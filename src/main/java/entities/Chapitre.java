@@ -2,48 +2,52 @@ package entities;
 
 public class Chapitre {
 
-    private int id_chapitre;
+    private int idChapitre;
     private String titre;
     private String contenu;
     private int ordre;
     private int duree;
-    private String pdf_url;
-    private int cours_id;
+    private String pdfUrl;
+    private int idCours;
+    private String resume;
+    private String typeExplication;
+    private String explication;
+    private String quizJson;
 
     // Constructeur vide
     public Chapitre() {}
 
     // Constructeur complet
-    public Chapitre(int id_chapitre, String titre, String contenu, int ordre,
-                    int duree, String pdf_url, int cours_id) {
-        this.id_chapitre = id_chapitre;
+    public Chapitre(int idChapitre, String titre, String contenu, int ordre,
+                    int duree, String pdfUrl, int idCours) {
+        this.idChapitre = idChapitre;
         this.titre = titre;
         this.contenu = contenu;
         this.ordre = ordre;
         this.duree = duree;
-        this.pdf_url = pdf_url;
-        this.cours_id = cours_id;
+        this.pdfUrl = pdfUrl;
+        this.idCours = idCours;
     }
 
     // Constructeur sans id (pour insertion)
     public Chapitre(String titre, String contenu, int ordre,
-                    int duree, String pdf_url, int cours_id) {
+                    int duree, String pdfUrl, int idCours) {
         this.titre = titre;
         this.contenu = contenu;
         this.ordre = ordre;
         this.duree = duree;
-        this.pdf_url = pdf_url;
-        this.cours_id = cours_id;
+        this.pdfUrl = pdfUrl;
+        this.idCours = idCours;
     }
 
     // Getters & Setters
 
-    public int getId_chapitre() {
-        return id_chapitre;
+    public int getIdChapitre() {
+        return idChapitre;
     }
 
-    public void setId_chapitre(int id_chapitre) {
-        this.id_chapitre = id_chapitre;
+    public void setIdChapitre(int idChapitre) {
+        this.idChapitre = idChapitre;
     }
 
     public String getTitre() {
@@ -78,32 +82,92 @@ public class Chapitre {
         this.duree = duree;
     }
 
-    public String getPdf_url() {
-        return pdf_url;
+    public String getPdfUrl() {
+        return pdfUrl;
     }
 
-    public void setPdf_url(String pdf_url) {
-        this.pdf_url = pdf_url;
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
+    }
+
+    public int getIdCours() {
+        return idCours;
+    }
+
+    public void setIdCours(int idCours) {
+        this.idCours = idCours;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
+    public String getTypeExplication() {
+        return typeExplication;
+    }
+
+    public void setTypeExplication(String typeExplication) {
+        this.typeExplication = typeExplication;
+    }
+
+    public String getExplication() {
+        return explication;
+    }
+
+    public void setExplication(String explication) {
+        this.explication = explication;
+    }
+
+    public String getQuizJson() {
+        return quizJson;
+    }
+
+    public void setQuizJson(String quizJson) {
+        this.quizJson = quizJson;
+    }
+
+    public int getId_chapitre() {
+        return getIdChapitre();
+    }
+
+    public void setId_chapitre(int idChapitre) {
+        setIdChapitre(idChapitre);
+    }
+
+    public String getPdf_url() {
+        return getPdfUrl();
+    }
+
+    public void setPdf_url(String pdfUrl) {
+        setPdfUrl(pdfUrl);
     }
 
     public int getCours_id() {
-        return cours_id;
+        return getIdCours();
     }
 
-    public void setCours_id(int cours_id) {
-        this.cours_id = cours_id;
+    public void setCours_id(int idCours) {
+        setIdCours(idCours);
     }
 
     @Override
     public String toString() {
         return "Chapitre{" +
-                "id_chapitre=" + id_chapitre +
+                "idChapitre=" + idChapitre +
                 ", titre='" + titre + '\'' +
                 ", contenu='" + contenu + '\'' +
                 ", ordre=" + ordre +
                 ", duree=" + duree +
-                ", pdf_url='" + pdf_url + '\'' +
-                ", cours_id=" + cours_id +
+                ", pdfUrl='" + pdfUrl + '\'' +
+                ", idCours=" + idCours +
+                ", resume='" + resume + '\'' +
+                ", typeExplication='" + typeExplication + '\'' +
+                ", explication='" + explication + '\'' +
+                ", quizJson='" + quizJson + '\'' +
                 '}';
     }
 }

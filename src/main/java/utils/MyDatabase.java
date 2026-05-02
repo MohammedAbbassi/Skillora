@@ -28,6 +28,11 @@ public class MyDatabase {
     }
 
     public Connection getCnx() {
+        if (cnx == null) {
+            throw new IllegalStateException(
+                    "Connexion MySQL indisponible. Demarrez MySQL/MariaDB, importez skillora.sql, "
+                            + "puis verifiez URL/user/mot de passe dans MyDatabase.");
+        }
         return cnx;
     }
 }

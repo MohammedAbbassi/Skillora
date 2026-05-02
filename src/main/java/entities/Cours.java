@@ -1,123 +1,93 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Cours {
 
-    private int id_cours;
+    private int idCours;
     private String titre;
     private String description;
     private String domaine;
     private String niveau;
     private int duree;
-    private Date date_creation;
-    private String instructeur;
+    private LocalDate dateCreation;
+    private Long idInstructeur;
+    private int progression;
 
-    // Constructeur vide
+    // ─── Constructeurs ───────────────────────────────────────────────────────────
+
     public Cours() {}
 
-    // Constructeur complet
-    public Cours(int id_cours, String titre, String description, String domaine,
-                 String niveau, int duree, Date date_creation, String instructeur) {
-        this.id_cours = id_cours;
-        this.titre = titre;
-        this.description = description;
-        this.domaine = domaine;
-        this.niveau = niveau;
-        this.duree = duree;
-        this.date_creation = date_creation;
-        this.instructeur = instructeur;
-    }
-
-    // Constructeur sans id (pour insertion)
+    /** Constructeur sans id (pour l'ajout) */
     public Cours(String titre, String description, String domaine,
-                 String niveau, int duree, Date date_creation, String instructeur) {
-        this.titre = titre;
-        this.description = description;
-        this.domaine = domaine;
-        this.niveau = niveau;
-        this.duree = duree;
-        this.date_creation = date_creation;
-        this.instructeur = instructeur;
+                 String niveau, int duree, LocalDate dateCreation,
+                 Long idInstructeur) {
+        this.titre        = titre;
+        this.description  = description;
+        this.domaine      = domaine;
+        this.niveau       = niveau;
+        this.duree        = duree;
+        this.dateCreation = dateCreation;
+        this.idInstructeur = idInstructeur;
+        this.progression  = 0;
     }
 
-    // Getters & Setters
-
-    public int getId_cours() {
-        return id_cours;
+    /** Constructeur complet (pour la lecture en BD) */
+    public Cours(int idCours, String titre, String description, String domaine,
+                 String niveau, int duree, LocalDate dateCreation,
+                 Long idInstructeur, int progression) {
+        this.idCours      = idCours;
+        this.titre        = titre;
+        this.description  = description;
+        this.domaine      = domaine;
+        this.niveau       = niveau;
+        this.duree        = duree;
+        this.dateCreation = dateCreation;
+        this.idInstructeur = idInstructeur;
+        this.progression  = progression;
     }
 
-    public void setId_cours(int id_cours) {
-        this.id_cours = id_cours;
-    }
+    // ─── Getters / Setters ────────────────────────────────────────────────────────
 
-    public String getTitre() {
-        return titre;
-    }
+    public int getIdCours()                     { return idCours; }
+    public void setIdCours(int idCours)          { this.idCours = idCours; }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
+    public String getTitre()                    { return titre; }
+    public void setTitre(String titre)           { this.titre = titre; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription()              { return description; }
+    public void setDescription(String desc)      { this.description = desc; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDomaine()                  { return domaine; }
+    public void setDomaine(String domaine)       { this.domaine = domaine; }
 
-    public String getDomaine() {
-        return domaine;
-    }
+    public String getNiveau()                   { return niveau; }
+    public void setNiveau(String niveau)         { this.niveau = niveau; }
 
-    public void setDomaine(String domaine) {
-        this.domaine = domaine;
-    }
+    public int getDuree()                       { return duree; }
+    public void setDuree(int duree)              { this.duree = duree; }
 
-    public String getNiveau() {
-        return niveau;
-    }
+    public LocalDate getDateCreation()          { return dateCreation; }
+    public void setDateCreation(LocalDate d)     { this.dateCreation = d; }
 
-    public void setNiveau(String niveau) {
-        this.niveau = niveau;
-    }
+    public Long getIdInstructeur()              { return idInstructeur; }
+    public void setIdInstructeur(Long idInstructeur) { this.idInstructeur = idInstructeur; }
 
-    public int getDuree() {
-        return duree;
-    }
+    public int getProgression()                 { return progression; }
+    public void setProgression(int progression)  { this.progression = progression; }
 
-    public void setDuree(int duree) {
-        this.duree = duree;
-    }
-
-    public Date getDate_creation() {
-        return date_creation;
-    }
-
-    public void setDate_creation(Date date_creation) {
-        this.date_creation = date_creation;
-    }
-
-    public String getInstructeur() {
-        return instructeur;
-    }
-
-    public void setInstructeur(String instructeur) {
-        this.instructeur = instructeur;
-    }
+    // ─── toString ────────────────────────────────────────────────────────────────
 
     @Override
     public String toString() {
         return "Cours{" +
-                "id_cours=" + id_cours +
+                "idCours=" + idCours +
                 ", titre='" + titre + '\'' +
-                ", description='" + description + '\'' +
                 ", domaine='" + domaine + '\'' +
                 ", niveau='" + niveau + '\'' +
-                ", duree=" + duree +
-                ", date_creation=" + date_creation +
-                ", instructeur='" + instructeur + '\'' +
+                ", duree=" + duree + "min" +
+                ", idInstructeur=" + idInstructeur +
+                ", progression=" + progression + "%" +
                 '}';
     }
 }
