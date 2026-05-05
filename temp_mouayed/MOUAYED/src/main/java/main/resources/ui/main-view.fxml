@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="650.0" prefWidth="1000.0" styleClass="root-bg" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.ui.UserPortalController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefWidth="380.0" spacing="16.0" styleClass="hero-pane">
+               <padding>
+                  <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+               </padding>
+               <children>
+                  <Label text="Skillora" styleClass="brand-title" />
+                  <Label text="Learn smarter, track progress, and stay in control with a clean user portal." wrapText="true" styleClass="brand-subtitle" />
+                  <Separator />
+                  <Label text="Modern JavaFX UI" styleClass="chip" />
+               </children>
+            </VBox>
+            <StackPane HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox maxWidth="520.0" prefWidth="520.0" spacing="16.0" styleClass="card">
+                     <padding>
+                        <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
+                     </padding>
+                     <children>
+                        <Label text="User Portal" styleClass="card-title" />
+                        <Label text="Sign in or create a new account" styleClass="card-subtitle" />
+                        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="main-tabs" VBox.vgrow="ALWAYS">
+                           <tabs>
+                              <Tab text="Login">
+                                 <content>
+                                    <VBox spacing="12.0">
+                                       <children>
+                                          <Label text="Email" styleClass="field-label" />
+                                          <TextField fx:id="loginEmailField" promptText="name@example.com" styleClass="text-field-modern" />
+                                          <Label text="Password" styleClass="field-label" />
+                                          <PasswordField fx:id="loginPasswordField" promptText="Enter your password" styleClass="text-field-modern" />
+                                          <Button mnemonicParsing="false" onAction="#onLogin" text="Login" styleClass="btn-primary" />
+                                          <Label fx:id="loginStatusLabel" text="" wrapText="true" styleClass="status-label" />
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                              <Tab text="Register">
+                                 <content>
+                                    <VBox spacing="12.0">
+                                       <children>
+                                          <Label text="Username" styleClass="field-label" />
+                                          <TextField fx:id="registerUsernameField" promptText="Choose a username" styleClass="text-field-modern" />
+                                          <Label text="First Name" styleClass="field-label" />
+                                          <TextField fx:id="registerFirstNameField" promptText="Your first name" styleClass="text-field-modern" />
+                                          <Label text="Last Name" styleClass="field-label" />
+                                          <TextField fx:id="registerLastNameField" promptText="Your last name" styleClass="text-field-modern" />
+                                          <Label text="Email" styleClass="field-label" />
+                                          <TextField fx:id="registerEmailField" promptText="name@example.com" styleClass="text-field-modern" />
+                                          <Label text="Password" styleClass="field-label" />
+                                          <PasswordField fx:id="registerPasswordField" promptText="Create a secure password" styleClass="text-field-modern" />
+                                          <Button mnemonicParsing="false" onAction="#onRegister" text="Create Account" styleClass="btn-primary" />
+                                          <Label fx:id="registerStatusLabel" text="" wrapText="true" styleClass="status-label" />
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children>
+                  </VBox>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

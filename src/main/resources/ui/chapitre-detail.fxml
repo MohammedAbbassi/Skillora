@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox spacing="0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreDetailController">
+    <!-- Header with progress -->
+    <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 2);">
+        <Button text="← Retour" styleClass="btn-secondary" onAction="#onBack" />
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label fx:id="chapterTitleLabel" text="Titre du Chapitre" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ProgressBar fx:id="overallProgressBar" prefWidth="200" progress="0.4" styleClass="progress-bar-custom"/>
+                <Label fx:id="progressTextLabel" text="40% Complété" styleClass="card-subtitle"/>
+            </HBox>
+        </VBox>
+        <HBox spacing="10">
+            <Button fx:id="btnPrev" text="Précédent" styleClass="nav-btn" onAction="#onPrev"/>
+            <Button fx:id="btnNext" text="Suivant" styleClass="nav-btn" onAction="#onNext"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: #f8fafc;">
+        <VBox spacing="30" maxWidth="1000" alignment="TOP_CENTER" style="-fx-padding: 40 auto;">
+            
+            <!-- Video Player Area -->
+            <VBox fx:id="videoArea" styleClass="video-container" maxWidth="900" minHeight="500">
+                <WebView fx:id="webView" minHeight="500" />
+            </VBox>
+
+            <!-- Content Area -->
+            <VBox spacing="20" maxWidth="900" styleClass="card">
+                <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+                
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label fx:id="niveauLabel" text="MOYEN" styleClass="badge-moyen"/>
+                    <Label fx:id="dureeLabel" text="15 min" styleClass="card-subtitle" style="-fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Passer au quiz" styleClass="btn-primary" onAction="#onQuiz"/>
+                </HBox>
+
+                <Separator />
+
+                <Label text="Contenu du chapitre" styleClass="card-title"/>
+                <Label fx:id="contenuLabel" wrapText="true" styleClass="detail-content" text="Chargement du contenu..."/>
+                
+                <HBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                    <Button text="Lire le PDF" styleClass="btn-secondary" onAction="#onReadPdf"/>
+                    <Button text="Générer résumé simple" styleClass="btn-secondary" onAction="#onGenerateSummary"/>
+                </HBox>
+            </VBox>
+            
+            <Region minHeight="40" />
+        </VBox>
+    </ScrollPane>
+</VBox>

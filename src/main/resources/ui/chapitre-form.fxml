@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreFormController">
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+    <VBox maxWidth="800" styleClass="card" spacing="15">
+        <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+        <Label fx:id="formTitle" text="Nouveau Chapitre" styleClass="card-title"/>
+        <Label fx:id="courseContextLabel" text="Cours : [Nom du cours]" styleClass="card-subtitle" style="-fx-text-fill: #0ea5e9;"/>
+        
+        <GridPane hgap="20" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            
+            <Label text="Titre" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="titreField" promptText="Titre du chapitre" styleClass="text-field-modern" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="Ordre" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="ordreField" promptText="Ex: 1" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            
+            <Label text="Durée (min)" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+            <TextField fx:id="dureeField" promptText="Ex: 15" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+            
+            <Label text="Type" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            
+            <Label text="PDF URL" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+            <TextField fx:id="pdfField" promptText="Lien vers le support" styleClass="text-field-modern" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+            
+            <Label text="Résumé" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextArea fx:id="resumeArea" prefRowCount="2" promptText="Bref résumé..." styleClass="text-area-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="Contenu" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextArea fx:id="contenuArea" prefRowCount="5" promptText="Contenu détaillé du chapitre..." styleClass="text-area-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+        </GridPane>
+        
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 20 0 0 0;">
+            <Button text="Annuler" styleClass="btn-secondary" onAction="#onCancel" />
+            <Button fx:id="saveButton" text="Enregistrer Chapitre" styleClass="btn-primary" onAction="#onSave" />
+        </HBox>
+    </VBox>
+</VBox>

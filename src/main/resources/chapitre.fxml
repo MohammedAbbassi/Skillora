@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ChapitreController" style="-fx-background-color: #f4f4f4;">
+    <top>
+        <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #8e44ad; -fx-padding: 20;">
+            <Label text="Gestion des Chapitres" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="tableChapitres" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTitre" text="Titre" prefWidth="150"/>
+                <TableColumn fx:id="colOrdre" text="Ordre" prefWidth="60"/>
+                <TableColumn fx:id="colDuree" text="Durée" prefWidth="80"/>
+                <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                <TableColumn fx:id="colCours" text="Cours ID" prefWidth="80"/>
+            </columns>
+            <BorderPane.margin>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </BorderPane.margin>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 0 1;" prefWidth="300">
+            <Label text="Formulaire Chapitre" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="txtTitre" promptText="Titre"/>
+            <TextArea fx:id="txtContenu" promptText="Contenu" prefHeight="80" wrapText="true"/>
+            <TextField fx:id="txtOrdre" promptText="Ordre"/>
+            <TextField fx:id="txtDuree" promptText="Durée (min)"/>
+            <TextField fx:id="txtPdfUrl" promptText="URL PDF"/>
+            <ComboBox fx:id="comboCours" promptText="Sélectionner Cours" maxWidth="Infinity"/>
+            <TextArea fx:id="txtResume" promptText="Résumé" prefHeight="60" wrapText="true"/>
+            <ComboBox fx:id="comboType" promptText="Type Explication" maxWidth="Infinity"/>
+
+            <HBox spacing="5" alignment="CENTER">
+                <Button text="Ajouter" onAction="#ajouterChapitre" style="-fx-background-color: #27ae60; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button text="Modifier" onAction="#modifierChapitre" style="-fx-background-color: #2980b9; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="5" alignment="CENTER">
+                <Button text="Supprimer" onAction="#supprimerChapitre" style="-fx-background-color: #c0392b; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button text="Vider" onAction="#viderChamps" style="-fx-background-color: #7f8c8d; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </right>
+</BorderPane>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+
+<ScrollPane
+    fx:id="rootScrollPane"
+    fitToWidth="true"
+    hbarPolicy="NEVER"
+    vbarPolicy="AS_NEEDED"
+    styleClass="root-scroll"
+    stylesheets="@CourseView.css"
+    xmlns:fx="http://javafx.com/fxml/1"
+    xmlns="http://javafx.com/javafx/17"
+    fx:controller="com.example.CourseViewController">
+
+    <!-- ═══════════════════════════════════════════════
+         MAIN CONTENT CONTAINER
+    ═══════════════════════════════════════════════ -->
+    <VBox
+        fx:id="mainContainer"
+        styleClass="main-container"
+        spacing="28"
+        maxWidth="960">
+
+        <padding>
+            <Insets top="48" right="48" bottom="64" left="48"/>
+        </padding>
+
+        <!-- ───────────────────────────────────────────
+             BREADCRUMB NAV
+        ─────────────────────────────────────────────── -->
+        <HBox fx:id="breadcrumbBar" styleClass="breadcrumb-bar" spacing="8" alignment="CENTER_LEFT">
+            <Label text="Dashboard" styleClass="breadcrumb-link"/>
+            <Label text="›" styleClass="breadcrumb-sep"/>
+            <Label text="My Courses" styleClass="breadcrumb-link"/>
+            <Label text="›" styleClass="breadcrumb-sep"/>
+            <Label text="Advanced Machine Learning" styleClass="breadcrumb-current"/>
+        </HBox>
+
+        <!-- ───────────────────────────────────────────
+             COURSE HEADER CARD
+        ─────────────────────────────────────────────── -->
+        <VBox fx:id="courseHeaderCard" styleClass="course-header-card" spacing="20">
+            <padding>
+                <Insets top="36" right="40" bottom="36" left="40"/>
+            </padding>
+
+            <!-- Top row: badge + meta -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="MACHINE LEARNING" styleClass="course-badge"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="42 enrolled" styleClass="meta-chip"/>
+                <Label text="Intermediate" styleClass="meta-chip meta-chip-violet"/>
+            </HBox>
+
+            <!-- Course Title -->
+            <Label
+                fx:id="courseTitle"
+                text="Advanced Machine Learning&#10;&amp; Neural Networks"
+                styleClass="course-title"
+                wrapText="true"/>
+
+            <!-- Description -->
+            <Label
+                fx:id="courseDescription"
+                text="Master the architecture of deep learning systems, from convolutional networks to transformers. Build production-grade models with TensorFlow and PyTorch through 12 hands-on chapters."
+                styleClass="course-description"
+                wrapText="true"
+                maxWidth="720"/>
+
+            <!-- Divider -->
+            <Separator styleClass="card-divider"/>
+
+            <!-- Progress Section -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="0">
+                    <Label text="Overall Progress" styleClass="progress-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="progressPercentLabel" text="67%" styleClass="progress-percent"/>
+                </HBox>
+
+                <StackPane styleClass="progress-track">
+                    <ProgressBar
+                        fx:id="overallProgress"
+                        progress="0.67"
+                        styleClass="course-progress-bar"
+                        maxWidth="1.7976931348623157E308"/>
+                </StackPane>
+
+                <!-- Stats Row -->
+                <HBox spacing="32" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8"/>
+                    </padding>
+                    <VBox styleClass="stat-block">
+                        <Label text="8 / 12" styleClass="stat-value"/>
+                        <Label text="Chapters Done" styleClass="stat-key"/>
+                    </VBox>
+                    <VBox styleClass="stat-block">
+                        <Label text="14.5 hrs" styleClass="stat-value"/>
+                        <Label text="Time Invested" styleClass="stat-key"/>
+                    </VBox>
+                    <VBox styleClass="stat-block">
+                        <Label text="4 left" styleClass="stat-value stat-value-accent"/>
+                        <Label text="Remaining" styleClass="stat-key"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+
+        <!-- ───────────────────────────────────────────
+             SECTION LABEL
+        ─────────────────────────────────────────────── -->
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Label text="CHAPTERS" styleClass="section-label"/>
+            <Line styleClass="section-line" startX="0" startY="0" endX="400" endY="0"/>
+        </HBox>
+
+        <!-- ═══════════════════════════════════════════
+             CHAPTER LIST
+        ═══════════════════════════════════════════ -->
+        <VBox fx:id="chapterListContainer" spacing="14">
+
+            <!-- ── CHAPTER 1 — COMPLETED ── -->
+            <HBox fx:id="chapterCard1" styleClass="chapter-card chapter-card-done" spacing="20" alignment="CENTER_LEFT">
+                <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+                <!-- Number Circle -->
+                <StackPane styleClass="chapter-num-circle chapter-num-done" minWidth="48" minHeight="48">
+                    <Label text="✓" styleClass="chapter-num-text"/>
+                </StackPane>
+
+                <!-- Chapter Info -->
+                <VBox HBox.hgrow="ALWAYS" spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Circle fx:id="status1" radius="6" styleClass="status-dot status-done"/>
+                        <Label text="Introduction to Neural Networks" styleClass="chapter-title"/>
+                        <Label text="COMPLETED" styleClass="status-tag status-tag-done"/>
+                    </HBox>
+                    <HBox spacing="18" alignment="CENTER_LEFT">
+                        <Label text="⏱  1h 45m" styleClass="chapter-meta"/>
+                        <Label text="12 lessons" styleClass="chapter-meta"/>
+                        <Label text="Quiz included" styleClass="chapter-meta chapter-meta-quiz"/>
+                    </HBox>
+                </VBox>
+
+                <Button text="Review" styleClass="btn-secondary" onAction="#onChapterAction" userData="1"/>
+            </HBox>
+
+            <!-- ── CHAPTER 2 — IN PROGRESS ── -->
+            <HBox fx:id="chapterCard2" styleClass="chapter-card chapter-card-active" spacing="20" alignment="CENTER_LEFT">
+                <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+                <StackPane styleClass="chapter-num-circle chapter-num-active" minWidth="48" minHeight="48">
+                    <Label text="02" styleClass="chapter-num-text"/>
+                </StackPane>
+
+                <VBox HBox.hgrow="ALWAYS" spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Circle fx:id="status2" radius="6" styleClass="status-dot status-progress"/>
+                        <Label text="Convolutional Neural Networks" styleClass="chapter-title"/>
+                        <Label text="IN PROGRESS" styleClass="status-tag status-tag-progress"/>
+                    </HBox>
+                    <HBox spacing="18" alignment="CENTER_LEFT">
+                        <Label text="⏱  2h 30m" styleClass="chapter-meta"/>
+                        <Label text="18 lessons" styleClass="chapter-meta"/>
+                        <Label text="Project included" styleClass="chapter-meta chapter-meta-quiz"/>
+                    </HBox>
+                    <!-- Mini sub-progress -->
+                    <ProgressBar progress="0.45" styleClass="chapter-progress-bar" maxWidth="300"/>
+                </VBox>
+
+                <Button text="Continue →" styleClass="btn-primary" onAction="#onChapterAction" userData="2"/>
+            </HBox>
+
+            <!-- ── CHAPTER 3 — LOCKED ── -->
+            <HBox fx:id="chapterCard3" styleClass="chapter-card chapter-card-locked" spacing="20" alignment="CENTER_LEFT">
+                <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+                <StackPane styleClass="chapter-num-circle chapter-num-locked" minWidth="48" minHeight="48">
+                    <Label text="03" styleClass="chapter-num-text chapter-num-text-locked"/>
+                </StackPane>
+
+                <VBox HBox.hgrow="ALWAYS" spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Circle fx:id="status3" radius="6" styleClass="status-dot status-locked"/>
+                        <Label text="Recurrent Networks &amp; LSTMs" styleClass="chapter-title chapter-title-locked"/>
+                    </HBox>
+                    <HBox spacing="18" alignment="CENTER_LEFT">
+                        <Label text="⏱  3h 15m" styleClass="chapter-meta"/>
+                        <Label text="20 lessons" styleClass="chapter-meta"/>
+                    </HBox>
+                </VBox>
+
+                <Button text="Start" styleClass="btn-start" onAction="#onChapterAction" userData="3"/>
+            </HBox>
+
+            <!-- ── CHAPTER 4 — LOCKED ── -->
+            <HBox fx:id="chapterCard4" styleClass="chapter-card chapter-card-locked" spacing="20" alignment="CENTER_LEFT">
+                <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+                <StackPane styleClass="chapter-num-circle chapter-num-locked" minWidth="48" minHeight="48">
+                    <Label text="04" styleClass="chapter-num-text chapter-num-text-locked"/>
+                </StackPane>
+
+                <VBox HBox.hgrow="ALWAYS" spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Circle fx:id="status4" radius="6" styleClass="status-dot status-locked"/>
+                        <Label text="Attention Mechanisms &amp; Transformers" styleClass="chapter-title chapter-title-locked"/>
+                    </HBox>
+                    <HBox spacing="18" alignment="CENTER_LEFT">
+                        <Label text="⏱  4h 00m" styleClass="chapter-meta"/>
+                        <Label text="24 lessons" styleClass="chapter-meta"/>
+                        <Label text="Capstone project" styleClass="chapter-meta chapter-meta-quiz"/>
+                    </HBox>
+                </VBox>
+
+                <Button text="Start" styleClass="btn-start" onAction="#onChapterAction" userData="4"/>
+            </HBox>
+
+            <!-- ── CHAPTER 5 — LOCKED ── -->
+            <HBox fx:id="chapterCard5" styleClass="chapter-card chapter-card-locked" spacing="20" alignment="CENTER_LEFT">
+                <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+                <StackPane styleClass="chapter-num-circle chapter-num-locked" minWidth="48" minHeight="48">
+                    <Label text="05" styleClass="chapter-num-text chapter-num-text-locked"/>
+                </StackPane>
+
+                <VBox HBox.hgrow="ALWAYS" spacing="6">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Circle fx:id="status5" radius="6" styleClass="status-dot status-locked"/>
+                        <Label text="Generative Adversarial Networks" styleClass="chapter-title chapter-title-locked"/>
+                    </HBox>
+                    <HBox spacing="18" alignment="CENTER_LEFT">
+                        <Label text="⏱  2h 50m" styleClass="chapter-meta"/>
+                        <Label text="16 lessons" styleClass="chapter-meta"/>
+                    </HBox>
+                </VBox>
+
+                <Button text="Start" styleClass="btn-start" onAction="#onChapterAction" userData="5"/>
+            </HBox>
+
+        </VBox>
+        <!-- END chapterListContainer -->
+
+        <!-- ───────────────────────────────────────────
+             FOOTER NOTE
+        ─────────────────────────────────────────────── -->
+        <HBox alignment="CENTER" styleClass="footer-note">
+            <Label text="🔒  Complete the current chapter to unlock the next one." styleClass="footer-text"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>
