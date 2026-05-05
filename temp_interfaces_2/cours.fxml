@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<!--
+    cours.fxml — Vue principale de la liste des cours.
+    Contrôleur : com.example.controllers.CoursController
+    CSS        : CourseView.css
+-->
+<ScrollPane
+    fx:id="rootScrollPane"
+    fitToWidth="true"
+    hbarPolicy="NEVER"
+    vbarPolicy="AS_NEEDED"
+    styleClass="root-scroll"
+    stylesheets="@CourseView.css"
+    xmlns:fx="http://javafx.com/fxml/1"
+    xmlns="http://javafx.com/javafx/17"
+    fx:controller="com.example.controllers.CoursController">
+
+    <VBox fx:id="mainContainer" styleClass="main-container" spacing="28" maxWidth="960">
+        <padding><Insets top="48" right="48" bottom="64" left="48"/></padding>
+
+        <!-- BREADCRUMB -->
+        <HBox fx:id="breadcrumbBar" styleClass="breadcrumb-bar" spacing="8" alignment="CENTER_LEFT">
+            <Label text="Tableau de bord"   styleClass="breadcrumb-link"/>
+            <Label text="›"                 styleClass="breadcrumb-sep"/>
+            <Label text="Mes Cours"         styleClass="breadcrumb-link"/>
+            <Label text="›"                 styleClass="breadcrumb-sep"/>
+            <Label fx:id="courseTitle"      styleClass="breadcrumb-current" text="Cours"/>
+        </HBox>
+
+        <!-- HEADER CARD -->
+        <VBox fx:id="courseHeaderCard" styleClass="course-header-card" spacing="20">
+            <padding><Insets top="36" right="40" bottom="36" left="40"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="COURS" styleClass="course-badge"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Intermédiaire" styleClass="meta-chip meta-chip-violet"/>
+            </HBox>
+
+            <Label fx:id="courseTitle"
+                   styleClass="course-title"
+                   wrapText="true"
+                   text="Chargement…"/>
+
+            <Label fx:id="courseDescription"
+                   styleClass="course-description"
+                   wrapText="true"
+                   maxWidth="720"
+                   text=""/>
+
+            <Separator styleClass="card-divider"/>
+
+            <!-- Progression -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Progression globale" styleClass="progress-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="progressPercentLabel" text="0%" styleClass="progress-percent"/>
+                </HBox>
+                <ProgressBar fx:id="overallProgress" progress="0"
+                             styleClass="course-progress-bar"
+                             maxWidth="1.7976931348623157E308"/>
+            </VBox>
+        </VBox>
+
+        <!-- SECTION LABEL -->
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Label text="CHAPITRES" styleClass="section-label"/>
+        </HBox>
+
+        <!-- CHAPTER LIST -->
+        <VBox fx:id="chapterListContainer" spacing="14"/>
+
+        <!-- FOOTER -->
+        <HBox alignment="CENTER" styleClass="footer-note">
+            <Label text="🔒  Terminez le chapitre en cours pour débloquer le suivant."
+                   styleClass="footer-text"/>
+        </HBox>
+    </VBox>
+</ScrollPane>

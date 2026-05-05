@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.CoursController" style="-fx-background-color: #f4f4f4;">
+    <top>
+        <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Label text="Gestion des Cours" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="tableCours" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTitre" text="Titre" prefWidth="150"/>
+                <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
+                <TableColumn fx:id="colDomaine" text="Domaine" prefWidth="120"/>
+                <TableColumn fx:id="colNiveau" text="Niveau" prefWidth="100"/>
+                <TableColumn fx:id="colDuree" text="Durée" prefWidth="80"/>
+                <TableColumn fx:id="colDateCreation" text="Date" prefWidth="100"/>
+                <TableColumn fx:id="colProgression" text="Progression" prefWidth="100"/>
+            </columns>
+            <BorderPane.margin>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </BorderPane.margin>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 0 1;">
+            <Label text="Formulaire Cours" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="txtTitre" promptText="Titre"/>
+            <TextArea fx:id="txtDescription" promptText="Description" prefHeight="80" wrapText="true"/>
+            <TextField fx:id="txtDomaine" promptText="Domaine"/>
+            <ComboBox fx:id="comboNiveau" promptText="Niveau" maxWidth="Infinity"/>
+            <TextField fx:id="txtDuree" promptText="Durée (min)"/>
+            <DatePicker fx:id="dateCreation" maxWidth="Infinity"/>
+            <TextField fx:id="txtProgression" promptText="Progression (%)"/>
+
+            <HBox spacing="5" alignment="CENTER">
+                <Button text="Ajouter" onAction="#ajouterCours" style="-fx-background-color: #27ae60; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button text="Modifier" onAction="#modifierCours" style="-fx-background-color: #2980b9; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="5" alignment="CENTER">
+                <Button text="Supprimer" onAction="#supprimerCours" style="-fx-background-color: #c0392b; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button text="Vider" onAction="#viderChamps" style="-fx-background-color: #7f8c8d; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </right>
+</BorderPane>

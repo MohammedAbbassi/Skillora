@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreAdminController">
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+    <VBox maxWidth="900" styleClass="card" spacing="15">
+        <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label fx:id="formTitle" text="Gestion Administrateur" styleClass="card-title"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Retour à la liste" styleClass="btn-secondary" onAction="#onCancel" />
+        </HBox>
+        
+        <Label fx:id="courseContextLabel" text="Cours : [Sélectionner un cours dans la liste]" styleClass="card-subtitle" style="-fx-text-fill: #0ea5e9;"/>
+        
+        <Separator />
+
+        <GridPane hgap="25" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            
+            <Label text="Titre du Chapitre" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="titreField" promptText="Ex: Introduction au JavaFX" styleClass="text-field-modern" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="Ordre" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="ordreField" promptText="Position (ex: 1)" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            
+            <Label text="Durée (min)" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+            <TextField fx:id="dureeField" promptText="Ex: 20" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+            
+            <Label text="Niveau" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ComboBox fx:id="niveauCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            
+            <Label text="Type" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+            <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+            
+            <Label text="URL Vidéo" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextField fx:id="videoUrlField" promptText="Lien YouTube ou autre" styleClass="text-field-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="URL PDF" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextField fx:id="pdfUrlField" promptText="Lien vers le support" styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+            
+            <Label text="URL Image" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="2" />
+            <TextField fx:id="imageUrlField" promptText="Image miniature" styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="3" />
+            
+            <Label text="Résumé" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <TextArea fx:id="resumeArea" prefRowCount="2" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="Contenu" styleClass="field-label" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+            <TextArea fx:id="contenuArea" prefRowCount="6" styleClass="text-area-modern" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+        </GridPane>
+        
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 20 0 0 0;">
+            <Button fx:id="btnDelete" text="Supprimer" style="-fx-background-color: #fef2f2; -fx-text-fill: #ef4444; -fx-border-color: #fca5a5; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;" onAction="#onDelete" visible="false"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="saveButton" text="Enregistrer les modifications" styleClass="btn-primary" onAction="#onSave" />
+        </HBox>
+    </VBox>
+</VBox>

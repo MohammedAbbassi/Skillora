@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CoursListController">
+    <VBox spacing="20" alignment="TOP_CENTER">
+        <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+        <HBox alignment="CENTER_LEFT" maxWidth="900">
+            <Label text="Liste des Cours" styleClass="card-title"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnNewCours" text="+ Nouveau Cours" styleClass="btn-primary" onAction="#onNewCours" />
+        </HBox>
+        <FlowPane fx:id="coursesContainer" hgap="20" vgap="20" maxWidth="900" alignment="TOP_LEFT" />
+    </VBox>
+</ScrollPane>

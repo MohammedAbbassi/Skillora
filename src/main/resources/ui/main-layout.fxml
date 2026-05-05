@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainLayoutController">
+    <left>
+        <VBox prefWidth="250.0" styleClass="root-bg" spacing="10">
+            <padding><Insets top="30" left="10" right="10" bottom="20"/></padding>
+            <Label text="Skillora" styleClass="brand-title" />
+            <Label text="Gestion des cours" styleClass="brand-subtitle" />
+            <Separator style="-fx-background-color: rgba(255,255,255,0.1); -fx-padding: 0; -fx-margin: 10 0;" />
+            <Button fx:id="btnCours" text="Cours" maxWidth="Infinity" styleClass="sidebar-btn" onAction="#onCoursClick" />
+            <Button fx:id="btnChapitres" text="Chapitres" maxWidth="Infinity" styleClass="sidebar-btn" onAction="#onChapitresClick" />
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <ToggleButton fx:id="toggleAdmin" text="Mode Administrateur" maxWidth="Infinity" styleClass="sidebar-btn" onAction="#onToggleAdmin" />
+        </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f1f5f9;">
+            <!-- Dynamic content goes here -->
+        </StackPane>
+    </center>
+</BorderPane>

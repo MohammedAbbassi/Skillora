@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<!--
+    chapitre.fxml — Carte réutilisable pour un Chapitre.
+    Contrôleur : com.example.controllers.ChapitreController
+    CSS        : CourseView.css  (hérité du parent ScrollPane)
+
+    Ce fichier sert à deux modes :
+      1. Mode CARTE  — inclus dynamiquement dans chapterListContainer
+      2. Mode DÉTAIL — chargé comme fenêtre modale
+-->
+<HBox fx:id="chapterCardRoot"
+      styleClass="chapter-card"
+      spacing="20"
+      alignment="CENTER_LEFT"
+      stylesheets="@CourseView.css"
+      xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="com.example.controllers.ChapitreController">
+
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+
+    <!-- ── Cercle numéro ── -->
+    <StackPane fx:id="chapitreNumCircle"
+               styleClass="chapter-num-circle"
+               minWidth="48" minHeight="48"
+               maxWidth="48" maxHeight="48">
+        <Label fx:id="chapitreNumLabel" text="01" styleClass="chapter-num-text"/>
+    </StackPane>
+
+    <!-- ── Infos centre ── -->
+    <VBox HBox.hgrow="ALWAYS" spacing="6">
+
+        <!-- Ligne titre + badges -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Circle fx:id="statusDot" radius="6" styleClass="status-dot status-locked"/>
+            <Label fx:id="chapitreTitre"
+                   text="Titre du Chapitre"
+                   styleClass="chapter-title"/>
+            <Label fx:id="statusTag"
+                   text=""
+                   styleClass="status-tag"
+                   visible="false"/>
+        </HBox>
+
+        <!-- Méta : durée, leçons, quiz -->
+        <HBox spacing="18" alignment="CENTER_LEFT">
+            <Label fx:id="chapitreDuree"   text="⏱  —"    styleClass="chapter-meta"/>
+            <Label fx:id="chapitreLecons"  text="— leçons" styleClass="chapter-meta"/>
+            <Label fx:id="chapitreQuizTag" text="Quiz"
+                   styleClass="chapter-meta chapter-meta-quiz"
+                   visible="false" managed="false"/>
+        </HBox>
+
+        <!-- Barre de progression (EN_COURS seulement) -->
+        <ProgressBar fx:id="chapitreProgressBar"
+                     progress="0"
+                     styleClass="chapter-progress-bar"
+                     maxWidth="300"
+                     visible="false" managed="false"/>
+    </VBox>
+
+    <!-- ── Bouton action ── -->
+    <Button fx:id="actionButton"
+            text="Démarrer"
+            styleClass="btn-start"/>
+
+</HBox>

@@ -1,0 +1,512 @@
+/* ═══════════════════════════════════════════════════════════════
+   CourseView.css  —  Dark Tech Educational Platform
+   Palette:  Background  #1A1A1D  |  Surface  #232329  |  Card  #2A2A32
+             Neon Blue   #00D4FF  |  Violet   #9B59FF  |  Done  #00E5A0
+   Font:     "JetBrains Mono" for numbers, "DM Sans" for UI text
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── Google Font import (web-view fallback chain) ──────────── */
+/* In a real app, bundle the fonts as resources and load via CSS  */
+/* @font-face blocks pointing to /resources/fonts/               */
+
+/* ══════════════════════════════════════════════════════════════
+   ROOT & SCROLL PANE
+══════════════════════════════════════════════════════════════ */
+.root-scroll {
+    -fx-background: #1A1A1D;
+    -fx-background-color: #1A1A1D;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.root-scroll > .viewport {
+    -fx-background-color: #1A1A1D;
+}
+
+/* Hide scrollbar track; keep thumb slim */
+.root-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+.root-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #3A3A48;
+    -fx-background-radius: 4;
+}
+.root-scroll .scroll-bar:vertical .track,
+.root-scroll .scroll-bar:vertical .increment-button,
+.root-scroll .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+.root-scroll .corner {
+    -fx-background-color: transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN CONTAINER
+══════════════════════════════════════════════════════════════ */
+.main-container {
+    -fx-background-color: #1A1A1D;
+    -fx-alignment: TOP_CENTER;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BREADCRUMB
+══════════════════════════════════════════════════════════════ */
+.breadcrumb-bar {
+    -fx-padding: 0 0 8 2;
+}
+.breadcrumb-link {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #5A5A72;
+    -fx-cursor: hand;
+}
+.breadcrumb-link:hover {
+    -fx-text-fill: #00D4FF;
+}
+.breadcrumb-sep {
+    -fx-font-size: 12px;
+    -fx-text-fill: #3A3A52;
+}
+.breadcrumb-current {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00D4FF;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COURSE HEADER CARD
+══════════════════════════════════════════════════════════════ */
+.course-header-card {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #232329 0%,
+        #1E1E28 100%
+    );
+    -fx-background-radius: 20;
+    -fx-border-color: #2E2E3E;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.08), 32, 0, 0, 8);
+}
+
+/* Course badge pill */
+.course-badge {
+    -fx-background-color: rgba(0, 212, 255, 0.12);
+    -fx-border-color: rgba(0, 212, 255, 0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00D4FF;
+    -fx-padding: 4 12 4 12;
+    -fx-letter-spacing: 1.5px;
+}
+
+/* Meta chips (enrolled / difficulty) */
+.meta-chip {
+    -fx-background-color: #2E2E3E;
+    -fx-background-radius: 6;
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #8888AA;
+    -fx-padding: 4 10 4 10;
+}
+.meta-chip-violet {
+    -fx-background-color: rgba(155, 89, 255, 0.15);
+    -fx-border-color: rgba(155, 89, 255, 0.4);
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-text-fill: #B27FFF;
+}
+
+/* Course title — display-weight heading */
+.course-title {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 32px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #F0F0FF;
+    -fx-line-spacing: 4;
+}
+
+/* Course description */
+.course-description {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #8888A8;
+    -fx-line-spacing: 3;
+}
+
+/* Divider inside header */
+.card-divider {
+    -fx-background-color: #2E2E42;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+    -fx-border-color: transparent;
+}
+
+/* Progress labels */
+.progress-label {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #6666AA;
+    -fx-font-weight: bold;
+}
+.progress-percent {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00D4FF;
+}
+
+/* Progress bar track */
+.progress-track {
+    -fx-background-color: #2A2A38;
+    -fx-background-radius: 8;
+    -fx-pref-height: 10;
+    -fx-max-height: 10;
+}
+
+/* Main progress bar */
+.course-progress-bar {
+    -fx-pref-height: 10;
+    -fx-accent: #00D4FF;
+    -fx-background-color: transparent;
+}
+.course-progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #00D4FF, #9B59FF);
+    -fx-background-radius: 8;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.6), 8, 0, 0, 0);
+}
+.course-progress-bar .track {
+    -fx-background-color: #252535;
+    -fx-background-radius: 8;
+    -fx-background-insets: 0;
+}
+
+/* Stat blocks */
+.stat-block {
+    -fx-spacing: 2;
+}
+.stat-value {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E0E0F5;
+}
+.stat-value-accent {
+    -fx-text-fill: #9B59FF;
+}
+.stat-key {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #5A5A78;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION LABEL + LINE
+══════════════════════════════════════════════════════════════ */
+.section-label {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4A4A68;
+    -fx-letter-spacing: 2px;
+}
+.section-line {
+    -fx-stroke: #2A2A3A;
+    -fx-stroke-width: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHAPTER CARDS — BASE
+══════════════════════════════════════════════════════════════ */
+.chapter-card {
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s ease;
+}
+
+/* Completed chapter */
+.chapter-card-done {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 0%,
+        #1E2820 0%,
+        #1E2228 100%
+    );
+    -fx-border-color: rgba(0, 229, 160, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0,229,160,0.06), 16, 0, 0, 4);
+}
+.chapter-card-done:hover {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 0%,
+        #1F2E22 0%,
+        #1E2430 100%
+    );
+    -fx-border-color: rgba(0, 229, 160, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(0,229,160,0.18), 24, 0, 0, 6);
+    -fx-translate-y: -2;
+}
+
+/* Active / in-progress chapter */
+.chapter-card-active {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 0%,
+        #1A1E2E 0%,
+        #1C1A2A 100%
+    );
+    -fx-border-color: rgba(0, 212, 255, 0.45);
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.18), 28, 0, 0, 6);
+}
+.chapter-card-active:hover {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 0%,
+        #1C2232 0%,
+        #1E1C2E 100%
+    );
+    -fx-border-color: rgba(0, 212, 255, 0.75);
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.35), 36, 0, 0, 8);
+    -fx-translate-y: -2;
+}
+
+/* Locked chapter */
+.chapter-card-locked {
+    -fx-background-color: #1F1F28;
+    -fx-border-color: #28283A;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0, 0, 3);
+    -fx-opacity: 0.72;
+}
+.chapter-card-locked:hover {
+    -fx-opacity: 0.88;
+    -fx-border-color: #353550;
+    -fx-translate-y: -1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHAPTER NUMBER CIRCLES
+══════════════════════════════════════════════════════════════ */
+.chapter-num-circle {
+    -fx-background-radius: 50;
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+    -fx-alignment: CENTER;
+}
+.chapter-num-done {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #00C98A, #00E5A0
+    );
+    -fx-effect: dropshadow(gaussian, rgba(0,229,160,0.4), 12, 0, 0, 0);
+}
+.chapter-num-active {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #00A8CC, #00D4FF
+    );
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.5), 16, 0, 0, 0);
+}
+.chapter-num-locked {
+    -fx-background-color: #28283A;
+    -fx-border-color: #353548;
+    -fx-border-width: 1;
+}
+.chapter-num-text {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A0A12;
+    -fx-alignment: CENTER;
+}
+.chapter-num-text-locked {
+    -fx-text-fill: #44445A;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATUS DOTS
+══════════════════════════════════════════════════════════════ */
+.status-dot {
+    /* base; color overridden per state */
+}
+.status-done {
+    -fx-fill: #00E5A0;
+    -fx-effect: dropshadow(gaussian, rgba(0,229,160,0.7), 8, 0, 0, 0);
+}
+.status-progress {
+    -fx-fill: #00D4FF;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.8), 10, 0, 0, 0);
+}
+.status-locked {
+    -fx-fill: #383850;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHAPTER TITLE & META
+══════════════════════════════════════════════════════════════ */
+.chapter-title {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #D8D8F0;
+}
+.chapter-title-locked {
+    -fx-text-fill: #555570;
+}
+.chapter-meta {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #55557A;
+}
+.chapter-meta-quiz {
+    -fx-background-color: rgba(155, 89, 255, 0.12);
+    -fx-background-radius: 4;
+    -fx-text-fill: #9B59FF;
+    -fx-padding: 2 8 2 8;
+}
+
+/* Status tags (pill badges on chapter row) */
+.status-tag {
+    -fx-font-family: "JetBrains Mono", "Courier New", monospace;
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-padding: 3 8 3 8;
+}
+.status-tag-done {
+    -fx-background-color: rgba(0, 229, 160, 0.12);
+    -fx-text-fill: #00E5A0;
+    -fx-border-color: rgba(0, 229, 160, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+}
+.status-tag-progress {
+    -fx-background-color: rgba(0, 212, 255, 0.12);
+    -fx-text-fill: #00D4FF;
+    -fx-border-color: rgba(0, 212, 255, 0.35);
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+}
+
+/* Chapter sub-progress bar */
+.chapter-progress-bar {
+    -fx-pref-height: 5;
+    -fx-pref-width: 260;
+    -fx-max-width: 260;
+}
+.chapter-progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #00D4FF, #9B59FF);
+    -fx-background-radius: 4;
+    -fx-background-insets: 0;
+}
+.chapter-progress-bar .track {
+    -fx-background-color: #2A2A3E;
+    -fx-background-radius: 4;
+    -fx-background-insets: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════════════════════ */
+
+/* Primary CTA — glowing neon blue */
+.btn-primary {
+    -fx-background-color: linear-gradient(
+        to right, #00B8DD, #00D4FF
+    );
+    -fx-text-fill: #050510;
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10 24 10 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.5), 16, 0, 0, 0);
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(
+        to right, #00D4FF, #5AD4FF
+    );
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.8), 24, 0, 0, 0);
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+.btn-primary:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+    -fx-effect: dropshadow(gaussian, rgba(0,212,255,0.4), 8, 0, 0, 0);
+}
+
+/* Secondary — ghost style for completed chapters */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(0, 229, 160, 0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #00E5A0;
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-padding: 9 22 9 22;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: rgba(0, 229, 160, 0.1);
+    -fx-border-color: #00E5A0;
+    -fx-effect: dropshadow(gaussian, rgba(0,229,160,0.35), 14, 0, 0, 0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+.btn-secondary:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Start — subtle violet ghost for locked chapters */
+.btn-start {
+    -fx-background-color: transparent;
+    -fx-border-color: #353555;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #555578;
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-padding: 9 22 9 22;
+    -fx-cursor: hand;
+}
+.btn-start:hover {
+    -fx-background-color: rgba(155, 89, 255, 0.1);
+    -fx-border-color: rgba(155, 89, 255, 0.6);
+    -fx-text-fill: #9B59FF;
+    -fx-effect: dropshadow(gaussian, rgba(155,89,255,0.3), 14, 0, 0, 0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+.btn-start:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER NOTE
+══════════════════════════════════════════════════════════════ */
+.footer-note {
+    -fx-padding: 12 0 0 0;
+}
+.footer-text {
+    -fx-font-family: "DM Sans", "Segoe UI", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #383858;
+}
