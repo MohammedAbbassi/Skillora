@@ -38,7 +38,11 @@ CREATE TABLE `chapitre` (
   `type_explication` enum('TEXTE','VIDEO') NOT NULL DEFAULT 'TEXTE',
   `explication` text DEFAULT NULL,
   `quiz_json` text DEFAULT NULL,
-  `id_cours` int(11) NOT NULL
+  `id_cours` int(11) NOT NULL,
+  `niveau` enum('FACILE','MOYEN','DIFFICILE') NOT NULL DEFAULT 'MOYEN',
+  `video_url` text DEFAULT NULL,
+  `image_url` text DEFAULT NULL,
+  `est_complete` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -92,12 +96,13 @@ CREATE TABLE `cours` (
   `id_cours` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
-  `domaine` varchar(100) DEFAULT NULL,
+  `categorie` varchar(100) DEFAULT NULL,
   `niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE') NOT NULL DEFAULT 'DEBUTANT',
-  `duree` int(11) DEFAULT NULL COMMENT 'en minutes',
+  `duree` varchar(50) DEFAULT NULL,
+  `objectif_semaine` text DEFAULT NULL,
+  `performance` text DEFAULT NULL,
   `date_creation` date NOT NULL DEFAULT curdate(),
-  `progression` int(11) NOT NULL DEFAULT 0 COMMENT 'pourcentage 0-100',
-  `id_instructeur` bigint(20) DEFAULT NULL
+  `progression` int(11) NOT NULL DEFAULT 0 COMMENT 'pourcentage 0-100'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -297,9 +302,10 @@ CREATE TABLE `vue_cours_details` (
 `id_cours` int(11)
 ,`titre` varchar(255)
 ,`description` text
-,`domaine` varchar(100)
+,`categorie` varchar(100)
 ,`niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE')
-,`duree` int(11)
+,`date_debut` date
+,`date_fin` date
 ,`date_creation` date
 ,`progression` int(11)
 ,`nom_instructeur` varchar(101)
@@ -359,7 +365,7 @@ CREATE TABLE `vue_profil_utilisateur` (
 --
 DROP TABLE IF EXISTS `vue_cours_details`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_cours_details`  AS SELECT `c`.`id_cours` AS `id_cours`, `c`.`titre` AS `titre`, `c`.`description` AS `description`, `c`.`domaine` AS `domaine`, `c`.`niveau` AS `niveau`, `c`.`duree` AS `duree`, `c`.`date_creation` AS `date_creation`, `c`.`progression` AS `progression`, concat(`u`.`prenom`,' ',`u`.`nom`) AS `nom_instructeur`, count(`ch`.`id_chapitre`) AS `nombre_chapitres` FROM ((`cours` `c` left join `utilisateurs` `u` on(`u`.`id_utilisateur` = `c`.`id_instructeur`)) left join `chapitre` `ch` on(`ch`.`id_cours` = `c`.`id_cours`)) GROUP BY `c`.`id_cours` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_cours_details`  AS SELECT `c`.`id_cours` AS `id_cours`, `c`.`titre` AS `titre`, `c`.`description` AS `description`, `c`.`categorie` AS `categorie`, `c`.`niveau` AS `niveau`, `c`.`date_debut` AS `date_debut`, `c`.`date_fin` AS `date_fin`, `c`.`date_creation` AS `date_creation`, `c`.`progression` AS `progression`, concat(`u`.`prenom`,' ',`u`.`nom`) AS `nom_instructeur`, count(`ch`.`id_chapitre`) AS `nombre_chapitres` FROM ((`cours` `c` left join `utilisateurs` `u` on(`u`.`id_utilisateur` = `c`.`id_instructeur`)) left join `chapitre` `ch` on(`ch`.`id_cours` = `c`.`id_cours`)) GROUP BY `c`.`id_cours` ;
 
 -- --------------------------------------------------------
 

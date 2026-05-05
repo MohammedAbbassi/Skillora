@@ -16,91 +16,58 @@ public class CoursService implements ICoursService {
         cnx = MyDatabase.getInstance().getCnx();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────
-    // AJOUTER
-    // ─────────────────────────────────────────────────────────────────────────────
-
     @Override
     public void add(Cours cours) throws SQLException {
-        String req = "INSERT INTO cours (titre, description, domaine, niveau, " +
-                "duree, date_creation, id_instructeur, progression) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO cours (titre, description, categorie, niveau, " +
+                "duree, objectif_semaine, performance, date_creation, progression) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, cours.getTitre());
         pst.setString(2, cours.getDescription());
-        pst.setString(3, cours.getDomaine());
+        pst.setString(3, cours.getCategorie());
         pst.setString(4, cours.getNiveau());
-        pst.setInt   (5, cours.getDuree());
-        pst.setDate  (6, cours.getDateCreation() != null
-                ? Date.valueOf(cours.getDateCreation()) : null);
-        if (cours.getIdInstructeur() != null) {
-            pst.setLong(7, cours.getIdInstructeur());
-        } else {
-            pst.setNull(7, Types.BIGINT);
-        }
-        pst.setInt   (8, cours.getProgression());
+        pst.setString(5, cours.getDuree());
+        pst.setString(6, cours.getObjectifSemaine());
+        pst.setString(7, cours.getPerformance());
+        pst.setDate  (8, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
+        pst.setInt   (9, cours.getProgression());
         pst.executeUpdate();
 
-        // Récupérer l'id généré automatiquement
         ResultSet rs = pst.getGeneratedKeys();
         if (rs.next()) {
             cours.setIdCours(rs.getInt(1));
         }
-
-        System.out.println("✅ Cours ajouté : " + cours);
     }
-
-    // ─────────────────────────────────────────────────────────────────────────────
-    // MODIFIER
-    // ─────────────────────────────────────────────────────────────────────────────
 
     @Override
     public void update(Cours cours) throws SQLException {
-        String req = "UPDATE cours SET titre = ?, description = ?, domaine = ?, " +
-                "niveau = ?, duree = ?, date_creation = ?, " +
-                "id_instructeur = ?, progression = ? " +
+        String req = "UPDATE cours SET titre = ?, description = ?, categorie = ?, " +
+                "niveau = ?, duree = ?, objectif_semaine = ?, performance = ?, " +
+                "date_creation = ?, progression = ? " +
                 "WHERE id_cours = ?";
 
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setString(1, cours.getTitre());
         pst.setString(2, cours.getDescription());
-        pst.setString(3, cours.getDomaine());
+        pst.setString(3, cours.getCategorie());
         pst.setString(4, cours.getNiveau());
-        pst.setInt   (5, cours.getDuree());
-        pst.setDate  (6, cours.getDateCreation() != null
-                ? Date.valueOf(cours.getDateCreation()) : null);
-        if (cours.getIdInstructeur() != null) {
-            pst.setLong(7, cours.getIdInstructeur());
-        } else {
-            pst.setNull(7, Types.BIGINT);
-        }
-        pst.setInt   (8, cours.getProgression());
-        pst.setInt   (9, cours.getIdCours());
+        pst.setString(5, cours.getDuree());
+        pst.setString(6, cours.getObjectifSemaine());
+        pst.setString(7, cours.getPerformance());
+        pst.setDate  (8, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
+        pst.setInt   (9, cours.getProgression());
+        pst.setInt   (10, cours.getIdCours());
         pst.executeUpdate();
-
-        System.out.println("✅ Cours modifié : " + cours);
     }
-
-    // ─────────────────────────────────────────────────────────────────────────────
-    // SUPPRIMER
-    // ─────────────────────────────────────────────────────────────────────────────
 
     @Override
     public void delete(Cours cours) throws SQLException {
-        // Grâce au ON DELETE CASCADE défini sur chapitre,
-        // les chapitres liés seront supprimés automatiquement.
         String req = "DELETE FROM cours WHERE id_cours = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setInt(1, cours.getIdCours());
         pst.executeUpdate();
-
-        System.out.println("✅ Cours supprimé (id=" + cours.getIdCours() + ")");
     }
-
-    // ─────────────────────────────────────────────────────────────────────────────
-    // AFFICHER TOUS
-    // ─────────────────────────────────────────────────────────────────────────────
 
     @Override
     public List<Cours> getAll() throws SQLException {
@@ -115,62 +82,48 @@ public class CoursService implements ICoursService {
         return liste;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────
-    // MÉTHODES UTILITAIRES
-    // ─────────────────────────────────────────────────────────────────────────────
+    @Override
+    public void ajouter(Cours t) throws SQLException { add(t); }
 
     @Override
-    public void ajouter(Cours t) throws SQLException {
-        add(t);
-    }
-
-    @Override
-    public void modifier(Cours t) throws SQLException {
-        update(t);
-    }
+    public void modifier(Cours t) throws SQLException { update(t); }
 
     @Override
     public void supprimer(int id) throws SQLException {
         Cours c = getById(id);
-        if (c != null) {
-            delete(c);
-        }
+        if (c != null) delete(c);
     }
 
     @Override
-    public List<Cours> afficher() throws SQLException {
-        return getAll();
-    }
+    public List<Cours> afficher() throws SQLException { return getAll(); }
 
-    /** Récupérer un cours par son id */
     @Override
     public Cours getById(int id) throws SQLException {
         String req = "SELECT * FROM cours WHERE id_cours = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setInt(1, id);
         ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            return mapRow(rs);
-        }
+        if (rs.next()) return mapRow(rs);
         return null;
     }
 
-    /** Convertit une ligne ResultSet en objet Cours */
     private Cours mapRow(ResultSet rs) throws SQLException {
         Cours c = new Cours();
         c.setIdCours    (rs.getInt("id_cours"));
         c.setTitre      (rs.getString("titre"));
         c.setDescription(rs.getString("description"));
-        c.setDomaine    (rs.getString("domaine"));
+        c.setCategorie  (rs.getString("categorie"));
         c.setNiveau     (rs.getString("niveau"));
-        c.setDuree      (rs.getInt("duree"));
+        c.setDuree      (rs.getString("duree"));
+        c.setObjectifSemaine(rs.getString("objectif_semaine"));
+        c.setPerformance(rs.getString("performance"));
 
-        Date d = rs.getDate("date_creation");
-        c.setDateCreation(d != null ? d.toLocalDate() : null);
+        Date dCreation = rs.getDate("date_creation");
+        c.setDateCreation(dCreation != null ? dCreation.toLocalDate() : null);
 
-        long idInstructeur = rs.getLong("id_instructeur");
-        c.setIdInstructeur(rs.wasNull() ? null : idInstructeur);
         c.setProgression(rs.getInt("progression"));
         return c;
     }
 }
+
+

@@ -14,6 +14,12 @@ public class Chapitre {
     private String explication;
     private String quizJson;
 
+    // Nouveaux champs pour Skillora Premium
+    private String niveau; // FACILE, MOYEN, DIFFICILE
+    private String videoUrl;
+    private String imageUrl;
+    private boolean estComplete;
+
     // Constructeur vide
     public Chapitre() {}
 
@@ -129,6 +135,18 @@ public class Chapitre {
     public void setQuizJson(String quizJson) {
         this.quizJson = quizJson;
     }
+
+    public String getNiveau() { return niveau; }
+    public void setNiveau(String niveau) { this.niveau = niveau; }
+
+    public String getVideoUrl() { return videoUrl; }
+    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public boolean isEstComplete() { return estComplete; }
+    public void setEstComplete(boolean estComplete) { this.estComplete = estComplete; }
 
     public int getId_chapitre() {
         return getIdChapitre();
