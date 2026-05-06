@@ -2,91 +2,63 @@ package services;
 
 import entities.Poste;
 import utils.MyDatabase;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PosteService implements IService<Poste> {
-
-    private Connection cnx;
+    private Connection connection;
 
     public PosteService() {
-        cnx = MyDatabase.getInstance().getCnx();
+        connection = MyDatabase.getInstance().getConnection();
     }
 
     @Override
     public void add(Poste poste) throws SQLException {
-        String req = "INSERT INTO `post`(`titre`, `contenu`, `image`, `id_utilisateur`) VALUES (?, ?, ?, ?)";
-        PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-        pst.setString(1, poste.getTitre());
-        pst.setString(2, poste.getContenu());
-        pst.setString(3, poste.getImage());
-        pst.setLong(4, poste.getIdUtilisateur());
-        pst.executeUpdate();
-
-        ResultSet rs = pst.getGeneratedKeys();
-        if (rs.next()) {
-            poste.setIdPost(rs.getInt(1));
-        }
-        System.out.println("Post added");
+        String req = "INSERT INTO post (titre, contenu, image, id_utilisateur) VALUES (?, ?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setString(1, poste.getTitre());
+        ps.setString(2, poste.getContenu());
+        ps.setString(3, poste.getImage());
+        ps.setInt(4, poste.getIdUtilisateur());
+        ps.executeUpdate();
     }
 
     @Override
     public void update(Poste poste) throws SQLException {
-        String req = "UPDATE post SET titre = ?, contenu = ?, image = ? WHERE id_post = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setString(1, poste.getTitre());
-        pst.setString(2, poste.getContenu());
-        pst.setString(3, poste.getImage());
-        pst.setInt(4, poste.getIdPost());
-        pst.executeUpdate();
-        System.out.println("Post modified");
+        String req = "UPDATE post SET titre=?, contenu=?, image=? WHERE id_post=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setString(1, poste.getTitre());
+        ps.setString(2, poste.getContenu());
+        ps.setString(3, poste.getImage());
+        ps.setInt(4, poste.getIdPost());
+        ps.executeUpdate();
     }
 
     @Override
     public void delete(Poste poste) throws SQLException {
-        String req = "DELETE FROM post WHERE id_post = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setInt(1, poste.getIdPost());
-        pst.executeUpdate();
-        System.out.println("Post deleted");
+        String req = "DELETE FROM post WHERE id_post=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setInt(1, poste.getIdPost());
+        ps.executeUpdate();
     }
 
     @Override
     public List<Poste> getAll() throws SQLException {
-        List<Poste> postes = new ArrayList<>();
+        List<Poste> list = new ArrayList<>();
         String req = "SELECT * FROM post";
-        Statement st = cnx.createStatement();
+        Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(req);
         while (rs.next()) {
-            Poste poste = new Poste();
-            poste.setIdPost(rs.getInt("id_post"));
-            poste.setTitre(rs.getString("titre"));
-            poste.setContenu(rs.getString("contenu"));
-            poste.setImage(rs.getString("image"));
-            poste.setDateCreation(rs.getTimestamp("date_creation"));
-            poste.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            postes.add(poste);
+            Poste p = new Poste();
+            p.setIdPost(rs.getInt("id_post"));
+            p.setTitre(rs.getString("titre"));
+            p.setContenu(rs.getString("contenu"));
+            p.setImage(rs.getString("image"));
+            p.setDateCreation(rs.getTimestamp("date_creation"));
+            p.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            list.add(p);
         }
-        return postes;
-    }
-
-    public Poste getById(int id) throws SQLException {
-        String req = "SELECT * FROM post WHERE id_post = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setInt(1, id);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            Poste poste = new Poste();
-            poste.setIdPost(rs.getInt("id_post"));
-            poste.setTitre(rs.getString("titre"));
-            poste.setContenu(rs.getString("contenu"));
-            poste.setImage(rs.getString("image"));
-            poste.setDateCreation(rs.getTimestamp("date_creation"));
-            poste.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            return poste;
-        }
-        return null;
+        return list;
     }
 }

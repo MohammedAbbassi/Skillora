@@ -1,45 +1,37 @@
 package entities;
 
-import java.sql.Timestamp;
-
 public class User {
-    private long idUtilisateur;
+    private int idUtilisateur;
     private String nomUtilisateur;
     private String email;
     private String motDePasse;
-    private String prenom;
-    private String nom;
-    private String photoProfil;
     private Role role;
-    private boolean estActif;
-    private Timestamp dateCreation;
-    private Timestamp dateModification;
+    private String photoProfil;
 
     public User() {
     }
 
-    public User(String nomUtilisateur, String email, String motDePasse, String prenom, String nom) {
+    public User(String nomUtilisateur, String email, String motDePasse, Role role) {
         this.nomUtilisateur = nomUtilisateur;
         this.email = email;
         this.motDePasse = motDePasse;
-        this.prenom = prenom;
-        this.nom = nom;
+        this.role = role;
     }
 
-    public User(long idUtilisateur, String nomUtilisateur, String email, String motDePasse, String prenom, String nom) {
+    public User(int idUtilisateur, String nomUtilisateur, String email, String motDePasse, Role role, String photoProfil) {
         this.idUtilisateur = idUtilisateur;
         this.nomUtilisateur = nomUtilisateur;
         this.email = email;
         this.motDePasse = motDePasse;
-        this.prenom = prenom;
-        this.nom = nom;
+        this.role = role;
+        this.photoProfil = photoProfil;
     }
 
-    public long getIdUtilisateur() {
+    public int getIdUtilisateur() {
         return idUtilisateur;
     }
 
-    public void setIdUtilisateur(long idUtilisateur) {
+    public void setIdUtilisateur(int idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
 
@@ -67,30 +59,6 @@ public class User {
         this.motDePasse = motDePasse;
     }
 
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPhotoProfil() {
-        return photoProfil;
-    }
-
-    public void setPhotoProfil(String photoProfil) {
-        this.photoProfil = photoProfil;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -99,39 +67,11 @@ public class User {
         this.role = role;
     }
 
-    public boolean isEstActif() {
-        return estActif;
+    public String getPhotoProfil() {
+        return photoProfil;
     }
 
-    public void setEstActif(boolean estActif) {
-        this.estActif = estActif;
-    }
-
-    public Timestamp getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Timestamp dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public Timestamp getDateModification() {
-        return dateModification;
-    }
-
-    public void setDateModification(Timestamp dateModification) {
-        this.dateModification = dateModification;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "idUtilisateur=" + idUtilisateur +
-                ", nomUtilisateur='" + nomUtilisateur + '\'' +
-                ", email='" + email + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", nom='" + nom + '\'' +
-                ", role=" + role +
-                '}';
+    public void setPhotoProfil(String photoProfil) {
+        this.photoProfil = photoProfil;
     }
 }

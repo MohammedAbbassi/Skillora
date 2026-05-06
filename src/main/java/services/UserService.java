@@ -1,7 +1,7 @@
 package services;
 
-import entities.User;
 import entities.Role;
+import entities.User;
 import utils.MyDatabase;
 
 import java.sql.*;
@@ -9,128 +9,80 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService implements IService<User> {
-
-    private Connection cnx;
+    private Connection connection;
 
     public UserService() {
-        cnx = MyDatabase.getInstance().getCnx();
+        connection = MyDatabase.getInstance().getConnection();
     }
 
     @Override
     public void add(User user) throws SQLException {
-        String req = "INSERT INTO `utilisateurs`(`nom_utilisateur`, `email`, `mot_de_passe`, `prenom`, `nom`) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-        pst.setString(1, user.getNomUtilisateur());
-        pst.setString(2, user.getEmail());
-        pst.setString(3, user.getMotDePasse());
-        pst.setString(4, user.getPrenom());
-        pst.setString(5, user.getNom());
-        pst.executeUpdate();
-        
-        ResultSet rs = pst.getGeneratedKeys();
+        String req = "INSERT INTO utilisateurs (nom_utilisateur, email, mot_de_passe, role) VALUES (?, ?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, user.getNomUtilisateur());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getMotDePasse());
+        ps.setString(4, user.getRole().name());
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
         if (rs.next()) {
-            user.setIdUtilisateur(rs.getLong(1));
+            user.setIdUtilisateur(rs.getInt(1));
         }
-        System.out.println("User added");
     }
 
     @Override
     public void update(User user) throws SQLException {
-        String req = "UPDATE utilisateurs SET nom_utilisateur = ?, email = ?, mot_de_passe = ?, prenom = ?, nom = ? WHERE id_utilisateur = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setString(1, user.getNomUtilisateur());
-        pst.setString(2, user.getEmail());
-        pst.setString(3, user.getMotDePasse());
-        pst.setString(4, user.getPrenom());
-        pst.setString(5, user.getNom());
-        pst.setLong(6, user.getIdUtilisateur());
-        pst.executeUpdate();
-        System.out.println("User modified");
+        String req = "UPDATE utilisateurs SET nom_utilisateur=?, email=?, mot_de_passe=?, role=?, photo_profil=? WHERE id_utilisateur=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setString(1, user.getNomUtilisateur());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getMotDePasse());
+        ps.setString(4, user.getRole().name());
+        ps.setString(5, user.getPhotoProfil());
+        ps.setInt(6, user.getIdUtilisateur());
+        ps.executeUpdate();
     }
 
     @Override
     public void delete(User user) throws SQLException {
-        String req = "DELETE FROM utilisateurs WHERE id_utilisateur = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setLong(1, user.getIdUtilisateur());
-        pst.executeUpdate();
-        System.out.println("User deleted");
+        String req = "DELETE FROM utilisateurs WHERE id_utilisateur=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setInt(1, user.getIdUtilisateur());
+        ps.executeUpdate();
     }
 
     @Override
     public List<User> getAll() throws SQLException {
-        List<User> users = new ArrayList<>();
+        List<User> list = new ArrayList<>();
         String req = "SELECT * FROM utilisateurs";
-        Statement st = cnx.createStatement();
+        Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(req);
         while (rs.next()) {
-            User user = new User();
-            user.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            user.setNomUtilisateur(rs.getString("nom_utilisateur"));
-            user.setEmail(rs.getString("email"));
-            user.setMotDePasse(rs.getString("mot_de_passe"));
-            user.setPrenom(rs.getString("prenom"));
-            user.setNom(rs.getString("nom"));
-            user.setPhotoProfil(rs.getString("photo_profil"));
-            String roleStr = rs.getString("role");
-            user.setRole(roleStr != null ? Role.valueOf(roleStr) : null);
-            user.setEstActif(rs.getBoolean("est_actif"));
-            user.setDateCreation(rs.getTimestamp("date_creation"));
-            user.setDateModification(rs.getTimestamp("date_modification"));
-            users.add(user);
+            User u = new User();
+            u.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            u.setNomUtilisateur(rs.getString("nom_utilisateur"));
+            u.setEmail(rs.getString("email"));
+            u.setMotDePasse(rs.getString("mot_de_passe"));
+            u.setPhotoProfil(rs.getString("photo_profil"));
+            list.add(u);
         }
-        return users;
+        return list;
     }
 
-    public User getUserById(long id) throws SQLException {
-        String req = "SELECT * FROM utilisateurs WHERE id_utilisateur = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setLong(1, id);
-        ResultSet rs = pst.executeQuery();
+    public User getById(int id) throws SQLException {
+        String req = "SELECT * FROM utilisateurs WHERE id_utilisateur=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            User user = new User();
-            user.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            user.setNomUtilisateur(rs.getString("nom_utilisateur"));
-            user.setEmail(rs.getString("email"));
-            user.setMotDePasse(rs.getString("mot_de_passe"));
-            user.setPrenom(rs.getString("prenom"));
-            user.setNom(rs.getString("nom"));
-            user.setPhotoProfil(rs.getString("photo_profil"));
-            String roleStr = rs.getString("role");
-            user.setRole(roleStr != null ? Role.valueOf(roleStr) : null);
-            user.setEstActif(rs.getBoolean("est_actif"));
-            user.setDateCreation(rs.getTimestamp("date_creation"));
-            user.setDateModification(rs.getTimestamp("date_modification"));
-            return user;
+            User u = new User();
+            u.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            u.setNomUtilisateur(rs.getString("nom_utilisateur"));
+            u.setEmail(rs.getString("email"));
+            u.setMotDePasse(rs.getString("mot_de_passe"));
+            u.setPhotoProfil(rs.getString("photo_profil"));
+            return u;
         }
         return null;
-    }
-
-    public User getUserByEmail(String email) throws SQLException {
-        String req = "SELECT * FROM utilisateurs WHERE email = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setString(1, email);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
-            User user = new User();
-            user.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            user.setNomUtilisateur(rs.getString("nom_utilisateur"));
-            user.setEmail(rs.getString("email"));
-            user.setMotDePasse(rs.getString("mot_de_passe"));
-            user.setPrenom(rs.getString("prenom"));
-            user.setNom(rs.getString("nom"));
-            user.setPhotoProfil(rs.getString("photo_profil"));
-            String roleStr = rs.getString("role");
-            user.setRole(roleStr != null ? Role.valueOf(roleStr) : null);
-            user.setEstActif(rs.getBoolean("est_actif"));
-            user.setDateCreation(rs.getTimestamp("date_creation"));
-            user.setDateModification(rs.getTimestamp("date_modification"));
-            return user;
-        }
-        return null;
-    }
-
-    public boolean emailExists(String email) throws SQLException {
-        return getUserByEmail(email) != null;
     }
 }

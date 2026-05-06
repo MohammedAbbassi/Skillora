@@ -7,82 +7,49 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentaireService implements IService<Commentaire> {
+public class CommentaireService {
+    private Connection conn = MyDatabase.getInstance().getConnection();
 
-    private Connection cnx;
-
-    public CommentaireService() {
-        cnx = MyDatabase.getInstance().getCnx();
+    public void add(Commentaire c) throws SQLException {
+        String sql = "INSERT INTO commentaire (contenu, id_utilisateur, id_post) VALUES (?,?,?)";
+        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, c.getContenu());
+        ps.setInt(2, c.getIdUtilisateur());
+        ps.setInt(3, c.getIdPost());
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) c.setIdCommentaire(rs.getInt(1));
     }
 
-    @Override
-    public void add(Commentaire commentaire) throws SQLException {
-        String req = "INSERT INTO `commentaire`(`contenu`, `id_utilisateur`, `id_post`) VALUES (?, ?, ?)";
-        PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-        pst.setString(1, commentaire.getContenu());
-        pst.setLong(2, commentaire.getIdUtilisateur());
-        pst.setInt(3, commentaire.getIdPost());
-        pst.executeUpdate();
-
-        ResultSet rs = pst.getGeneratedKeys();
-        if (rs.next()) {
-            commentaire.setIdCommentaire(rs.getInt(1));
-        }
-        System.out.println("Comment added");
+    public void update(Commentaire c) throws SQLException {
+        String sql = "UPDATE commentaire SET contenu=? WHERE id_commentaire=?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, c.getContenu());
+        ps.setInt(2, c.getIdCommentaire());
+        ps.executeUpdate();
     }
 
-    @Override
-    public void update(Commentaire commentaire) throws SQLException {
-        String req = "UPDATE commentaire SET contenu = ? WHERE id_commentaire = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setString(1, commentaire.getContenu());
-        pst.setInt(2, commentaire.getIdCommentaire());
-        pst.executeUpdate();
-        System.out.println("Comment modified");
+    public void delete(int id) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM commentaire WHERE id_commentaire=?");
+        ps.setInt(1, id);
+        ps.executeUpdate();
     }
 
-    @Override
-    public void delete(Commentaire commentaire) throws SQLException {
-        String req = "DELETE FROM commentaire WHERE id_commentaire = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setInt(1, commentaire.getIdCommentaire());
-        pst.executeUpdate();
-        System.out.println("Comment deleted");
-    }
-
-    @Override
-    public List<Commentaire> getAll() throws SQLException {
-        List<Commentaire> commentaires = new ArrayList<>();
-        String req = "SELECT * FROM commentaire";
-        Statement st = cnx.createStatement();
-        ResultSet rs = st.executeQuery(req);
+    public List<Commentaire> getByPost(int postId) throws SQLException {
+        List<Commentaire> list = new ArrayList<>();
+        PreparedStatement ps = conn.prepareStatement(
+            "SELECT * FROM commentaire WHERE id_post=? ORDER BY date_creation ASC");
+        ps.setInt(1, postId);
+        ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            Commentaire commentaire = new Commentaire();
-            commentaire.setIdCommentaire(rs.getInt("id_commentaire"));
-            commentaire.setContenu(rs.getString("contenu"));
-            commentaire.setDateCreation(rs.getTimestamp("date_creation"));
-            commentaire.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            commentaire.setIdPost(rs.getInt("id_post"));
-            commentaires.add(commentaire);
+            Commentaire c = new Commentaire();
+            c.setIdCommentaire(rs.getInt("id_commentaire"));
+            c.setContenu(rs.getString("contenu"));
+            c.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            c.setIdPost(rs.getInt("id_post"));
+            c.setDateCreation(rs.getTimestamp("date_creation"));
+            list.add(c);
         }
-        return commentaires;
-    }
-
-    public List<Commentaire> getByPost(int idPost) throws SQLException {
-        List<Commentaire> commentaires = new ArrayList<>();
-        String req = "SELECT * FROM commentaire WHERE id_post = ?";
-        PreparedStatement pst = cnx.prepareStatement(req);
-        pst.setInt(1, idPost);
-        ResultSet rs = pst.executeQuery();
-        while (rs.next()) {
-            Commentaire commentaire = new Commentaire();
-            commentaire.setIdCommentaire(rs.getInt("id_commentaire"));
-            commentaire.setContenu(rs.getString("contenu"));
-            commentaire.setDateCreation(rs.getTimestamp("date_creation"));
-            commentaire.setIdUtilisateur(rs.getLong("id_utilisateur"));
-            commentaire.setIdPost(rs.getInt("id_post"));
-            commentaires.add(commentaire);
-        }
-        return commentaires;
+        return list;
     }
 }
