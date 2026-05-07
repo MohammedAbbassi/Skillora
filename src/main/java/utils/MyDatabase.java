@@ -6,15 +6,15 @@ import java.sql.SQLException;
 
 public class MyDatabase {
 
-    private final String url = "jdbc:mysql://localhost:3306/skillora";
-    private final String user = "root";
-    private final String password = "";
+    private static final String URL = "jdbc:mysql://localhost:3306/skillora";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
     private Connection cnx;
     private static MyDatabase instance;
 
     private MyDatabase() {
         try {
-            cnx = DriverManager.getConnection(url, user, password);
+            cnx = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Connected to database");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
