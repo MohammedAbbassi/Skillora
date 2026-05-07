@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="25.0" style="-fx-background-color: #f1f5f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DatabaseErrorController">
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+    </padding>
+    
+    <VBox alignment="CENTER" maxWidth="600.0" spacing="20.0" styleClass="card">
+        <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+        </padding>
+        <children>
+
+            <StackPane style="-fx-background-color: #fef2f2; -fx-background-radius: 50; -fx-min-width: 80; -fx-min-height: 80; -fx-max-width: 80; -fx-max-height: 80;">
+                <children>
+                    <Label text="!" style="-fx-text-fill: #ef4444; -fx-font-size: 40; -fx-font-weight: 900;" />
+                </children>
+            </StackPane>
+            
+            <Label styleClass="card-title" text="Base de données déconnectée" textAlignment="CENTER" wrapText="true" />
+            
+            <Label fx:id="errorLabel" styleClass="card-subtitle" text="Impossible de se connecter au serveur MySQL sur localhost:3306." textAlignment="CENTER" wrapText="true" style="-fx-font-size: 14px;" />
+            
+            <Separator prefWidth="200.0">
+                <VBox.margin>
+                    <Insets bottom="10.0" top="10.0" />
+                </VBox.margin>
+            </Separator>
+            
+            <VBox spacing="12.0" alignment="CENTER_LEFT">
+                <children>
+                    <Label text="Comment résoudre ce problème ?" style="-fx-font-weight: bold; -fx-text-fill: #0f172a; -fx-font-size: 15px;" />
+                    <HBox spacing="10.0">
+                        <Label text="1." style="-fx-text-fill: #0ea5e9; -fx-font-weight: bold;" />
+                        <Label text="Démarrez votre serveur MySQL ou MariaDB (XAMPP, WAMP, Docker...)" wrapText="true" style="-fx-text-fill: #475569;" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label text="2." style="-fx-text-fill: #0ea5e9; -fx-font-weight: bold;" />
+                        <Label text="Assurez-vous que la base de données 'skillora' existe." wrapText="true" style="-fx-text-fill: #475569;" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label text="3." style="-fx-text-fill: #0ea5e9; -fx-font-weight: bold;" />
+                        <Label text="Importez le fichier 'skillora.sql' situé à la racine du projet." wrapText="true" style="-fx-text-fill: #475569;" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label text="4." style="-fx-text-fill: #0ea5e9; -fx-font-weight: bold;" />
+                        <Label text="Vérifiez les identifiants (root / sans mot de passe) dans MyDatabase.java" wrapText="true" style="-fx-text-fill: #475569;" />
+                    </HBox>
+                </children>
+            </VBox>
+            
+            <Button fx:id="btnRetry" mnemonicParsing="false" onAction="#onRetry" prefHeight="45.0" prefWidth="250.0" styleClass="btn-primary" text="Réessayer la connexion">
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+            </Button>
+        </children>
+    </VBox>
+</VBox>
