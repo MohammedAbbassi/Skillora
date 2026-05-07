@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.skillora.controllers.AdminProductsController" spacing="12"
+      stylesheets="@../../css/theme.css">
+    <padding>
+        <Insets bottom="8" left="8" right="8" top="8"/>
+    </padding>
+    <Label text="Produits de la boutique" styleClass="title-h2"/>
+    <Label text="Ajoutez ou modifiez les articles proposés aux clients (sans passer par la boutique). La suppression peut échouer si le produit figure dans une commande."
+           styleClass="muted" wrapText="true"/>
+    <TableView fx:id="productTable" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colId" text="Id" prefWidth="50"/>
+            <TableColumn fx:id="colNom" text="Nom" prefWidth="200"/>
+            <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="110"/>
+            <TableColumn fx:id="colLangue" text="Langue" prefWidth="80"/>
+            <TableColumn fx:id="colPrix" text="Prix (TND)" prefWidth="90"/>
+            <TableColumn fx:id="colNiveau" text="Niveau" prefWidth="110"/>
+        </columns>
+    </TableView>
+    <Label text="Formulaire" styleClass="field-label"/>
+    <GridPane hgap="10" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+        </columnConstraints>
+        <Label text="Nom" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="fieldNom" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Description" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextArea fx:id="fieldDesc" prefRowCount="2" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="Prix (TND)" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="fieldPrix" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Langue" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="fieldLangue" promptText="FR" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="Catégorie" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <ComboBox fx:id="comboCategorie" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Label text="Niveau" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <ComboBox fx:id="comboNiveau" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+    <HBox spacing="10">
+        <Button text="Ajouter" onAction="#onAdd" styleClass="primary-button"/>
+        <Button text="Mettre à jour" onAction="#onUpdate" styleClass="secondary-button"/>
+        <Button text="Supprimer" onAction="#onDelete" styleClass="danger-button"/>
+        <Button text="Vider le formulaire" onAction="#onClearForm" styleClass="secondary-button"/>
+    </HBox>
+    <Label fx:id="adminMsg" styleClass="muted" wrapText="true"/>
+</VBox>

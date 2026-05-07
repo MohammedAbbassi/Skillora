@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.skillora.controllers.ShopController" stylesheets="@../../css/theme.css">
+    <padding>
+        <Insets bottom="8" left="8" right="8" top="8"/>
+    </padding>
+    <center>
+        <VBox spacing="12">
+            <Label text="Boutique" styleClass="title-h2"/>
+            <Label text="Statistiques du catalogue et produits en cartes — filtrez par catégorie puis ajoutez au panier." styleClass="muted"/>
+            <HBox spacing="10" styleClass="stat-strip">
+                <VBox styleClass="stat-card" spacing="4">
+                    <Label text="Produits" styleClass="stat-label"/>
+                    <Label fx:id="statTotalProducts" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" spacing="4">
+                    <Label text="Prix moyen (TND)" styleClass="stat-label"/>
+                    <Label fx:id="statAvgPrice" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" spacing="4">
+                    <Label text="Min / Max (TND)" styleClass="stat-label"/>
+                    <Label fx:id="statMinMax" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" spacing="4">
+                    <Label text="Par catégorie" styleClass="stat-label"/>
+                    <Label fx:id="statByType" wrapText="true" styleClass="muted"/>
+                </VBox>
+            </HBox>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Filtrer :" styleClass="field-label"/>
+                <ComboBox fx:id="filterTypeCombo" prefWidth="200" promptText="Tous les types"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="catalog-scroll" prefHeight="380" VBox.vgrow="ALWAYS">
+                <FlowPane fx:id="productsFlow" hgap="14" vgap="14" prefWrapLength="900"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+    <right>
+        <VBox spacing="12" prefWidth="280" styleClass="card">
+            <padding>
+                <Insets bottom="16" left="16" right="16" top="16"/>
+            </padding>
+            <Label text="Panier" styleClass="title-h2"/>
+            <ListView fx:id="cartList" prefHeight="280"/>
+            <Label fx:id="cartTotalLabel" styleClass="title-h2"/>
+            <HBox spacing="8">
+                <Button text="Retirer sélection" onAction="#onRemoveLine" styleClass="secondary-button"
+                        maxWidth="Infinity"/>
+            </HBox>
+            <Button text="Valider la commande" onAction="#onCheckout" styleClass="primary-button"
+                    maxWidth="Infinity"/>
+            <Label fx:id="shopMessage" wrapText="true" styleClass="muted"/>
+        </VBox>
+    </right>
+</BorderPane>
