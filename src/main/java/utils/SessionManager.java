@@ -6,6 +6,10 @@ import entities.User;
 public final class SessionManager {
     private static User currentUser;
 
+    static {
+        setDevUser(Role.ETUDIANT);
+    }
+
     private SessionManager() {
     }
 
@@ -13,16 +17,32 @@ public final class SessionManager {
         currentUser = user;
     }
 
-    public static void clearSession() {
-        currentUser = null;
+    public static void setDevUser(Role role) {
+        User devUser = new User();
+        devUser.setRole(role);
+
+        if (role == Role.ADMIN) {
+            devUser.setIdUtilisateur(1001);
+            devUser.setPrenom("Admin");
+            devUser.setNom("Test");
+            devUser.setNomUtilisateur("admin_evenements");
+        } else if (role == Role.INSTRUCTEUR) {
+            devUser.setIdUtilisateur(1002);
+            devUser.setPrenom("Enseignant");
+            devUser.setNom("Test");
+            devUser.setNomUtilisateur("enseignant_evenements");
+        } else {
+            devUser.setIdUtilisateur(1003);
+            devUser.setPrenom("Etudiant");
+            devUser.setNom("Test");
+            devUser.setNomUtilisateur("etudiant_evenements");
+        }
+
+        currentUser = devUser;
     }
 
     public static User getCurrentUser() {
         return currentUser;
-    }
-
-    public static boolean isLoggedIn() {
-        return currentUser != null;
     }
 
     public static long getCurrentUserId() {

@@ -6,11 +6,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import entities.Role;
 import utils.SessionManager;
 
@@ -29,6 +31,8 @@ public class MainController implements Initializable {
     @FXML
     private Button btnNavReservations;
     @FXML
+    private ComboBox<Role> comboRoleTest;
+    @FXML
     private Label lblSessionUser;
     @FXML
     private ToggleButton btnDyslexiaMode;
@@ -39,9 +43,44 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        updateSessionLabel();
+        setupRoleTester();
         applyNavigationForCurrentRole();
         showDefaultViewForCurrentRole();
+    }
+
+    private void setupRoleTester() {
+        comboRoleTest.getItems().setAll(Role.ADMIN, Role.INSTRUCTEUR, Role.ETUDIANT);
+        comboRoleTest.setConverter(new StringConverter<Role>() {
+            @Override
+            public String toString(Role role) {
+                if (role == Role.ADMIN) {
+                    return "Admin";
+                }
+                if (role == Role.INSTRUCTEUR) {
+                    return "Enseignant";
+                }
+                if (role == Role.ETUDIANT) {
+                    return "Etudiant";
+                }
+                return "";
+            }
+
+            @Override
+            public Role fromString(String value) {
+                if ("Admin".equals(value)) {
+                    return Role.ADMIN;
+                }
+                if ("Enseignant".equals(value)) {
+                    return Role.INSTRUCTEUR;
+                }
+                if ("Etudiant".equals(value)) {
+                    return Role.ETUDIANT;
+                }
+                return null;
+            }
+        });
+        comboRoleTest.setValue(SessionManager.getCurrentUserRole());
+        updateSessionLabel();
     }
 
     @FXML
@@ -60,6 +99,19 @@ public class MainController implements Initializable {
         setActiveButton(btnNavReservations);
         currentView = "/com/skillora/views/ReservationInterface.fxml";
         loadView(currentView);
+    }
+
+    @FXML
+    private void handleRoleTestChange() {
+        Role selectedRole = comboRoleTest.getValue();
+        if (selectedRole == null) {
+            return;
+        }
+
+        SessionManager.setDevUser(selectedRole);
+        updateSessionLabel();
+        applyNavigationForCurrentRole();
+        showDefaultViewForCurrentRole();
     }
 
     @FXML
@@ -91,21 +143,8 @@ public class MainController implements Initializable {
 
     private void applyNavigationForCurrentRole() {
         Role role = SessionManager.getCurrentUserRole();
-        if (role == null) {
-            btnNavEvenements.setVisible(false);
-            btnNavEvenements.setManaged(false);
-            btnNavReservations.setVisible(false);
-            btnNavReservations.setManaged(false);
-            accessibilityPanel.setVisible(false);
-            accessibilityPanel.setManaged(false);
-            contentArea.getChildren().setAll(new Label("Aucun utilisateur connecte."));
-            return;
-        }
-
         boolean student = role == Role.ETUDIANT;
 
-        btnNavReservations.setVisible(true);
-        btnNavReservations.setManaged(true);
         accessibilityPanel.setVisible(student);
         accessibilityPanel.setManaged(student);
         if (!student) {
@@ -133,9 +172,6 @@ public class MainController implements Initializable {
     }
 
     private void showDefaultViewForCurrentRole() {
-        if (SessionManager.getCurrentUserRole() == null) {
-            return;
-        }
         if (SessionManager.getCurrentUserRole() == Role.ETUDIANT) {
             showReservations();
         } else {

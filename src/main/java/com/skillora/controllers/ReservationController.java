@@ -8,6 +8,7 @@ import services.ReservationCRUD;
 import utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -69,13 +70,13 @@ public class ReservationController implements Initializable {
 
     private final ReservationCRUD reservationCRUD = new ReservationCRUD();
     private final EvenementCRUD evenementCRUD = new EvenementCRUD();
-    private final ObservableList<Reservation> allReservationList = FXCollections.observableArrayList();
-    private final ObservableList<Reservation> reservationList = FXCollections.observableArrayList();
-    private final ObservableList<Evenement> eventChoiceList = FXCollections.observableArrayList();
+    private ObservableList<Reservation> allReservationList = FXCollections.observableArrayList();
+    private ObservableList<Reservation> reservationList = FXCollections.observableArrayList();
+    private ObservableList<Evenement> eventChoiceList = FXCollections.observableArrayList();
     private int nbPlaces = 1;
     private LocalDate maxReservationDate;
     private final Set<String> selectedSeats = new LinkedHashSet<>();
-    private final Set<String> occupiedSeats = new LinkedHashSet<>();
+    private Set<String> occupiedSeats = new LinkedHashSet<>();
     private boolean populatingReservation;
 
     @Override
@@ -259,8 +260,7 @@ public class ReservationController implements Initializable {
 
     private void refreshSeatGrid() {
         seatGrid.getChildren().clear();
-        occupiedSeats.clear();
-        occupiedSeats.addAll(loadOccupiedSeatsForSelectedEvent());
+        occupiedSeats = loadOccupiedSeatsForSelectedEvent();
 
         String[] rows = {"A", "B", "C", "D", "E", "F"};
         for (int row = 0; row < rows.length; row++) {
@@ -280,7 +280,7 @@ public class ReservationController implements Initializable {
                     seatButton.getStyleClass().add("seat-selected");
                 }
 
-                seatButton.setOnAction(ignored -> toggleSeat(seatCode));
+                seatButton.setOnAction(event -> toggleSeat(seatCode));
                 seatGrid.add(seatButton, col, row);
             }
         }
@@ -360,7 +360,7 @@ public class ReservationController implements Initializable {
     }
 
     private ListCell<Reservation> createReservationListCell() {
-        return new ListCell<>() {
+        return new ListCell<Reservation>() {
             @Override
             protected void updateItem(Reservation reservation, boolean empty) {
                 super.updateItem(reservation, empty);
@@ -418,7 +418,7 @@ public class ReservationController implements Initializable {
     }
 
     private ListCell<Evenement> createEventChoiceListCell() {
-        return new ListCell<>() {
+        return new ListCell<Evenement>() {
             @Override
             protected void updateItem(Evenement evenement, boolean empty) {
                 super.updateItem(evenement, empty);
@@ -640,7 +640,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleOpenAddForm() {
+    private void handleOpenAddForm(ActionEvent event) {
         listReservations.getSelectionModel().clearSelection();
         clearFormFields();
         applyRolePermissions(null);
@@ -648,7 +648,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleOpenSelectedForm() {
+    private void handleOpenSelectedForm(ActionEvent event) {
         Reservation selected = getSelectedReservation();
         if (selected == null) {
             showAlert("Selection requise", "Veuillez selectionner une reservation dans la liste.", Alert.AlertType.WARNING);
@@ -660,7 +660,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleBackToReservationList() {
+    private void handleBackToReservationList(ActionEvent event) {
         showReservationListPage();
     }
 
@@ -695,7 +695,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleAjouter() {
+    private void handleAjouter(ActionEvent event) {
         if (!canCreateReservation()) {
             showAlert("Acces refuse", "Seul l'etudiant peut ajouter une reservation.", Alert.AlertType.WARNING);
             return;
@@ -715,7 +715,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleModifier() {
+    private void handleModifier(ActionEvent event) {
         Reservation selected = getSelectedReservation();
         if (!canModifyReservation(selected)) {
             if (selected != null
@@ -748,8 +748,7 @@ public class ReservationController implements Initializable {
     }
 
     private boolean isSelectedReservationUnchanged(Reservation selected) {
-        Evenement selectedEvent = getSelectedEvent();
-        if (selected == null || datePicker.getValue() == null || selectedEvent == null) {
+        if (selected == null || datePicker.getValue() == null || getSelectedEvent() == null) {
             return false;
         }
 
@@ -758,17 +757,17 @@ public class ReservationController implements Initializable {
 
         return selected.getNb_places() == selectedSeats.size()
                 && selected.getDate_reservation().toLocalDate().equals(datePicker.getValue())
-                && selected.getId_evenement() == selectedEvent.getId_evenement()
+                && selected.getId_evenement() == getSelectedEvent().getId_evenement()
                 && selectedChaises.equals(formChaises);
     }
 
     @FXML
-    private void handleAnnulerModification() {
+    private void handleAnnulerModification(ActionEvent event) {
         clearForm();
     }
 
     @FXML
-    private void handleSupprimer() {
+    private void handleSupprimer(ActionEvent event) {
         Reservation selected = getSelectedReservation();
         if (selected == null) {
             showAlert("Selection requise", "Veuillez selectionner une reservation dans la liste.", Alert.AlertType.WARNING);
@@ -799,7 +798,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleAccepter() {
+    private void handleAccepter(ActionEvent event) {
         changerStatutReservation(
                 "ACCEPTEE",
                 "Reservation acceptee.",
@@ -809,7 +808,7 @@ public class ReservationController implements Initializable {
     }
 
     @FXML
-    private void handleRefuser() {
+    private void handleRefuser(ActionEvent event) {
         changerStatutReservation(
                 "REFUSEE",
                 "Reservation refusee.",
@@ -850,6 +849,16 @@ public class ReservationController implements Initializable {
         return alert.showAndWait().filter(button -> button == ButtonType.OK).isPresent();
     }
 
+    @FXML
+    private void handleDiminuerPlaces(ActionEvent event) {
+        setNbPlaces(nbPlaces - 1);
+    }
+
+    @FXML
+    private void handleAugmenterPlaces(ActionEvent event) {
+        setNbPlaces(nbPlaces + 1);
+    }
+
     private void setNbPlaces(int value) {
         nbPlaces = Math.max(0, value);
         lblNbPlaces.setText(String.valueOf(nbPlaces));
@@ -861,15 +870,10 @@ public class ReservationController implements Initializable {
     }
 
     private Reservation createReservationFromFields(long userId) {
-        Evenement selectedEvent = getSelectedEvent();
-        if (selectedEvent == null) {
-            throw new IllegalStateException("Aucun evenement selectionne.");
-        }
-
         Reservation r = new Reservation();
         r.setNb_places(selectedSeats.size());
         r.setDate_reservation(Date.valueOf(datePicker.getValue()));
-        r.setId_evenement(selectedEvent.getId_evenement());
+        r.setId_evenement(getSelectedEvent().getId_evenement());
         r.setId_utilisateur(userId);
         r.setChaises(String.join(",", selectedSeats));
         return r;

@@ -6,6 +6,7 @@ import services.EvenementCRUD;
 import utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -147,7 +148,7 @@ public class EvenementController implements Initializable {
     }
 
     private ListCell<Evenement> createEventListCell() {
-        return new ListCell<>() {
+        return new ListCell<Evenement>() {
             @Override
             protected void updateItem(Evenement evenement, boolean empty) {
                 super.updateItem(evenement, empty);
@@ -236,7 +237,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleChoisirImage() {
+    private void handleChoisirImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         fileChooser.getExtensionFilters().add(
@@ -357,7 +358,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleOpenAddForm() {
+    private void handleOpenAddForm(ActionEvent event) {
         listEvenements.getSelectionModel().clearSelection();
         clearFormFields();
         applyRolePermissions(null);
@@ -365,7 +366,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleOpenSelectedForm() {
+    private void handleOpenSelectedForm(ActionEvent event) {
         Evenement selected = getSelectedEvent();
         if (selected == null) {
             showAlert("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
@@ -377,7 +378,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleBackToEventList() {
+    private void handleBackToEventList(ActionEvent event) {
         showEventListPage();
     }
 
@@ -392,7 +393,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleAjouter() {
+    private void handleAjouter(ActionEvent event) {
         if (!canCreateEvent()) {
             showAlert("Acces refuse", "Seul l'admin peut ajouter un evenement.", Alert.AlertType.WARNING);
             return;
@@ -432,7 +433,7 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleModifier() {
+    private void handleModifier(ActionEvent event) {
         Evenement selected = getSelectedEvent();
         if (!canManageEvent(selected)) {
             showAlert("Acces refuse", "Seul l'admin peut modifier un evenement.", Alert.AlertType.WARNING);
@@ -459,12 +460,12 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleAnnulerModification() {
+    private void handleAnnulerModification(ActionEvent event) {
         clearForm();
     }
 
     @FXML
-    private void handleSupprimer() {
+    private void handleSupprimer(ActionEvent event) {
         Evenement selected = getSelectedEvent();
         if (selected == null) {
             showAlert("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
