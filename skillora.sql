@@ -244,7 +244,9 @@ CREATE TABLE `reservation` (
   `nb_places` int(11) NOT NULL DEFAULT 1,
   `date_reservation` date NOT NULL,
   `id_evenement` int(11) NOT NULL,
-  `id_utilisateur` bigint(20) NOT NULL
+  `id_utilisateur` bigint(20) NOT NULL,
+  `statut` varchar(20) NOT NULL DEFAULT 'EN_ATTENTE',
+  `chaises` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -286,6 +288,29 @@ CREATE TABLE `utilisateurs` (
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Donnees de test pour les roles et le module evenements/reservations
+--
+
+INSERT INTO `utilisateurs` (`id_utilisateur`, `nom_utilisateur`, `email`, `mot_de_passe`, `prenom`, `nom`, `photo_profil`, `role`, `est_actif`) VALUES
+(1001, 'admin_evenements', 'admin.evenements@skillora.test', 'test123', 'Admin', 'Evenements', NULL, 'ADMIN', 1),
+(1002, 'enseignant_evenements', 'enseignant.evenements@skillora.test', 'test123', 'Enseignant', 'Evenements', NULL, 'INSTRUCTEUR', 1),
+(1003, 'etudiant_evenements', 'etudiant.evenements@skillora.test', 'test123', 'Etudiant', 'Evenements', NULL, 'ETUDIANT', 1),
+(1004, 'meryem_evenements', 'meryem.evenements@skillora.test', 'test123', 'Meryem', 'Ben Salem', NULL, 'ETUDIANT', 1);
+
+INSERT INTO `evenement` (`id_evenement`, `nom`, `date_evenement`, `lieu`, `image`, `duree_minutes`, `id_utilisateur`) VALUES
+(501, 'Atelier methodes de revision', '2026-05-15', 'Salle A1', 'classpath:/com/skillora/images/events/revision-real.jpg', 90, 1002),
+(502, 'Conference orientation IA', '2026-05-22', 'Amphi 2', 'classpath:/com/skillora/images/events/orientation-ia-real.jpg', 120, 1002),
+(503, 'Session lecture facile', '2026-06-05', 'Bibliotheque', 'classpath:/com/skillora/images/events/lecture-facile-real.jpg', 75, 1002),
+(504, 'Workshop JavaFX CRUD', '2026-06-12', 'Lab Informatique', 'classpath:/com/skillora/images/events/javafx-crud-real.jpg', 150, 1001);
+
+INSERT INTO `reservation` (`id_reservation`, `nb_places`, `date_reservation`, `id_evenement`, `id_utilisateur`, `statut`, `chaises`) VALUES
+(801, 1, '2026-05-02', 501, 1003, 'EN_ATTENTE', 'A1'),
+(802, 2, '2026-05-03', 502, 1003, 'ACCEPTEE', 'B1,B2'),
+(803, 1, '2026-05-04', 503, 1003, 'REFUSEE', 'C1'),
+(804, 1, '2026-05-05', 501, 1004, 'ACCEPTEE', 'A2'),
+(805, 1, '2026-05-06', 504, 1004, 'EN_ATTENTE', 'D1');
 
 -- --------------------------------------------------------
 
@@ -426,6 +451,7 @@ ALTER TABLE `cours`
 --
 ALTER TABLE `evenement`
   ADD PRIMARY KEY (`id_evenement`),
+  ADD UNIQUE KEY `uq_evenement_identite` (`nom`,`date_evenement`,`lieu`),
   ADD KEY `idx_evenement_utilisateur` (`id_utilisateur`),
   ADD KEY `idx_evenement_date` (`date_evenement`);
 

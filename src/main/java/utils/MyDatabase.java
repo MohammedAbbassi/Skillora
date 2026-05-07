@@ -6,15 +6,15 @@ import java.sql.SQLException;
 
 public class MyDatabase {
 
-    private  final  String URL="jdbc:mysql://localhost:3306/skillora";
-    private  final  String USER="root";
-    private  final  String PASSWORD="";
+    private final String url = "jdbc:mysql://localhost:3306/skillora";
+    private final String user = "root";
+    private final String password = "";
     private Connection cnx;
-    private  static  MyDatabase instance ;
+    private static MyDatabase instance;
 
     private MyDatabase() {
         try {
-            cnx = DriverManager.getConnection(URL,USER,PASSWORD);
+            cnx = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to database");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -22,8 +22,9 @@ public class MyDatabase {
     }
 
     public static MyDatabase getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new MyDatabase();
+        }
         return instance;
     }
 
