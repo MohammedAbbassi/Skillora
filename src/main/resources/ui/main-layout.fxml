@@ -3,15 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainLayoutController">
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainLayoutController">
     <left>
         <VBox prefWidth="250.0" styleClass="root-bg" spacing="10">
             <padding><Insets top="30" left="10" right="10" bottom="20"/></padding>
             <Label text="Skillora" styleClass="brand-title" />
             <Label text="Gestion des cours" styleClass="brand-subtitle" />
-            <Separator style="-fx-background-color: rgba(255,255,255,0.1); -fx-padding: 0; -fx-margin: 10 0;" />
+            <Separator style="-fx-background-color: rgba(255,255,255,0.1); -fx-padding: 0;">
+                <VBox.margin><Insets top="10" bottom="10"/></VBox.margin>
+            </Separator>
+
             <Button fx:id="btnCours" text="Cours" maxWidth="Infinity" styleClass="sidebar-btn" onAction="#onCoursClick" />
-            <Button fx:id="btnChapitres" text="Chapitres" maxWidth="Infinity" styleClass="sidebar-btn" onAction="#onChapitresClick" />
+
             
             <Region VBox.vgrow="ALWAYS" />
             

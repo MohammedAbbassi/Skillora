@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.web.WebView?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox spacing="0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreDetailController">
+<VBox spacing="0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreDetailController">
+
     <!-- Header with progress -->
     <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 2);">
         <Button text="← Retour" styleClass="btn-secondary" onAction="#onBack" />
@@ -23,12 +24,10 @@
     </HBox>
 
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: #f8fafc;">
-        <VBox spacing="30" maxWidth="1000" alignment="TOP_CENTER" style="-fx-padding: 40 auto;">
+        <VBox spacing="30" maxWidth="1000" alignment="TOP_CENTER" style="-fx-padding: 40 0 40 0;">
+
             
-            <!-- Video Player Area -->
-            <VBox fx:id="videoArea" styleClass="video-container" maxWidth="900" minHeight="500">
-                <WebView fx:id="webView" minHeight="500" />
-            </VBox>
+
 
             <!-- Content Area -->
             <VBox spacing="20" maxWidth="900" styleClass="card">
@@ -38,7 +37,11 @@
                     <Label fx:id="niveauLabel" text="MOYEN" styleClass="badge-moyen"/>
                     <Label fx:id="dureeLabel" text="15 min" styleClass="card-subtitle" style="-fx-font-weight: bold;"/>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button text="Passer au quiz" styleClass="btn-primary" onAction="#onQuiz"/>
+                    <ToggleButton fx:id="btnComplete" text="Terminer ce chapitre" styleClass="btn-secondary" onAction="#onToggleComplete" />
+                    <Button fx:id="btnQuiz" text="Passer au Quiz" styleClass="btn-primary" visible="false" managed="false" onAction="#onQuizClick" />
+
+
+
                 </HBox>
 
                 <Separator />
@@ -47,10 +50,35 @@
                 <Label fx:id="contenuLabel" wrapText="true" styleClass="detail-content" text="Chargement du contenu..."/>
                 
                 <HBox spacing="15" style="-fx-padding: 20 0 0 0;">
-                    <Button text="Lire le PDF" styleClass="btn-secondary" onAction="#onReadPdf"/>
-                    <Button text="Générer résumé simple" styleClass="btn-secondary" onAction="#onGenerateSummary"/>
+                    <Button text="Télécharger le chapitre (PDF)" styleClass="btn-primary" onAction="#onDownloadChapter" />
+                    <Button text="Lire le PDF du cours" styleClass="btn-secondary" onAction="#onReadPdf"/>
+                    <Button text="Générer résumé" styleClass="btn-secondary" onAction="#onGenerateSummary"/>
                 </HBox>
+
             </VBox>
+
+            <!-- User Data Area: Remarks & TPs -->
+            <HBox spacing="30" maxWidth="900" alignment="TOP_CENTER">
+                <!-- Remarks Card -->
+                <VBox spacing="15" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="450">
+                    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                    <Label text="Mes Remarques" styleClass="card-title" style="-fx-font-size: 18px;"/>
+                    <TextArea fx:id="remarksArea" prefRowCount="6" promptText="Prenez des notes sur ce chapitre..." styleClass="text-area-modern" wrapText="true"/>
+                    <Button text="Enregistrer mes notes" styleClass="btn-primary" onAction="#onSaveUserData" maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- TPs / Exercises Card -->
+                <VBox spacing="15" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="450">
+                    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                    <Label text="Mes Travaux (TP/Rendus)" styleClass="card-title" style="-fx-font-size: 18px;"/>
+                    <ListView fx:id="tpFilesList" prefHeight="120" style="-fx-background-color: #f8fafc; -fx-background-radius: 10;"/>
+                    <HBox spacing="10">
+                        <Button text="Ajouter un fichier" styleClass="btn-secondary" onAction="#onAddTp" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button text="Ouvrir" styleClass="btn-secondary" onAction="#onOpenTp" />
+                    </HBox>
+                </VBox>
+            </HBox>
+
             
             <Region minHeight="40" />
         </VBox>

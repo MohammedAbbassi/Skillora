@@ -13,7 +13,7 @@ public class CoursFormController {
 
     @FXML private Label formTitle;
     @FXML private TextField titreField;
-    @FXML private TextField categorieField;
+    @FXML private MenuButton categorieMenu;
     @FXML private ComboBox<String> niveauCombo;
     @FXML private ComboBox<String> dureeCombo;
     @FXML private TextArea descriptionArea;
@@ -25,6 +25,7 @@ public class CoursFormController {
 
     private CoursService coursService = new CoursService();
     private Cours coursToEdit = null;
+    private String[] availableCategories = {"Java", "Web", "IA", "Réseau", "Électronique"};
 
     @FXML
     public void initialize() {
@@ -34,11 +35,18 @@ public class CoursFormController {
         dureeCombo.setItems(FXCollections.observableArrayList("1h", "2h", "3h", "5h", "10h", "20h+"));
         dureeCombo.setValue("2h");
 
+        // Initialize categories
+        for (String cat : availableCategories) {
+            CheckMenuItem item = new CheckMenuItem(cat);
+            categorieMenu.getItems().add(item);
+        }
+
         // Bind slider value to label
         progressionSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             progressionLabel.setText(newVal.intValue() + "%");
         });
     }
+
 
     public void setCoursForEdit(Cours cours) {
         this.coursToEdit = cours;
@@ -46,7 +54,22 @@ public class CoursFormController {
         saveButton.setText("Mettre à jour");
 
         titreField.setText(cours.getTitre());
-        categorieField.setText(cours.getCategorie());
+        
+        // Set selected categories
+        if (cours.getCategorie() != null) {
+            String[] cats = cours.getCategorie().split(",\\s*");
+            for (MenuItem item : categorieMenu.getItems()) {
+                CheckMenuItem checkItem = (CheckMenuItem) item;
+                checkItem.setSelected(false);
+                for (String c : cats) {
+                    if (checkItem.getText().equals(c)) {
+                        checkItem.setSelected(true);
+                        break;
+                    }
+                }
+            }
+        }
+
         niveauCombo.setValue(cours.getNiveau());
         dureeCombo.setValue(cours.getDuree());
         descriptionArea.setText(cours.getDescription());
@@ -71,7 +94,18 @@ public class CoursFormController {
             Cours c = (coursToEdit != null) ? coursToEdit : new Cours();
             c.setTitre(titreField.getText());
             c.setDescription(descriptionArea.getText());
-            c.setCategorie(categorieField.getText());
+            
+            // Collect categories
+            StringBuilder sb = new StringBuilder();
+            for (MenuItem item : categorieMenu.getItems()) {
+                CheckMenuItem checkItem = (CheckMenuItem) item;
+                if (checkItem.isSelected()) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(checkItem.getText());
+                }
+            }
+            c.setCategorie(sb.toString());
+
             c.setNiveau(niveauCombo.getValue());
             c.setDuree(dureeCombo.getValue());
             c.setObjectifSemaine(objectifArea.getText());

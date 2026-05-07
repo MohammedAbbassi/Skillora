@@ -9,11 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 import javafx.geometry.Pos;
+
 import javafx.geometry.Insets;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,29 +26,55 @@ public class CoursListController {
 
     @FXML private FlowPane coursesContainer;
     @FXML private Button btnNewCours;
+    @FXML private TextField searchField;
 
     private CoursService coursService = new CoursService();
+    private services.CertificateService certificateService = new services.CertificateService();
+    private List<Cours> allCourses;
 
     @FXML
     public void initialize() {
         boolean isAdmin = MainLayoutController.getInstance().isAdminMode();
         if (btnNewCours != null) btnNewCours.setVisible(isAdmin);
+        
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filterCourses(newVal);
+        });
+        
         loadCourses();
     }
 
     private void loadCourses() {
-        coursesContainer.getChildren().clear();
-        boolean isAdmin = MainLayoutController.getInstance().isAdminMode();
         try {
-            List<Cours> courses = coursService.getAll();
-            for (Cours cours : courses) {
-                VBox card = createCourseCard(cours, isAdmin);
-                coursesContainer.getChildren().add(card);
-            }
+            allCourses = coursService.getAll();
+            renderCourses(allCourses);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void filterCourses(String query) {
+        if (query == null || query.isEmpty()) {
+            renderCourses(allCourses);
+            return;
+        }
+        String q = query.toLowerCase();
+        List<Cours> filtered = allCourses.stream()
+            .filter(c -> c.getTitre().toLowerCase().contains(q) || 
+                         (c.getCategorie() != null && c.getCategorie().toLowerCase().contains(q)))
+            .collect(java.util.stream.Collectors.toList());
+        renderCourses(filtered);
+    }
+
+    private void renderCourses(List<Cours> courses) {
+        coursesContainer.getChildren().clear();
+        boolean isAdmin = MainLayoutController.getInstance().isAdminMode();
+        for (Cours cours : courses) {
+            VBox card = createCourseCard(cours, isAdmin);
+            coursesContainer.getChildren().add(card);
+        }
+    }
+
 
     private VBox createCourseCard(Cours cours, boolean isAdmin) {
         VBox card = new VBox();
@@ -57,8 +86,23 @@ public class CoursListController {
         title.getStyleClass().add("course-card-title");
         title.setWrapText(true);
 
-        Label cat = new Label(cours.getCategorie() != null ? cours.getCategorie() : "Aucune");
-        cat.getStyleClass().add("chip");
+        FlowPane tagsBox = new FlowPane();
+        tagsBox.setHgap(5);
+        tagsBox.setVgap(5);
+        if (cours.getCategorie() != null && !cours.getCategorie().isEmpty()) {
+            String[] tags = cours.getCategorie().split(",\\s*");
+            for (String tag : tags) {
+                Label tagLabel = new Label(tag);
+                tagLabel.getStyleClass().add("chip");
+                tagLabel.setStyle("-fx-font-size: 10px; -fx-padding: 4 8;");
+                tagsBox.getChildren().add(tagLabel);
+            }
+        } else {
+            Label cat = new Label("Aucune catégorie");
+            cat.getStyleClass().add("chip");
+            cat.setStyle("-fx-background-color: #f1f5f9; -fx-text-fill: #64748b;");
+            tagsBox.getChildren().add(cat);
+        }
         
         Label level = new Label(cours.getNiveau());
         level.setStyle("-fx-text-fill: #64748b; -fx-font-size: 12px;");
@@ -91,10 +135,48 @@ public class CoursListController {
 
         extraInfo.getChildren().addAll(objLabel, perfLabel, progText, pb);
 
-        card.getChildren().addAll(cat, title, level, duration, desc, extraInfo);
+        Button planBtn = new Button("Voir le plan");
+        planBtn.getStyleClass().add("btn-secondary");
+        planBtn.setMaxWidth(Double.MAX_VALUE);
+        planBtn.setOnAction(e -> handleViewChapters(cours));
+
+        card.getChildren().addAll(tagsBox, title, level, duration, desc, extraInfo, planBtn);
+
+
+        // Certificate & Quiz Buttons
+        if (cours.getProgression() == 100) {
+            HBox completedActions = new HBox(10);
+            completedActions.setAlignment(Pos.CENTER);
+
+            Button certBtn = new Button("🎓 Certificat");
+            certBtn.getStyleClass().add("btn-primary");
+            certBtn.setStyle("-fx-background-color: #8b5cf6;");
+            certBtn.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(certBtn, Priority.ALWAYS);
+            certBtn.setOnAction(e -> handleGenerateCertificate(cours));
+
+            Button quizBtn = new Button("📝 Passer au Quiz");
+            quizBtn.getStyleClass().add("btn-primary");
+            quizBtn.setStyle("-fx-background-color: #10b981;");
+            quizBtn.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(quizBtn, Priority.ALWAYS);
+            quizBtn.setOnAction(e -> handleViewQuiz(cours));
+
+            completedActions.getChildren().addAll(certBtn, quizBtn);
+            card.getChildren().add(completedActions);
+        }
+
+
+        // Navigation on card click
+        card.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                handleViewChapters(cours);
+            }
+        });
 
         if (isAdmin) {
             // Action Buttons
+
             Button editBtn = new Button("Modifier");
             editBtn.getStyleClass().add("btn-secondary");
             editBtn.setStyle("-fx-padding: 5 10; -fx-font-size: 11px;");
@@ -116,6 +198,49 @@ public class CoursListController {
         return card;
     }
     
+    private void handleViewChapters(Cours cours) {
+        ChapitreListController ctrl = MainLayoutController.getInstance().loadViewAndGetController("/ui/chapitre-list.fxml");
+        if (ctrl != null) {
+            ctrl.setCourseContext(cours);
+        }
+    }
+
+    private void handleViewQuiz(Cours cours) {
+        MainLayoutController.getInstance().loadView("/ui/quiz-view.fxml");
+    }
+
+
+    private void handleGenerateCertificate(Cours cours) {
+
+        try {
+            // In a real app, we would get the student name from the session
+            String studentName = "Étudiant Skillora";
+            String path = certificateService.generateCertificate(cours, studentName);
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Certificat Généré");
+            alert.setHeaderText("Félicitations !");
+            alert.setContentText("Votre certificat a été généré avec succès :\n" + path);
+            alert.showAndWait();
+            
+            // Try to open it
+            try {
+                java.io.File file = new java.io.File(path);
+                if (java.awt.Desktop.isDesktopSupported()) {
+                    java.awt.Desktop.getDesktop().open(file);
+                }
+            } catch (Exception ex) {
+                System.err.println("Could not open PDF automatically: " + ex.getMessage());
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText("Erreur lors de la génération du certificat : " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
     private void handleEdit(Cours cours) {
         CoursFormController ctrl = MainLayoutController.getInstance().loadViewAndGetController("/ui/cours-form.fxml");
         if (ctrl != null) {

@@ -13,15 +13,22 @@ public class ChapitreService implements IChapitreService {
     private final Connection cnx;
 
     public ChapitreService() {
-        cnx = MyDatabase.getInstance().getCnx();
+        this.cnx = MyDatabase.getInstance().getCnx();
+    }
+
+    private void checkConnection() throws SQLException {
+        if (cnx == null) {
+            throw new SQLException("Base de données non connectée. Veuillez vérifier votre configuration MySQL.");
+        }
     }
 
     @Override
     public void add(Chapitre ch) throws SQLException {
+        checkConnection();
         String req = "INSERT INTO chapitre (titre, contenu, ordre, duree, " +
                 "pdf_url, id_cours, resume, type_explication, " +
-                "explication, quiz_json, niveau, video_url, image_url, est_complete) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "explication, quiz_json, niveau, video_url, image_url, est_complete, remarques, fichiers_tp) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1,  ch.getTitre());
@@ -38,6 +45,8 @@ public class ChapitreService implements IChapitreService {
         pst.setString(12, ch.getVideoUrl());
         pst.setString(13, ch.getImageUrl());
         pst.setBoolean(14, ch.isEstComplete());
+        pst.setString(15, ch.getRemarques());
+        pst.setString(16, ch.getFichiersTp());
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();
@@ -48,10 +57,11 @@ public class ChapitreService implements IChapitreService {
 
     @Override
     public void update(Chapitre ch) throws SQLException {
+        checkConnection();
         String req = "UPDATE chapitre SET titre = ?, contenu = ?, ordre = ?, " +
                 "duree = ?, pdf_url = ?, id_cours = ?, resume = ?, " +
                 "type_explication = ?, explication = ?, quiz_json = ?, " +
-                "niveau = ?, video_url = ?, image_url = ?, est_complete = ? " +
+                "niveau = ?, video_url = ?, image_url = ?, est_complete = ?, remarques = ?, fichiers_tp = ? " +
                 "WHERE id_chapitre = ?";
 
         PreparedStatement pst = cnx.prepareStatement(req);
@@ -69,12 +79,26 @@ public class ChapitreService implements IChapitreService {
         pst.setString(12, ch.getVideoUrl());
         pst.setString(13, ch.getImageUrl());
         pst.setBoolean(14, ch.isEstComplete());
-        pst.setInt   (15, ch.getIdChapitre());
+        pst.setString(15, ch.getRemarques());
+        pst.setString(16, ch.getFichiersTp());
+        pst.setInt(17, ch.getIdChapitre());
         pst.executeUpdate();
     }
 
-    @Override
+    public void updateUserData(int id, String remarques, String fichiersTp) throws SQLException {
+
+        checkConnection();
+        String req = "UPDATE chapitre SET remarques = ?, fichiers_tp = ? WHERE id_chapitre = ?";
+        PreparedStatement pst = cnx.prepareStatement(req);
+        pst.setString(1, remarques);
+        pst.setString(2, fichiersTp);
+        pst.setInt(3, id);
+        pst.executeUpdate();
+    }
+
     public void delete(Chapitre ch) throws SQLException {
+
+        checkConnection();
         String req = "DELETE FROM chapitre WHERE id_chapitre = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setInt(1, ch.getIdChapitre());
@@ -83,6 +107,7 @@ public class ChapitreService implements IChapitreService {
 
     @Override
     public List<Chapitre> getAll() throws SQLException {
+        checkConnection();
         List<Chapitre> liste = new ArrayList<>();
         String req = "SELECT * FROM chapitre ORDER BY id_cours, ordre";
         Statement st = cnx.createStatement();
@@ -111,6 +136,7 @@ public class ChapitreService implements IChapitreService {
 
     @Override
     public List<Chapitre> getByCours(int coursId) throws SQLException {
+        checkConnection();
         List<Chapitre> liste = new ArrayList<>();
         String req = "SELECT * FROM chapitre WHERE id_cours = ? ORDER BY ordre";
         PreparedStatement pst = cnx.prepareStatement(req);
@@ -124,6 +150,7 @@ public class ChapitreService implements IChapitreService {
 
     @Override
     public Chapitre getById(int id) throws SQLException {
+        checkConnection();
         String req = "SELECT * FROM chapitre WHERE id_chapitre = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setInt(1, id);
@@ -132,7 +159,17 @@ public class ChapitreService implements IChapitreService {
         return null;
     }
 
+    public void updateCompletionStatus(int id, boolean status) throws SQLException {
+        checkConnection();
+        String req = "UPDATE chapitre SET est_complete = ? WHERE id_chapitre = ?";
+        PreparedStatement pst = cnx.prepareStatement(req);
+        pst.setBoolean(1, status);
+        pst.setInt(2, id);
+        pst.executeUpdate();
+    }
+
     private Chapitre mapRow(ResultSet rs) throws SQLException {
+
         Chapitre ch = new Chapitre();
         ch.setIdChapitre     (rs.getInt("id_chapitre"));
         ch.setTitre          (rs.getString("titre"));
@@ -149,6 +186,8 @@ public class ChapitreService implements IChapitreService {
         ch.setVideoUrl       (rs.getString("video_url"));
         ch.setImageUrl       (rs.getString("image_url"));
         ch.setEstComplete    (rs.getBoolean("est_complete"));
+        ch.setRemarques      (rs.getString("remarques"));
+        ch.setFichiersTp     (rs.getString("fichiers_tp"));
         return ch;
     }
 }

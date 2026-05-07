@@ -12,7 +12,6 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML private Button btnCours;
-    @FXML private Button btnChapitres;
     @FXML private ToggleButton toggleAdmin;
     @FXML private StackPane contentArea;
 
@@ -23,9 +22,15 @@ public class MainLayoutController {
     public void initialize() {
         instance = this;
         isAdminMode = false;
-        // Par défaut on affiche la liste des cours
-        loadView("/ui/cours-list.fxml");
+        
+        if (!utils.MyDatabase.getInstance().isConnected()) {
+            loadView("/ui/database-error.fxml");
+        } else {
+            // Par défaut on affiche la liste des cours
+            loadView("/ui/cours-list.fxml");
+        }
     }
+
 
     public static MainLayoutController getInstance() {
         return instance;
@@ -46,26 +51,18 @@ public class MainLayoutController {
             toggleAdmin.setStyle("");
         }
         // Rafraîchir la vue actuelle
-        if (btnCours.getStyleClass().contains("sidebar-btn-active")) onCoursClick(null);
-        else onChapitresClick(null);
+        onCoursClick(null);
     }
+
 
     @FXML
     void onCoursClick(ActionEvent event) {
         // Active state styling
         btnCours.getStyleClass().add("sidebar-btn-active");
-        btnChapitres.getStyleClass().remove("sidebar-btn-active");
         
         loadView("/ui/cours-list.fxml");
     }
 
-    @FXML
-    void onChapitresClick(ActionEvent event) {
-        btnChapitres.getStyleClass().add("sidebar-btn-active");
-        btnCours.getStyleClass().remove("sidebar-btn-active");
-        
-        loadView("/ui/chapitre-list.fxml");
-    }
 
     public void loadView(String fxmlPath) {
         try {

@@ -48,7 +48,15 @@ public class ChapitreListController {
         });
     }
 
+    public void setCourseContext(Cours cours) {
+        if (cours != null) {
+            courseSelector.setValue(cours);
+            loadChapters(cours.getIdCours());
+        }
+    }
+
     private void setupCourseSelector() {
+
         try {
             List<Cours> courses = coursService.getAll();
             courseSelector.setItems(FXCollections.observableArrayList(courses));
@@ -130,10 +138,8 @@ public class ChapitreListController {
         viewBtn.setPrefWidth(100);
         viewBtn.setOnAction(e -> handleViewDetail(ch));
 
-        Button pdfBtn = new Button("PDF");
-        pdfBtn.getStyleClass().add("btn-secondary");
-        
-        footer.getChildren().addAll(viewBtn, pdfBtn);
+        footer.getChildren().addAll(viewBtn);
+
 
         if (isAdmin) {
             Button editBtn = new Button("Editer");
@@ -149,7 +155,13 @@ public class ChapitreListController {
     }
 
     @FXML
+    void onBackToCourses(ActionEvent event) {
+        MainLayoutController.getInstance().loadView("/ui/cours-list.fxml");
+    }
+
+    @FXML
     void onAddChapitre(ActionEvent event) {
+
         Cours selected = courseSelector.getValue();
         if (selected == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);

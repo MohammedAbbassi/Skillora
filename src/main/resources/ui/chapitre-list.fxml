@@ -4,16 +4,19 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.shape.Circle?>
 
-<VBox spacing="25" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreListController">
+<VBox spacing="25" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreListController">
+
     <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
     
     <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="←" styleClass="btn-secondary" onAction="#onBackToCourses" style="-fx-font-size: 18px; -fx-padding: 5 15;"/>
         <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Mes Chapitres" styleClass="view-title"/>
-            <Label text="Progressez à votre rythme à travers les chapitres." styleClass="card-subtitle"/>
+            <Label text="Mes Chapitres" styleClass="brand-title" style="-fx-font-size: 28px;"/>
+            <Label text="Progressez à votre rythme à travers les chapitres." styleClass="brand-subtitle"/>
         </VBox>
         <Button fx:id="btnAddChapitre" text="+ Ajouter un Chapitre" styleClass="btn-primary" onAction="#onAddChapitre" visible="false"/>
     </HBox>
+
 
     <!-- Course Selection & Search -->
     <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card">
@@ -26,6 +29,7 @@
             <Label text="Rechercher" styleClass="field-label"/>
             <TextField fx:id="searchField" promptText="Rechercher un chapitre..." styleClass="text-field-modern"/>
         </VBox>
+
     </HBox>
 
     <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">

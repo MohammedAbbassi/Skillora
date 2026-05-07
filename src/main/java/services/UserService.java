@@ -13,11 +13,18 @@ public class UserService implements IService<User> {
     private Connection cnx;
 
     public UserService() {
-        cnx = MyDatabase.getInstance().getCnx();
+        this.cnx = MyDatabase.getInstance().getCnx();
+    }
+
+    private void checkConnection() throws SQLException {
+        if (cnx == null) {
+            throw new SQLException("Base de données non connectée. Veuillez vérifier votre configuration MySQL.");
+        }
     }
 
     @Override
     public void add(User user) throws SQLException {
+        checkConnection();
         String req = "INSERT INTO `utilisateurs`(`nom_utilisateur`, `email`, `mot_de_passe`, `prenom`, `nom`) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, user.getNomUtilisateur());
@@ -36,6 +43,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void update(User user) throws SQLException {
+        checkConnection();
         String req = "UPDATE utilisateurs SET nom_utilisateur = ?, email = ?, mot_de_passe = ?, prenom = ?, nom = ? WHERE id_utilisateur = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setString(1, user.getNomUtilisateur());
@@ -50,6 +58,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void delete(User user) throws SQLException {
+        checkConnection();
         String req = "DELETE FROM utilisateurs WHERE id_utilisateur = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setLong(1, user.getIdUtilisateur());
@@ -59,6 +68,7 @@ public class UserService implements IService<User> {
 
     @Override
     public List<User> getAll() throws SQLException {
+        checkConnection();
         List<User> users = new ArrayList<>();
         String req = "SELECT * FROM utilisateurs";
         Statement st = cnx.createStatement();
@@ -83,6 +93,7 @@ public class UserService implements IService<User> {
     }
 
     public User getUserById(long id) throws SQLException {
+        checkConnection();
         String req = "SELECT * FROM utilisateurs WHERE id_utilisateur = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setLong(1, id);
@@ -107,6 +118,7 @@ public class UserService implements IService<User> {
     }
 
     public User getUserByEmail(String email) throws SQLException {
+        checkConnection();
         String req = "SELECT * FROM utilisateurs WHERE email = ?";
         PreparedStatement pst = cnx.prepareStatement(req);
         pst.setString(1, email);

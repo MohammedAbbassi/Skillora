@@ -12,27 +12,56 @@ public class MyDatabase {
     private Connection cnx;
     private  static  MyDatabase instance ;
 
+    private String lastError;
+
     private MyDatabase() {
         try {
-            cnx = DriverManager.getConnection(URL,USER,PASSWORD);
+            cnx = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Connected to database");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            this.lastError = e.getMessage();
+            System.err.println("Database connection failed: " + lastError);
+        }
+    }
+
+    public void reconnect() {
+        try {
+            if (cnx != null && !cnx.isClosed()) {
+                cnx.close();
+            }
+        } catch (SQLException ignored) {}
+        
+        try {
+            cnx = DriverManager.getConnection(URL, USER, PASSWORD);
+            lastError = null;
+            System.out.println("Reconnected to database");
+        } catch (SQLException e) {
+            this.lastError = e.getMessage();
+            System.err.println("Database reconnection failed: " + lastError);
         }
     }
 
     public static MyDatabase getInstance() {
+
         if (instance == null)
             instance = new MyDatabase();
         return instance;
     }
 
-    public Connection getCnx() {
-        if (cnx == null) {
-            throw new IllegalStateException(
-                    "Connexion MySQL indisponible. Demarrez MySQL/MariaDB, importez skillora.sql, "
-                            + "puis verifiez URL/user/mot de passe dans MyDatabase.");
+    public boolean isConnected() {
+        try {
+            return cnx != null && !cnx.isClosed();
+        } catch (SQLException e) {
+            return false;
         }
+    }
+
+    public String getLastError() {
+        return lastError;
+    }
+
+    public Connection getCnx() {
         return cnx;
     }
 }
+

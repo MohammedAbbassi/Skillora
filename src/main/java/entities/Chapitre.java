@@ -19,6 +19,9 @@ public class Chapitre {
     private String videoUrl;
     private String imageUrl;
     private boolean estComplete;
+    private String remarques;
+    private String fichiersTp;
+
 
     // Constructeur vide
     public Chapitre() {}
@@ -147,6 +150,13 @@ public class Chapitre {
 
     public boolean isEstComplete() { return estComplete; }
     public void setEstComplete(boolean estComplete) { this.estComplete = estComplete; }
+
+    public String getRemarques() { return remarques; }
+    public void setRemarques(String remarques) { this.remarques = remarques; }
+
+    public String getFichiersTp() { return fichiersTp; }
+    public void setFichiersTp(String fichiersTp) { this.fichiersTp = fichiersTp; }
+
 
     public int getId_chapitre() {
         return getIdChapitre();
