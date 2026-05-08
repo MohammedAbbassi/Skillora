@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.OrdersController" spacing="24"
+      stylesheets="/styles.css" styleClass="content-area">
+    <padding>
+        <Insets bottom="24" left="24" right="24" top="24"/>
+    </padding>
+    <VBox spacing="4">
+        <Label text="Commandes" styleClass="section-title"/>
+        <Label fx:id="subtitleLabel" styleClass="text-secondary"/>
+    </VBox>
+    
+    <VBox fx:id="adminCommandsBox" spacing="16" managed="false" visible="false" styleClass="card">
+        <HBox spacing="16" alignment="CENTER_LEFT">
+            <VBox spacing="4">
+                <Label text="Statut" styleClass="field-label"/>
+                <ComboBox fx:id="statusCombo" prefWidth="160" styleClass="auth-field"/>
+            </VBox>
+            <VBox spacing="4">
+                <Label text="Total (TND)" styleClass="field-label"/>
+                <TextField fx:id="adminTotalField" prefWidth="120" promptText="0.00" styleClass="auth-field"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Enregistrer" onAction="#onSaveOrderEdits" styleClass="action-btn" prefWidth="150"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Supprimer" onAction="#onDeleteOrder" styleClass="action-btn-secondary" style="-fx-text-fill: #ef4444;"/>
+            <Button text="Nouvelle commande…" onAction="#onNewOrder" styleClass="action-btn-secondary"/>
+        </HBox>
+    </VBox>
+
+    <HBox spacing="16">
+        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS" alignment="CENTER">
+            <Label text="Commandes" styleClass="field-label"/>
+            <Label fx:id="statOrderCount" styleClass="text-3xl font-black"/>
+        </VBox>
+        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS" alignment="CENTER">
+            <Label text="Montant total" styleClass="field-label"/>
+            <Label fx:id="statTotalAmount" styleClass="text-3xl font-black text-primary"/>
+        </VBox>
+        <VBox styleClass="card" spacing="6" HBox.hgrow="ALWAYS" alignment="CENTER">
+            <Label text="Répartition" styleClass="field-label"/>
+            <Label fx:id="statStatusBreakdown" styleClass="text-lg font-bold text-secondary"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="12" styleClass="card" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Historique des commandes" styleClass="card-title"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Voir détails" onAction="#onDetail" styleClass="action-btn-secondary"/>
+        </HBox>
+        <TableView fx:id="orderTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="N°" prefWidth="70"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="160"/>
+                <TableColumn fx:id="colTotal" text="Total" prefWidth="110"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                <TableColumn fx:id="colUser" text="Utilisateur" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </VBox>
+    
+    <Label fx:id="orderMessage" wrapText="true" styleClass="text-secondary"/>
+</VBox>

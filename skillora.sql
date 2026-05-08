@@ -20,6 +20,13 @@ SET time_zone = "+00:00";
 --
 -- Database: `skillora`
 --
+CREATE DATABASE IF NOT EXISTS `skillora`;
+USE `skillora`;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `chapitre`, `commande`, `commande_produit`, `commentaire`, `cours`, `evenement`, `jaime`, `post`, `preferences_utilisateur`, `produit`, `progression_cours`, `question`, `reponse`, `reservation`, `statistiques_utilisateur`, `utilisateurs`;
+DROP VIEW IF EXISTS `vue_cours_details`, `vue_post_stats`, `vue_profil_utilisateur`;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- --------------------------------------------------------
 
@@ -48,11 +55,12 @@ CREATE TABLE `chapitre` (
 --
 
 CREATE TABLE `commande` (
-  `id_commande` int(11) NOT NULL,
+  `id_commande` int(11) NOT NULL AUTO_INCREMENT,
   `date_commande` timestamp NOT NULL DEFAULT current_timestamp(),
   `total` decimal(10,2) NOT NULL DEFAULT 0.00,
   `statut` enum('EN_ATTENTE','PAYEE','ANNULEE') NOT NULL DEFAULT 'EN_ATTENTE',
-  `id_utilisateur` bigint(20) NOT NULL
+  `id_utilisateur` bigint(20) NOT NULL,
+  PRIMARY KEY (`id_commande`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -65,7 +73,8 @@ CREATE TABLE `commande_produit` (
   `id_commande` int(11) NOT NULL,
   `id_produit` int(11) NOT NULL,
   `quantite` int(11) NOT NULL DEFAULT 1,
-  `prix_unitaire` decimal(10,2) NOT NULL
+  `prix_unitaire` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id_commande`, `id_produit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -111,7 +120,7 @@ CREATE TABLE `evenement` (
   `nom` varchar(50) NOT NULL,
   `date_evenement` date NOT NULL,
   `lieu` varchar(50) NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `image` LONGTEXT DEFAULT NULL,
   `duree_minutes` int(11) NOT NULL,
   `id_utilisateur` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -138,7 +147,7 @@ CREATE TABLE `post` (
   `id_post` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `contenu` text DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `image` LONGTEXT DEFAULT NULL,
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `id_utilisateur` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -170,14 +179,15 @@ CREATE TABLE `preferences_utilisateur` (
 --
 
 CREATE TABLE `produit` (
-  `id_produit` int(11) NOT NULL,
+  `id_produit` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `prix` decimal(10,2) NOT NULL,
-  `type` enum('FORMATION','COURS','SERIE') NOT NULL,
-  `duree` int(11) DEFAULT NULL COMMENT 'en heures',
+  `categorie` enum('LIVRE','SERIE','FORMATION','KIT') NOT NULL,
+  `langue` varchar(40) DEFAULT NULL,
   `niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE') DEFAULT NULL,
-  `id_cours` int(11) DEFAULT NULL
+  `id_cours` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_produit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -200,37 +210,56 @@ CREATE TABLE `progression_cours` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question`
+-- Structure de la table `quiz`
 --
 
-CREATE TABLE `question` (
-  `id_question` int(11) NOT NULL,
-  `libelle` varchar(255) NOT NULL,
-  `niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE') NOT NULL DEFAULT 'DEBUTANT',
-  `score` int(11) NOT NULL DEFAULT 0,
-  `categorie` varchar(100) DEFAULT NULL,
-  `est_active` tinyint(1) NOT NULL DEFAULT 1,
-  `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
-  `id_utilisateur` bigint(20) NOT NULL
+CREATE TABLE `quiz` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titre` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `niveau` varchar(100) DEFAULT NULL,
+  `matiere` enum('JAVA','HTML','CSS','JAVASCRIPT','PHP','PYTHON','SQL') NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reponse`
+-- Structure de la table `question`
+--
+
+CREATE TABLE `question` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `libelle` varchar(255) NOT NULL,
+  `niveau` varchar(100) DEFAULT 'Debutant',
+  `score` int(11) DEFAULT 1,
+  `active` tinyint(1) DEFAULT 1,
+  `quiz_id` int(11) NOT NULL,
+  `enonce` text NOT NULL,
+  `type_question` enum('QCU','QCM') NOT NULL,
+  `image_path` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_question_quiz` (`quiz_id`),
+  CONSTRAINT `fk_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `reponse`
 --
 
 CREATE TABLE `reponse` (
-  `id_reponse` int(11) NOT NULL,
-  `contenu` text NOT NULL,
-  `est_correcte` tinyint(1) NOT NULL DEFAULT 0,
-  `commentaire` text DEFAULT NULL,
-  `source` varchar(255) DEFAULT NULL,
-  `type_reponse` enum('CHOIX_UNIQUE','CHOIX_MULTIPLE','VRAI_FAUX') NOT NULL DEFAULT 'CHOIX_UNIQUE',
-  `est_active` tinyint(1) NOT NULL DEFAULT 1,
-  `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
-  `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `id_question` int(11) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `texte` text NOT NULL,
+  `correcte` tinyint(1) DEFAULT 0,
+  `type_reponse` varchar(100) DEFAULT 'Texte',
+  `active` tinyint(1) DEFAULT 1,
+  `question_id` int(11) NOT NULL,
+  `auteur` varchar(255) DEFAULT 'Systeme',
+  PRIMARY KEY (`id`),
+  KEY `fk_reponse_question` (`question_id`),
+  CONSTRAINT `fk_reponse_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -280,9 +309,12 @@ CREATE TABLE `utilisateurs` (
   `mot_de_passe` varchar(255) NOT NULL,
   `prenom` varchar(50) DEFAULT NULL,
   `nom` varchar(50) DEFAULT NULL,
-  `photo_profil` varchar(255) DEFAULT NULL,
+  `photo_profil` LONGTEXT DEFAULT NULL,
   `role` enum('ETUDIANT','INSTRUCTEUR','ADMIN') NOT NULL DEFAULT 'ETUDIANT',
   `est_actif` tinyint(1) NOT NULL DEFAULT 1,
+  `est_en_ligne` tinyint(1) NOT NULL DEFAULT 0,
+  `xp_points` int(11) NOT NULL DEFAULT 0,
+  `streak_days` int(11) NOT NULL DEFAULT 0,
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -333,7 +365,7 @@ CREATE TABLE `vue_profil_utilisateur` (
 ,`email` varchar(100)
 ,`prenom` varchar(50)
 ,`nom` varchar(50)
-,`photo_profil` varchar(255)
+,`photo_profil` LONGTEXT
 ,`role` enum('ETUDIANT','INSTRUCTEUR','ADMIN')
 ,`est_actif` tinyint(1)
 ,`date_creation` timestamp

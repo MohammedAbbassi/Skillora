@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.ShopController" stylesheets="/styles.css">
+    <padding>
+        <Insets bottom="8" left="8" right="8" top="8"/>
+    </padding>
+    <center>
+        <VBox spacing="12" styleClass="content-area">
+            <Label text="Boutique" styleClass="section-title"/>
+            <Label text="Statistiques du catalogue et produits en cartes — filtrez par catégorie puis ajoutez au panier." styleClass="text-secondary"/>
+            <HBox spacing="10">
+                <VBox styleClass="card" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Produits" styleClass="field-label"/>
+                    <Label fx:id="statTotalProducts" styleClass="text-xl font-black"/>
+                </VBox>
+                <VBox styleClass="card" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Prix moyen" styleClass="field-label"/>
+                    <Label fx:id="statAvgPrice" styleClass="text-xl font-black"/>
+                </VBox>
+                <VBox styleClass="card" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Min / Max" styleClass="field-label"/>
+                    <Label fx:id="statMinMax" styleClass="text-xl font-black"/>
+                </VBox>
+            </HBox>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Filtrer :" styleClass="field-label"/>
+                <ComboBox fx:id="filterTypeCombo" prefWidth="200" promptText="Tous les types" styleClass="auth-field"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll" prefHeight="380" VBox.vgrow="ALWAYS">
+                <FlowPane fx:id="productsFlow" hgap="14" vgap="14" prefWrapLength="900"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+    <right>
+        <VBox spacing="12" prefWidth="300" styleClass="card">
+            <padding>
+                <Insets bottom="16" left="16" right="16" top="16"/>
+            </padding>
+            <Label text="Panier" styleClass="card-title"/>
+            <ListView fx:id="cartList" prefHeight="280" VBox.vgrow="ALWAYS"/>
+            <Label fx:id="cartTotalLabel" styleClass="text-xl font-black text-primary"/>
+            <HBox spacing="8">
+                <Button text="Retirer" onAction="#onRemoveLine" styleClass="action-btn-secondary"
+                        maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <Button text="Valider la commande" onAction="#onCheckout" styleClass="action-btn"
+                    maxWidth="Infinity"/>
+            <Label fx:id="shopMessage" wrapText="true" styleClass="text-secondary"/>
+        </VBox>
+    </right>
+</BorderPane>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.NewOrderDialogController" spacing="20"
+      stylesheets="/styles.css" styleClass="card" prefWidth="500">
+    <padding>
+        <Insets bottom="24" left="24" right="24" top="24"/>
+    </padding>
+    
+    <Label text="Nouvelle Commande" styleClass="card-title"/>
+    
+    <VBox spacing="8">
+        <Label text="Client" styleClass="field-label"/>
+        <ComboBox fx:id="userCombo" maxWidth="Infinity" styleClass="auth-field"/>
+    </VBox>
+    
+    <Separator />
+    
+    <HBox spacing="12" alignment="BOTTOM_LEFT">
+        <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <Label text="Produit" styleClass="field-label"/>
+            <ComboBox fx:id="productCombo" maxWidth="Infinity" styleClass="auth-field"/>
+        </VBox>
+        <VBox spacing="8">
+            <Label text="Qté" styleClass="field-label"/>
+            <Spinner fx:id="qtySpinner" prefWidth="80" styleClass="auth-field"/>
+        </VBox>
+        <Button text="＋" onAction="#onAddLine" styleClass="action-btn" prefHeight="44"/>
+    </HBox>
+    
+    <VBox spacing="8" VBox.vgrow="ALWAYS">
+        <Label text="Lignes de commande" styleClass="field-label"/>
+        <ListView fx:id="linesView" prefHeight="150"/>
+    </VBox>
+    
+    <Label fx:id="dialogMsg" styleClass="text-secondary" wrapText="true"/>
+    
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="Annuler" onAction="#onCancel" styleClass="action-btn-secondary"/>
+        <Button text="Confirmer la commande" onAction="#onConfirm" styleClass="action-btn" prefWidth="200"/>
+    </HBox>
+</VBox>
