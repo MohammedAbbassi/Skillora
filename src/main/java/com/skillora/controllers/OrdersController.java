@@ -24,6 +24,10 @@ import javafx.stage.Stage;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
+
 public class OrdersController {
 
     private static final double BAR_TRACK_WIDTH = 260.0;
@@ -37,17 +41,7 @@ public class OrdersController {
     @FXML
     private TextField adminTotalField;
     @FXML
-    private TableView<CommandeRecord> orderTable;
-    @FXML
-    private TableColumn<CommandeRecord, String> colId;
-    @FXML
-    private TableColumn<CommandeRecord, String> colDate;
-    @FXML
-    private TableColumn<CommandeRecord, String> colTotal;
-    @FXML
-    private TableColumn<CommandeRecord, String> colStatut;
-    @FXML
-    private TableColumn<CommandeRecord, String> colUser;
+    private ListView<CommandeRecord> orderList;
     @FXML
     private Label orderMessage;
     @FXML
@@ -77,7 +71,7 @@ public class OrdersController {
             statusCombo.setItems(FXCollections.observableArrayList("EN_ATTENTE", "PAYEE", "ANNULEE"));
             statusCombo.getSelectionModel().selectFirst();
 
-            orderTable.getSelectionModel().selectedItemProperty().addListener((obs, o, sel) -> {
+            orderList.getSelectionModel().selectedItemProperty().addListener((obs, o, sel) -> {
                 if (sel != null) {
                     adminTotalField.setText(String.format("%.2f", sel.getTotal()));
                     String st = sel.getStatut();
@@ -90,21 +84,54 @@ public class OrdersController {
             subtitleLabel.setText("Vos commandes");
         }
 
-        colId.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getIdCommande())));
-        colDate.setCellValueFactory(c -> {
-            var dt = c.getValue().getDateCommande();
-            return new SimpleStringProperty(dt == null ? "" : FMT.format(dt));
-        });
-        colTotal.setCellValueFactory(c -> new SimpleStringProperty(MoneyFormat.amount(c.getValue().getTotal())));
-        colStatut.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatut()));
-        colUser.setCellValueFactory(c -> {
-            if (Session.isAdmin()) {
-                return new SimpleStringProperty(String.valueOf(c.getValue().getIdUtilisateur()));
-            }
-            return new SimpleStringProperty("—");
-        });
+        orderList.setCellFactory(lv -> new ListCell<CommandeRecord>() {
+            @Override
+            protected void updateItem(CommandeRecord c, boolean empty) {
+                super.updateItem(c, empty);
+                if (empty || c == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox mainBox = new HBox(15);
+                    mainBox.setAlignment(Pos.CENTER_LEFT);
+                    mainBox.setPadding(new Insets(10));
+                    mainBox.setStyle("-fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
 
-        orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                    VBox infoBox = new VBox(5);
+                    HBox.setHgrow(infoBox, Priority.ALWAYS);
+                    
+                    String dt = c.getDateCommande() == null ? "Date Inconnue" : FMT.format(c.getDateCommande());
+                    Label dateLbl = new Label("Commande du " + dt);
+                    dateLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
+                    
+                    String user = Session.isAdmin() ? "Utilisateur ID: " + c.getIdUtilisateur() : "";
+                    Label userLbl = new Label(user);
+                    userLbl.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+                    
+                    if (user.isEmpty()) {
+                        infoBox.getChildren().add(dateLbl);
+                    } else {
+                        infoBox.getChildren().addAll(dateLbl, userLbl);
+                    }
+
+                    Label statusLbl = new Label(c.getStatut());
+                    String statusColor = "#666";
+                    if ("PAYEE".equals(c.getStatut())) statusColor = "#27ae60";
+                    else if ("EN_ATTENTE".equals(c.getStatut())) statusColor = "#f39c12";
+                    else if ("ANNULEE".equals(c.getStatut())) statusColor = "#e74c3c";
+                    
+                    statusLbl.setStyle(String.format("-fx-font-weight: bold; -fx-text-fill: %s; -fx-font-size: 12px; -fx-padding: 3px 8px; -fx-background-color: #f5f5f5; -fx-background-radius: 10px;", statusColor));
+
+                    Label totalLbl = new Label(MoneyFormat.amount(c.getTotal()));
+                    totalLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-font-size: 16px; -fx-min-width: 100px; -fx-alignment: center-right;");
+                    
+                    mainBox.getChildren().addAll(infoBox, statusLbl, totalLbl);
+
+                    setText(null);
+                    setGraphic(mainBox);
+                }
+            }
+        });
         refresh();
     }
 
@@ -118,7 +145,7 @@ public class OrdersController {
                 long uid = Session.getUser().getIdUtilisateur();
                 list = orderService.listForUser(uid);
             }
-            orderTable.setItems(FXCollections.observableArrayList(list));
+            orderList.setItems(FXCollections.observableArrayList(list));
 
             OrderStatsSummary stats = Session.isAdmin()
                     ? orderService.statsAll()
@@ -134,7 +161,7 @@ public class OrdersController {
         if (!Session.isAdmin()) {
             return;
         }
-        CommandeRecord sel = orderTable.getSelectionModel().getSelectedItem();
+        CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
         String st = statusCombo.getSelectionModel().getSelectedItem();
         if (sel == null || st == null) {
             orderMessage.setText("Sélectionnez une commande.");
@@ -158,13 +185,13 @@ public class OrdersController {
         if (!Session.isAdmin()) {
             return;
         }
-        CommandeRecord sel = orderTable.getSelectionModel().getSelectedItem();
+        CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
         if (sel == null) {
             orderMessage.setText("Sélectionnez une commande.");
             return;
         }
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setHeaderText("Supprimer la commande n° " + sel.getIdCommande() + " ?");
+        confirm.setHeaderText("Supprimer la commande ?");
         confirm.setContentText("Les lignes associées seront aussi supprimées.");
         if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
             return;
@@ -189,7 +216,7 @@ public class OrdersController {
             NewOrderDialogController ctrl = loader.getController();
             ctrl.setOnSuccess(this::refresh);
             Stage dlg = new Stage();
-            dlg.initOwner(orderTable.getScene().getWindow());
+            dlg.initOwner(orderList.getScene().getWindow());
             dlg.initModality(Modality.WINDOW_MODAL);
             dlg.setTitle("Nouvelle commande");
             dlg.setScene(new Scene(root));
@@ -242,7 +269,7 @@ public class OrdersController {
 
     @FXML
     private void onDetail() {
-        CommandeRecord sel = orderTable.getSelectionModel().getSelectedItem();
+        CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
         if (sel == null) {
             orderMessage.setText("Sélectionnez une commande.");
             return;
@@ -256,7 +283,7 @@ public class OrdersController {
                         .append(MoneyFormat.amount(ol.getSousTotal())).append("\n");
             }
             Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setHeaderText("Commande #" + sel.getIdCommande());
+            a.setHeaderText("Détails de la commande");
             a.setContentText(sb.length() == 0 ? "Aucune ligne." : sb.toString());
             a.showAndWait();
         } catch (Exception e) {

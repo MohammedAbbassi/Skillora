@@ -9,6 +9,7 @@ public class Produit {
     private String description;
     private String niveau;
     private Integer idCours;
+    private String image;
 
     public Long getId() {
         return id;
@@ -72,5 +73,13 @@ public class Produit {
 
     public void setIdCours(Integer idCours) {
         this.idCours = idCours;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

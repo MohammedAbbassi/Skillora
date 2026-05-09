@@ -9,35 +9,33 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import java.io.File;
 
 public class AdminProductsController {
 
     @FXML
-    private TableView<Produit> productTable;
+    private ListView<Produit> productList;
     @FXML
-    private TableColumn<Produit, String> colId;
+    private TextField searchField;
     @FXML
-    private TableColumn<Produit, String> colNom;
+    private Button btnEdit;
     @FXML
-    private TableColumn<Produit, String> colCategorie;
-    @FXML
-    private TableColumn<Produit, String> colLangue;
-    @FXML
-    private TableColumn<Produit, String> colPrix;
-    @FXML
-    private TableColumn<Produit, String> colNiveau;
-    @FXML
-    private TextField fieldNom;
-    @FXML
-    private TextArea fieldDesc;
-    @FXML
-    private TextField fieldPrix;
-    @FXML
-    private TextField fieldLangue;
-    @FXML
-    private ComboBox<CategorieProduit> comboCategorie;
-    @FXML
-    private ComboBox<String> comboNiveau;
+    private Button btnDelete;
     @FXML
     private Label adminMsg;
 
@@ -49,33 +47,102 @@ public class AdminProductsController {
             adminMsg.setText("Accès réservé à l’administrateur.");
             return;
         }
-        comboCategorie.setItems(FXCollections.observableArrayList(CategorieProduit.values()));
-        comboCategorie.getSelectionModel().select(CategorieProduit.FORMATION);
-        comboNiveau.setItems(FXCollections.observableArrayList("DEBUTANT", "INTERMEDIAIRE", "AVANCE"));
-        comboNiveau.getSelectionModel().selectFirst();
 
-        colId.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
-        colNom.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNom()));
-        colCategorie.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().getCategorie() == null ? "" : c.getValue().getCategorie().name()));
-        colLangue.setCellValueFactory(c -> new SimpleStringProperty(str(c.getValue().getLangue())));
-        colPrix.setCellValueFactory(c -> new SimpleStringProperty(MoneyFormat.amount(c.getValue().getPrix())));
-        colNiveau.setCellValueFactory(c -> new SimpleStringProperty(str(c.getValue().getNiveau())));
-        productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        productList.setCellFactory(lv -> new ListCell<Produit>() {
+            @Override
+            protected void updateItem(Produit p, boolean empty) {
+                super.updateItem(p, empty);
+                if (empty || p == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox mainBox = new HBox(15);
+                    mainBox.setAlignment(Pos.CENTER_LEFT);
+                    mainBox.setPadding(new Insets(10));
+                    mainBox.setStyle("-fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
 
-        productTable.getSelectionModel().selectedItemProperty().addListener((o, a, p) -> {
-            if (p != null) {
-                fieldNom.setText(p.getNom());
-                fieldDesc.setText(str(p.getDescription()));
-                fieldPrix.setText(String.format("%.2f", p.getPrix()));
-                fieldLangue.setText(str(p.getLangue()));
-                comboCategorie.getSelectionModel().select(
-                        p.getCategorie() != null ? p.getCategorie() : CategorieProduit.FORMATION);
-                comboNiveau.getSelectionModel().select(p.getNiveau() != null ? p.getNiveau() : "DEBUTANT");
+                    // Image du produit
+                    StackPane imgContainer = new StackPane();
+                    imgContainer.setPrefSize(60, 60);
+                    imgContainer.setStyle("-fx-background-color: #f1f5f9; -fx-background-radius: 8;");
+                    
+                    ImageView iv = new ImageView();
+                    iv.setFitWidth(60);
+                    iv.setFitHeight(60);
+                    iv.setPreserveRatio(true);
+                    
+                    if (p.getImage() != null && !p.getImage().isEmpty()) {
+                        try {
+                            String path = p.getImage();
+                            if (path.contains("pollinations.ai/p/")) {
+                                path = path.replace("pollinations.ai/p/", "image.pollinations.ai/prompt/");
+                            }
+                            
+                            Image img;
+                            if (path.startsWith("http")) {
+                                img = new Image(path, true);
+                            } else {
+                                img = new Image(new File(path).toURI().toString());
+                            }
+                            iv.setImage(img);
+                        } catch (Exception e) {
+                            // Ignorer les erreurs d'image
+                        }
+                    }
+                    imgContainer.getChildren().add(iv);
+
+                    VBox infoBox = new VBox(5);
+                    HBox.setHgrow(infoBox, Priority.ALWAYS);
+                    
+                    Label nomLbl = new Label(p.getNom());
+                    nomLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
+                    
+                    String cat = p.getCategorie() == null ? "N/A" : p.getCategorie().name();
+                    Label detailsLbl = new Label(String.format("Catégorie: %s  •  Langue: %s  •  Niveau: %s", cat, str(p.getLangue()), str(p.getNiveau())));
+                    detailsLbl.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+                    
+                    infoBox.getChildren().addAll(nomLbl, detailsLbl);
+
+                    Label prixLbl = new Label(MoneyFormat.amount(p.getPrix()));
+                    prixLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #27ae60; -fx-font-size: 16px; -fx-min-width: 80px; -fx-alignment: center-right;");
+
+                    mainBox.getChildren().addAll(imgContainer, infoBox, prixLbl);
+
+                    setText(null);
+                    setGraphic(mainBox);
+                }
             }
         });
 
+        productList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            boolean hasSelection = newVal != null;
+            btnEdit.setDisable(!hasSelection);
+            btnDelete.setDisable(!hasSelection);
+        });
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filterProducts(newVal);
+        });
+
         reload();
+    }
+
+    private void filterProducts(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            reload();
+            return;
+        }
+        String lowerQuery = query.toLowerCase().trim();
+        try {
+            productList.setItems(FXCollections.observableArrayList(
+                produitCRUD.afficher().stream()
+                    .filter(p -> p.getNom().toLowerCase().contains(lowerQuery) || 
+                                (p.getDescription() != null && p.getDescription().toLowerCase().contains(lowerQuery)))
+                    .toList()
+            ));
+        } catch (Exception e) {
+            adminMsg.setText("Erreur lors du filtrage: " + e.getMessage());
+        }
     }
 
     public void reload() {
@@ -84,52 +151,50 @@ public class AdminProductsController {
             return;
         }
         try {
-            productTable.setItems(FXCollections.observableArrayList(produitCRUD.afficher()));
+            productList.setItems(FXCollections.observableArrayList(produitCRUD.afficher()));
         } catch (Exception e) {
-            adminMsg.setText(e.getMessage());
+            adminMsg.setText("Erreur lors du chargement: " + e.getMessage());
         }
     }
 
     @FXML
     private void onAdd() {
-        if (!Session.isAdmin()) {
-            return;
-        }
-        adminMsg.setText("");
-        try {
-            Produit p = buildFromForm(null);
-            produitCRUD.ajouter(p);
-            clearForm();
-            reload();
-            adminMsg.setText("Produit ajouté.");
-        } catch (Exception e) {
-            adminMsg.setText(e.getMessage());
-        }
+        showProductDialog(null);
     }
 
     @FXML
-    private void onUpdate() {
-        Produit sel = productTable.getSelectionModel().getSelectedItem();
-        if (sel == null) {
-            adminMsg.setText("Sélectionnez un produit dans le tableau.");
-            return;
+    private void onEdit() {
+        Produit selected = productList.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            showProductDialog(selected);
         }
-        adminMsg.setText("");
+    }
+
+    private void showProductDialog(Produit p) {
         try {
-            Produit p = buildFromForm(sel.getId());
-            produitCRUD.modifier(p);
-            reload();
-            adminMsg.setText("Produit mis à jour.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/shop/ProductFormDialog.fxml"));
+            Parent root = loader.load();
+            
+            ProductFormDialogController controller = loader.getController();
+            controller.setProduct(p);
+            controller.setOnSuccess(this::reload);
+
+            Stage stage = new Stage();
+            stage.setTitle(p == null ? "Ajouter un produit" : "Modifier le produit");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
         } catch (Exception e) {
-            adminMsg.setText(e.getMessage());
+            adminMsg.setText("Erreur lors de l'ouverture du formulaire: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void onDelete() {
-        Produit sel = productTable.getSelectionModel().getSelectedItem();
+        Produit sel = productList.getSelectionModel().getSelectedItem();
         if (sel == null) {
-            adminMsg.setText("Sélectionnez un produit.");
+            adminMsg.setText("Sélectionnez un produit à supprimer.");
             return;
         }
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -141,50 +206,11 @@ public class AdminProductsController {
         adminMsg.setText("");
         try {
             produitCRUD.supprimer(sel.getId().intValue());
-            clearForm();
             reload();
             adminMsg.setText("Produit supprimé.");
         } catch (Exception e) {
-            adminMsg.setText(e.getMessage());
+            adminMsg.setText("Erreur lors de la suppression: " + e.getMessage());
         }
-    }
-
-    @FXML
-    private void onClearForm() {
-        clearForm();
-        productTable.getSelectionModel().clearSelection();
-    }
-
-    private void clearForm() {
-        fieldNom.clear();
-        fieldDesc.clear();
-        fieldPrix.clear();
-        fieldLangue.clear();
-        comboCategorie.getSelectionModel().select(CategorieProduit.FORMATION);
-        comboNiveau.getSelectionModel().selectFirst();
-    }
-
-    private Produit buildFromForm(Long id) {
-        String nom = trim(fieldNom.getText());
-        if (nom.isEmpty()) {
-            throw new IllegalArgumentException("Le nom est obligatoire.");
-        }
-        double prix = Double.parseDouble(trim(fieldPrix.getText()).replace(",", "."));
-        Produit p = new Produit();
-        if (id != null) {
-            p.setId(id);
-        }
-        p.setNom(nom);
-        p.setDescription(trim(fieldDesc.getText()));
-        p.setPrix(prix);
-        p.setLangue(trim(fieldLangue.getText()));
-        p.setCategorie(comboCategorie.getSelectionModel().getSelectedItem());
-        p.setNiveau(comboNiveau.getSelectionModel().getSelectedItem());
-        return p;
-    }
-
-    private static String trim(String s) {
-        return s != null ? s.trim() : "";
     }
 
     private static String str(String s) {

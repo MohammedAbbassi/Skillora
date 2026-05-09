@@ -14,11 +14,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,12 +181,51 @@ public class ShopController {
     }
 
     private VBox buildProductCard(Produit p) {
-        VBox card = new VBox(8);
+        VBox card = new VBox(12);
         card.getStyleClass().add("product-card");
         card.setPrefWidth(260);
         card.setMinWidth(240);
         card.setMaxWidth(300);
-        card.setPadding(new Insets(14));
+        card.setPadding(new Insets(0)); // On gère le padding différemment pour l'image
+
+        // Conteneur de l'image
+        StackPane imgContainer = new StackPane();
+        imgContainer.setPrefHeight(160);
+        imgContainer.setStyle("-fx-background-color: #f1f5f9; -fx-background-radius: 14 14 0 0; -fx-overflow: hidden;");
+        
+        ImageView iv = new ImageView();
+        iv.setFitWidth(260);
+        iv.setFitHeight(160);
+        iv.setPreserveRatio(true);
+        
+        Label placeholder = new Label("📷");
+        placeholder.setStyle("-fx-font-size: 40px; -fx-opacity: 0.2;");
+        
+        if (p.getImage() != null && !p.getImage().isEmpty()) {
+            try {
+                String path = p.getImage();
+                if (path.contains("pollinations.ai/p/")) {
+                    path = path.replace("pollinations.ai/p/", "image.pollinations.ai/prompt/");
+                }
+                
+                Image img;
+                if (path.startsWith("http")) {
+                    img = new Image(path, true);
+                } else {
+                    img = new Image(new File(path).toURI().toString());
+                }
+                iv.setImage(img);
+                placeholder.setVisible(false);
+            } catch (Exception e) {
+                // Image par défaut
+            }
+        }
+        imgContainer.getChildren().addAll(placeholder, iv);
+
+        // Contenu texte (avec padding)
+        VBox content = new VBox(8);
+        content.setPadding(new Insets(14));
+        VBox.setVgrow(content, javafx.scene.layout.Priority.ALWAYS);
 
         Label name = new Label(p.getNom());
         name.getStyleClass().add("course-card-title");
@@ -212,8 +255,8 @@ public class ShopController {
         typePrice.getStyleClass().add("course-card-meta");
 
         String desc = str(p.getDescription());
-        if (desc.length() > 120) {
-            desc = desc.substring(0, 120) + "…";
+        if (desc.length() > 100) {
+            desc = desc.substring(0, 100) + "…";
         }
         Label excerpt = new Label(desc.isEmpty() ? "—" : desc);
         excerpt.setWrapText(true);
@@ -234,7 +277,8 @@ public class ShopController {
             shopMessage.setText("Sélection : " + p.getNom());
         });
 
-        card.getChildren().addAll(titleRow, typePrice, excerpt, spacer, selectBtn);
+        content.getChildren().addAll(titleRow, typePrice, excerpt, spacer, selectBtn);
+        card.getChildren().addAll(imgContainer, content);
         return card;
     }
 

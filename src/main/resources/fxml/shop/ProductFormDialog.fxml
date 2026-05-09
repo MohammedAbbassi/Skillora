@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.skillora.controllers.ProductFormDialogController" spacing="0"
+      stylesheets="@../../css/theme.css" prefWidth="550" style="-fx-background-color: transparent;">
+    
+    <VBox spacing="20" styleClass="card" VBox.vgrow="ALWAYS">
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="dialogTitle" text="Détails du produit" styleClass="title-h2"/>
+                <Label text="Veuillez renseigner les informations ci-dessous." styleClass="muted"/>
+            </VBox>
+            <Label text="📦" style="-fx-font-size: 32px;"/>
+        </HBox>
+        
+        <Separator/>
+        
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;" prefHeight="400">
+            <VBox spacing="20">
+                <!-- Section: Informations Générales -->
+                <VBox spacing="10">
+                    <Label text="INFORMATIONS GÉNÉRALES" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 11px; -fx-letter-spacing: 0.05em;"/>
+                    <GridPane hgap="15" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120" halignment="LEFT"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="250"/>
+                        </columnConstraints>
+                        
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                            <Label text="Nom du produit" styleClass="field-label"/>
+                            <TextField fx:id="fieldNom" promptText="ex: Formation Java Avancée"/>
+                        </VBox>
+                        
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                            <Label text="Description" styleClass="field-label"/>
+                            <TextArea fx:id="fieldDesc" prefRowCount="3" wrapText="true" promptText="Décrivez brièvement le produit..."/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Section: Prix et Localisation -->
+                <HBox spacing="20">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label text="PRIX ET LANGUE" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 11px; -fx-letter-spacing: 0.05em;"/>
+                        <GridPane hgap="15" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Prix (TND)" styleClass="field-label"/>
+                                <TextField fx:id="fieldPrix" promptText="0.00"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Langue" styleClass="field-label"/>
+                                <TextField fx:id="fieldLangue" promptText="ex: Français"/>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+                    
+                    <Separator orientation="VERTICAL"/>
+                    
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label text="CATÉGORISATION" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 11px; -fx-letter-spacing: 0.05em;"/>
+                        <GridPane hgap="15" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Catégorie" styleClass="field-label"/>
+                                <ComboBox fx:id="comboCategorie" prefWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Niveau" styleClass="field-label"/>
+                                <ComboBox fx:id="comboNiveau" prefWidth="Infinity"/>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Section: Image -->
+                <VBox spacing="10">
+                    <Label text="IMAGE DU PRODUIT" style="-fx-font-weight: bold; -fx-text-fill: #4f46e5; -fx-font-size: 11px; -fx-letter-spacing: 0.05em;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <StackPane style="-fx-background-color: #f1f5f9; -fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-border-width: 1;" prefWidth="120" prefHeight="120">
+                            <Label fx:id="imagePlaceholder" text="📷" style="-fx-font-size: 40px; -fx-opacity: 0.3;"/>
+                            <javafx.scene.image.ImageView fx:id="imagePreview" fitWidth="120" fitHeight="120" preserveRatio="true"/>
+                        </StackPane>
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <TextField fx:id="fieldImagePath" promptText="URL de l'image ou chemin local" editable="false"/>
+                            <HBox spacing="10">
+                                <Button text="Choisir un fichier" onAction="#onBrowseImage" styleClass="secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                                <Button text="Générer par IA" onAction="#onGenerateAIImage" styleClass="secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                    <style>-fx-text-fill: #4f46e5; -fx-font-weight: bold;</style>
+                                </Button>
+                            </HBox>
+                            <Label text="L'IA générera une image basée sur le nom et la description du produit." styleClass="muted" wrapText="true" style="-fx-font-size: 10px;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+        
+        <Separator/>
+        
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Label fx:id="errorMsg" styleClass="danger-text" wrapText="true" visible="false" managed="false" HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Annuler" onAction="#onCancel" styleClass="secondary-button" minWidth="100"/>
+            <Button fx:id="btnConfirm" text="Enregistrer" defaultButton="true" onAction="#onConfirm" styleClass="primary-button" minWidth="140"/>
+        </HBox>
+    </VBox>
+</VBox>
+

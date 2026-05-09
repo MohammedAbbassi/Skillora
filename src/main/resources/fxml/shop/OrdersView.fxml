@@ -52,14 +52,6 @@
     <HBox spacing="12">
         <Button text="Voir le détail (lignes)" onAction="#onDetail" styleClass="secondary-button"/>
     </HBox>
-    <TableView fx:id="orderTable" prefHeight="320" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colId" text="N°" prefWidth="70"/>
-            <TableColumn fx:id="colDate" text="Date" prefWidth="160"/>
-            <TableColumn fx:id="colTotal" text="Total (TND)" prefWidth="110"/>
-            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
-            <TableColumn fx:id="colUser" text="Utilisateur" prefWidth="100"/>
-        </columns>
-    </TableView>
+    <ListView fx:id="orderList" prefHeight="320" VBox.vgrow="ALWAYS"/>
     <Label fx:id="orderMessage" wrapText="true" styleClass="muted"/>
 </VBox>

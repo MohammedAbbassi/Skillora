@@ -15,7 +15,7 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
 
     @Override
     public void ajouter(Produit p) throws SQLException {
-        String sql = "INSERT INTO produit (nom, prix, langue, categorie, description, niveau) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO produit (nom, prix, langue, categorie, description, niveau, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, p.getNom());
         ps.setDouble(2, p.getPrix());
@@ -23,12 +23,13 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
         ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
         ps.setString(5, p.getDescription());
         ps.setString(6, p.getNiveau());
+        ps.setString(7, p.getImage());
         ps.executeUpdate();
     }
 
     @Override
     public void modifier(Produit p) throws SQLException {
-        String sql = "UPDATE produit SET nom=?, prix=?, langue=?, categorie=?, description=?, niveau=? WHERE id_produit=?";
+        String sql = "UPDATE produit SET nom=?, prix=?, langue=?, categorie=?, description=?, niveau=?, image=? WHERE id_produit=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, p.getNom());
         ps.setDouble(2, p.getPrix());
@@ -36,7 +37,8 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
         ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
         ps.setString(5, p.getDescription());
         ps.setString(6, p.getNiveau());
-        ps.setLong(7, p.getId());
+        ps.setString(7, p.getImage());
+        ps.setLong(8, p.getId());
         ps.executeUpdate();
     }
 
@@ -64,6 +66,7 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
                 }
                 p.setDescription(rs.getString("description"));
                 p.setNiveau(rs.getString("niveau"));
+                p.setImage(rs.getString("image"));
                 int ic = rs.getInt("id_cours");
                 if (!rs.wasNull()) {
                     p.setIdCours(ic);
