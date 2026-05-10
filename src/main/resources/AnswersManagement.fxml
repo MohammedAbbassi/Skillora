@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.AnswersManagementController">
+    <padding>
+        <Insets top="34" right="40" bottom="34" left="40"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="14">
+        <VBox spacing="6">
+            <Label text="Réponses" styleClass="page-title"/>
+            <Label text="Vue centrale des réponses stockées et de leur validité." styleClass="page-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button minWidth="118" text="Modifier" onAction="#editAnswer" styleClass="secondary-button"/>
+        <Button minWidth="118" text="Supprimer" onAction="#deleteAnswer" styleClass="danger-button"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <TextField fx:id="searchAnswerField" promptText="Rechercher une réponse..." HBox.hgrow="ALWAYS" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="searchCountLabel" text="0 résultat(s)" styleClass="page-subtitle" />
+    </HBox>
+
+    <VBox spacing="12" styleClass="table-panel" VBox.vgrow="ALWAYS">
+        <Label text="Liste des réponses" styleClass="section-title"/>
+        <ListView fx:id="answerList" VBox.vgrow="ALWAYS" styleClass="cards-list" />
+    </VBox>
+</VBox>
