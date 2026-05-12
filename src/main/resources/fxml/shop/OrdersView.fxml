@@ -49,8 +49,13 @@
             </HBox>
         </VBox>
     </HBox>
-    <HBox spacing="12">
-        <Button text="Voir le détail (lignes)" onAction="#onDetail" styleClass="secondary-button"/>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button text="Voir le détail" onAction="#onDetail" styleClass="secondary-button">
+            <graphic><Label text="📄"/></graphic>
+        </Button>
+        <Button fx:id="btnInvoice" text="Télécharger Facture" onAction="#onGenerateInvoice" styleClass="primary-button" disable="true">
+            <graphic><Label text="📥" style="-fx-text-fill: white;"/></graphic>
+        </Button>
     </HBox>
     <ListView fx:id="orderList" prefHeight="320" VBox.vgrow="ALWAYS"/>
     <Label fx:id="orderMessage" wrapText="true" styleClass="muted"/>

@@ -2,6 +2,8 @@ package com.skillora.controllers;
 
 import Entities.CommandeRecord;
 import Services.OrderService;
+import Services.InvoiceService;
+import Services.UserService;
 import com.skillora.MoneyFormat;
 import com.skillora.Session;
 import com.skillora.model.OrderLine;
@@ -43,6 +45,8 @@ public class OrdersController {
     @FXML
     private ListView<CommandeRecord> orderList;
     @FXML
+    private Button btnInvoice;
+    @FXML
     private Label orderMessage;
     @FXML
     private Label statOrderCount;
@@ -60,6 +64,8 @@ public class OrdersController {
     private Label legendAnnulee;
 
     private final OrderService orderService = new OrderService();
+    private final InvoiceService invoiceService = new InvoiceService();
+    private final UserService userService = new UserService();
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML
@@ -72,6 +78,8 @@ public class OrdersController {
             statusCombo.getSelectionModel().selectFirst();
 
             orderList.getSelectionModel().selectedItemProperty().addListener((obs, o, sel) -> {
+                boolean hasSelection = sel != null;
+                btnInvoice.setDisable(!hasSelection);
                 if (sel != null) {
                     adminTotalField.setText(String.format("%.2f", sel.getTotal()));
                     String st = sel.getStatut();
@@ -82,6 +90,9 @@ public class OrdersController {
             });
         } else {
             subtitleLabel.setText("Vos commandes");
+            orderList.getSelectionModel().selectedItemProperty().addListener((obs, o, sel) -> {
+                btnInvoice.setDisable(sel == null);
+            });
         }
 
         orderList.setCellFactory(lv -> new ListCell<CommandeRecord>() {
@@ -223,6 +234,37 @@ public class OrdersController {
             dlg.showAndWait();
         } catch (Exception e) {
             orderMessage.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onGenerateInvoice() {
+        CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            orderMessage.setText("Sélectionnez une commande.");
+            return;
+        }
+        try {
+            // Récupérer les lignes de la commande
+            List<OrderLine> lines = orderService.listLines(sel.getIdCommande());
+            
+            // Récupérer l'utilisateur (si admin, il faut peut-être le charger depuis la base)
+            Entities.User orderUser;
+            if (Session.isAdmin()) {
+                // Pour l'admin, on charge l'utilisateur propriétaire de la commande
+                orderUser = userService.getAll().stream()
+                        .filter(u -> u.getIdUtilisateur() == sel.getIdUtilisateur())
+                        .findFirst()
+                        .orElse(Session.getUser());
+            } else {
+                orderUser = Session.getUser();
+            }
+
+            // Génération manuelle
+            invoiceService.generateAndOpenInvoice(sel.getIdCommande(), orderUser, lines);
+            orderMessage.setText("Facture générée avec succès.");
+        } catch (Exception e) {
+            orderMessage.setText("Erreur génération facture : " + e.getMessage());
         }
     }
 

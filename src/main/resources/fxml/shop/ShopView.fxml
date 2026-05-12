@@ -34,6 +34,8 @@
             <HBox spacing="12" alignment="CENTER_LEFT">
                 <Label text="Filtrer :" styleClass="field-label"/>
                 <ComboBox fx:id="filterTypeCombo" prefWidth="200" promptText="Tous les types"/>
+                <Label text="Trier par :" styleClass="field-label" style="-fx-padding: 0 0 0 10;"/>
+                <ComboBox fx:id="sortCombo" prefWidth="220" promptText="Trier par nom"/>
             </HBox>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="catalog-scroll" prefHeight="380" VBox.vgrow="ALWAYS">
                 <FlowPane fx:id="productsFlow" hgap="14" vgap="14" prefWrapLength="900"/>
@@ -47,7 +49,35 @@
             </padding>
             <Label text="Panier" styleClass="title-h2"/>
             <ListView fx:id="cartList" prefHeight="280"/>
-            <Label fx:id="cartTotalLabel" styleClass="title-h2"/>
+            <!-- Coupons -->
+            <VBox spacing="8" style="-fx-background-color: #f8fafc; -fx-padding: 12; -fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-width: 1;">
+                <Label text="CODE PROMO" style="-fx-font-weight: bold; -fx-font-size: 11px; -fx-text-fill: #64748b;"/>
+                <HBox spacing="8">
+                    <TextField fx:id="couponField" promptText="Entrez votre code" HBox.hgrow="ALWAYS" prefHeight="35"/>
+                    <Button text="Appliquer" onAction="#onApplyCoupon" styleClass="secondary-button" prefHeight="35"/>
+                </HBox>
+                <Label fx:id="couponStatusMsg" style="-fx-font-size: 11px;" wrapText="true" visible="false" managed="false"/>
+            </VBox>
+
+            <Separator/>
+
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Total produits :" styleClass="muted"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="subtotalLabel" text="0.00 TND" style="-fx-font-weight: bold;"/>
+                </HBox>
+                <HBox fx:id="discountRow" alignment="CENTER_LEFT" visible="false" managed="false">
+                    <Label text="Réduction :" style="-fx-text-fill: #ef4444;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="discountLabel" text="-0.00 TND" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="TOTAL À PAYER :" styleClass="title-h3"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="totalLabel" text="0.00 TND" style="-fx-font-weight: bold; -fx-font-size: 20px; -fx-text-fill: #4f46e5;"/>
+                </HBox>
+            </VBox>
             <HBox spacing="8">
                 <Button text="Retirer sélection" onAction="#onRemoveLine" styleClass="secondary-button"
                         maxWidth="Infinity"/>

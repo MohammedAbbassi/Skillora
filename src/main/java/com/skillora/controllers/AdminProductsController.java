@@ -98,7 +98,8 @@ public class AdminProductsController {
                     nomLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
                     
                     String cat = p.getCategorie() == null ? "N/A" : p.getCategorie().name();
-                    Label detailsLbl = new Label(String.format("Catégorie: %s  •  Langue: %s  •  Niveau: %s", cat, str(p.getLangue()), str(p.getNiveau())));
+                    Label detailsLbl = new Label(String.format("Catégorie: %s  •  Langue: %s  •  Niveau: %s  •  ⭐ %.1f (%d)", 
+                            cat, str(p.getLangue()), str(p.getNiveau()), p.getNoteMoyenne(), p.getNombreEvaluations()));
                     detailsLbl.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
                     
                     infoBox.getChildren().addAll(nomLbl, detailsLbl);

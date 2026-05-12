@@ -1,12 +1,18 @@
 package com.skillora.controllers;
 
 import Entities.Produit;
+import Entities.Evaluation;
+import Entities.Coupon;
 import Services.OrderService;
 import Services.ProduitCRUD;
+import Services.EvaluationCRUD;
+import Services.InvoiceService;
+import Services.CouponService;
 import Services.ProductCatalogStatsService;
 import com.skillora.MoneyFormat;
 import com.skillora.Session;
 import com.skillora.model.CartLine;
+import com.skillora.model.OrderLine;
 import com.skillora.model.CatalogStats;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -33,6 +39,8 @@ public class ShopController {
     @FXML
     private ComboBox<String> filterTypeCombo;
     @FXML
+    private ComboBox<String> sortCombo;
+    @FXML
     private Label statTotalProducts;
     @FXML
     private Label statAvgPrice;
@@ -43,18 +51,35 @@ public class ShopController {
     @FXML
     private ListView<CartLine> cartList;
     @FXML
-    private Label cartTotalLabel;
+    private Label subtotalLabel;
+    @FXML
+    private Label totalLabel;
+    @FXML
+    private Label discountLabel;
+    @FXML
+    private HBox discountRow;
+    @FXML
+    private TextField couponField;
+    @FXML
+    private Label couponStatusMsg;
     @FXML
     private Label shopMessage;
 
     private final ProduitCRUD produitCRUD = new ProduitCRUD();
+    private final EvaluationCRUD evaluationCRUD = new EvaluationCRUD();
     private final OrderService orderService = new OrderService();
     private final ProductCatalogStatsService catalogStatsService = new ProductCatalogStatsService();
+    private final InvoiceService invoiceService = new InvoiceService();
+    private final CouponService couponService = new CouponService();
 
     private static final String FILTER_ALL = "Tous les types";
+    private static final String SORT_NAME = "Trier par nom";
+    private static final String SORT_RATING = "Trier par note (décroissant)";
 
     private List<Produit> allProducts = List.of();
     private Produit selectedProduct;
+    private Coupon appliedCoupon;
+    private double currentDiscount = 0;
 
     @FXML
     private void initialize() {
@@ -63,6 +88,9 @@ public class ShopController {
         }
 
         filterTypeCombo.setOnAction(e -> rebuildProductCards());
+        sortCombo.setItems(FXCollections.observableArrayList(SORT_NAME, SORT_RATING));
+        sortCombo.getSelectionModel().selectFirst();
+        sortCombo.setOnAction(e -> rebuildProductCards());
 
         cartList.setItems(Session.getCart());
         cartList.setCellFactory(lv -> new ListCell<>() {
@@ -171,11 +199,19 @@ public class ShopController {
         productsFlow.getChildren().clear();
         selectedProduct = null;
         String filter = filterTypeCombo.getSelectionModel().getSelectedItem();
-        for (Produit p : allProducts) {
-            if (filter != null && !FILTER_ALL.equals(filter)
-                    && (p.getCategorie() == null || !filter.equalsIgnoreCase(p.getCategorie().name()))) {
-                continue;
-            }
+        String sort = sortCombo.getSelectionModel().getSelectedItem();
+
+        List<Produit> filteredList = allProducts.stream()
+                .filter(p -> filter == null || FILTER_ALL.equals(filter) || (p.getCategorie() != null && filter.equalsIgnoreCase(p.getCategorie().name())))
+                .collect(Collectors.toList());
+
+        if (SORT_RATING.equals(sort)) {
+            filteredList.sort(Comparator.comparingDouble(Produit::getNoteMoyenne).reversed());
+        } else {
+            filteredList.sort(Comparator.comparing(Produit::getNom, Comparator.nullsLast(String::compareToIgnoreCase)));
+        }
+
+        for (Produit p : filteredList) {
             productsFlow.getChildren().add(buildProductCard(p));
         }
     }
@@ -254,6 +290,8 @@ public class ShopController {
         Label typePrice = new Label(str(p.getCategorie() == null ? "" : p.getCategorie().name()) + " · " + MoneyFormat.amount(p.getPrix()));
         typePrice.getStyleClass().add("course-card-meta");
 
+        HBox ratingRow = buildStarRating(p);
+
         String desc = str(p.getDescription());
         if (desc.length() > 100) {
             desc = desc.substring(0, 100) + "…";
@@ -277,18 +315,119 @@ public class ShopController {
             shopMessage.setText("Sélection : " + p.getNom());
         });
 
-        content.getChildren().addAll(titleRow, typePrice, excerpt, spacer, selectBtn);
+        content.getChildren().addAll(titleRow, typePrice, ratingRow, excerpt, spacer, selectBtn);
         card.getChildren().addAll(imgContainer, content);
         return card;
+    }
+
+    private HBox buildStarRating(Produit p) {
+        HBox stars = new HBox(2);
+        stars.setAlignment(Pos.CENTER_LEFT);
+        
+        double rating = p.getNoteMoyenne();
+        for (int i = 1; i <= 5; i++) {
+            Label star = new Label(i <= Math.round(rating) ? "★" : "☆");
+            star.setStyle("-fx-font-size: 16px; -fx-text-fill: #f59e0b;");
+            
+            final int note = i;
+            if (!Session.isAdmin() && Session.isLoggedIn()) {
+                star.setCursor(javafx.scene.Cursor.HAND);
+                star.setOnMouseClicked(e -> rateProduct(p, note));
+                star.setOnMouseEntered(e -> star.setStyle("-fx-font-size: 18px; -fx-text-fill: #fbbf24; -fx-cursor: hand;"));
+                star.setOnMouseExited(e -> star.setStyle("-fx-font-size: 16px; -fx-text-fill: #f59e0b;"));
+            }
+            stars.getChildren().add(star);
+        }
+        
+        Label count = new Label(String.format(" (%.1f/5, %d avis)", rating, p.getNombreEvaluations()));
+        count.getStyleClass().add("muted");
+        count.setStyle("-fx-font-size: 11px; -fx-padding: 0 0 0 5;");
+        stars.getChildren().add(count);
+        
+        return stars;
+    }
+
+    private void rateProduct(Produit p, int note) {
+        if (Session.isAdmin() || !Session.isLoggedIn()) {
+            shopMessage.setText("Vous devez être connecté en tant qu'étudiant pour noter un produit.");
+            return;
+        }
+        try {
+            Evaluation e = new Evaluation();
+            e.setIdProduit(p.getId());
+            e.setIdUtilisateur(Session.getUser().getIdUtilisateur());
+            e.setNote(note);
+            evaluationCRUD.ajouter(e);
+            
+            shopMessage.setText("Merci ! Votre note de " + note + " étoiles a été enregistrée.");
+            loadProductsAndStats(); // Refresh to show new average
+        } catch (Exception ex) {
+            shopMessage.setText("Erreur lors de la notation : " + ex.getMessage());
+        }
     }
 
     private static String str(String s) {
         return s == null ? "" : s;
     }
 
+    @FXML
+    private void onApplyCoupon() {
+        String code = couponField.getText();
+        if (code == null || code.trim().isEmpty()) {
+            return;
+        }
+
+        double subtotal = Session.getCart().stream().mapToDouble(CartLine::getSousTotal).sum();
+        try {
+            appliedCoupon = couponService.validateCoupon(code.trim(), subtotal);
+            currentDiscount = couponService.calculateDiscount(appliedCoupon, subtotal);
+            
+            couponStatusMsg.setText("Coupon '" + appliedCoupon.getCode() + "' appliqué !");
+            couponStatusMsg.setStyle("-fx-text-fill: #16a34a;"); // Vert
+            couponStatusMsg.setVisible(true);
+            couponStatusMsg.setManaged(true);
+            
+            updateTotal();
+        } catch (Exception e) {
+            appliedCoupon = null;
+            currentDiscount = 0;
+            couponStatusMsg.setText(e.getMessage());
+            couponStatusMsg.setStyle("-fx-text-fill: #ef4444;"); // Rouge
+            couponStatusMsg.setVisible(true);
+            couponStatusMsg.setManaged(true);
+            updateTotal();
+        }
+    }
+
     private void updateTotal() {
-        double t = Session.getCart().stream().mapToDouble(CartLine::getSousTotal).sum();
-        cartTotalLabel.setText("Total : " + MoneyFormat.amount(t));
+        double subtotal = Session.getCart().stream().mapToDouble(CartLine::getSousTotal).sum();
+        
+        // Recalculer la réduction si un coupon est déjà appliqué (si le panier a changé)
+        if (appliedCoupon != null) {
+            try {
+                // Re-valider pour vérifier le montant minimum
+                couponService.validateCoupon(appliedCoupon.getCode(), subtotal);
+                currentDiscount = couponService.calculateDiscount(appliedCoupon, subtotal);
+            } catch (Exception e) {
+                appliedCoupon = null;
+                currentDiscount = 0;
+                couponStatusMsg.setText("Coupon retiré : " + e.getMessage());
+                couponStatusMsg.setStyle("-fx-text-fill: #ef4444;");
+            }
+        }
+
+        subtotalLabel.setText(MoneyFormat.amount(subtotal));
+        
+        if (currentDiscount > 0) {
+            discountLabel.setText("-" + MoneyFormat.amount(currentDiscount));
+            discountRow.setVisible(true);
+            discountRow.setManaged(true);
+        } else {
+            discountRow.setVisible(false);
+            discountRow.setManaged(false);
+        }
+        
+        totalLabel.setText(MoneyFormat.amount(subtotal - currentDiscount));
     }
 
     @FXML
@@ -321,10 +460,27 @@ public class ShopController {
         try {
             long uid = Session.getUser().getIdUtilisateur();
             var copy = List.copyOf(Session.getCart());
-            orderService.placeOrder(uid, copy, "EN_ATTENTE");
+            double finalTotal = Session.getCart().stream().mapToDouble(CartLine::getSousTotal).sum() - currentDiscount;
+            long idCommande = orderService.placeOrder(uid, copy, "EN_ATTENTE", finalTotal);
+            
+            // Récupérer les lignes de la commande pour la facture (converties en OrderLine)
+            List<OrderLine> orderLines = orderService.listLines(idCommande);
+            
+            // Enregistrer l'utilisation du coupon si applicable
+            if (appliedCoupon != null) {
+                couponService.registerUsage(appliedCoupon.getIdCoupon(), uid, idCommande);
+            }
+            
+            // Génération automatique de la facture PDF avec les OrderLines
+            invoiceService.generateAndOpenInvoice(idCommande, Session.getUser(), orderLines);
+            
             Session.getCart().clear();
+            appliedCoupon = null;
+            currentDiscount = 0;
+            couponField.clear();
+            couponStatusMsg.setVisible(false);
             updateTotal();
-            shopMessage.setText("Commande enregistrée avec succès (statut EN_ATTENTE).");
+            shopMessage.setText("Commande enregistrée. La facture a été générée.");
         } catch (Exception e) {
             shopMessage.setText("Erreur : " + e.getMessage());
         }

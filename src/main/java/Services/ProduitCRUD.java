@@ -53,7 +53,12 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
     @Override
     public List<Produit> afficher() throws SQLException {
         List<Produit> list = new ArrayList<>();
-        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery("SELECT * FROM produit ORDER BY nom")) {
+        String sql = "SELECT p.*, COALESCE(AVG(e.note), 0) as note_moyenne, COUNT(e.id_evaluation) as nb_evals " +
+                     "FROM produit p " +
+                     "LEFT JOIN evaluation e ON p.id_produit = e.id_produit " +
+                     "GROUP BY p.id_produit " +
+                     "ORDER BY p.nom";
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Produit p = new Produit();
                 p.setId(rs.getLong("id_produit"));
@@ -67,6 +72,8 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
                 p.setDescription(rs.getString("description"));
                 p.setNiveau(rs.getString("niveau"));
                 p.setImage(rs.getString("image"));
+                p.setNoteMoyenne(rs.getDouble("note_moyenne"));
+                p.setNombreEvaluations(rs.getInt("nb_evals"));
                 int ic = rs.getInt("id_cours");
                 if (!rs.wasNull()) {
                     p.setIdCours(ic);

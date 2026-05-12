@@ -10,6 +10,8 @@ public class Produit {
     private String niveau;
     private Integer idCours;
     private String image;
+    private double noteMoyenne;
+    private int nombreEvaluations;
 
     public Long getId() {
         return id;
@@ -81,5 +83,21 @@ public class Produit {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public double getNoteMoyenne() {
+        return noteMoyenne;
+    }
+
+    public void setNoteMoyenne(double noteMoyenne) {
+        this.noteMoyenne = noteMoyenne;
+    }
+
+    public int getNombreEvaluations() {
+        return nombreEvaluations;
+    }
+
+    public void setNombreEvaluations(int nombreEvaluations) {
+        this.nombreEvaluations = nombreEvaluations;
     }
 }

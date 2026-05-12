@@ -19,10 +19,14 @@ public class OrderService {
     private final Connection cnx = MyDatabase.getInstance().getCnx();
 
     public long placeOrder(long userId, List<CartLine> lines, String statutInitial) throws SQLException {
+        return placeOrder(userId, lines, statutInitial, null);
+    }
+
+    public long placeOrder(long userId, List<CartLine> lines, String statutInitial, Double totalForce) throws SQLException {
         if (lines == null || lines.isEmpty()) {
             throw new IllegalArgumentException("Panier vide");
         }
-        double total = lines.stream().mapToDouble(CartLine::getSousTotal).sum();
+        double total = totalForce != null ? totalForce : lines.stream().mapToDouble(CartLine::getSousTotal).sum();
 
         boolean prevAuto = cnx.getAutoCommit();
         cnx.setAutoCommit(false);

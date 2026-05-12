@@ -29,8 +29,49 @@ CREATE TABLE produit (
   langue VARCHAR(40) DEFAULT NULL,
   niveau ENUM('DEBUTANT','INTERMEDIAIRE','AVANCE') DEFAULT NULL,
   id_cours INT(11) DEFAULT NULL,
+  image VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (id_produit),
   KEY idx_produit_categorie (categorie)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE coupon (
+  id_coupon INT(11) NOT NULL AUTO_INCREMENT,
+  code VARCHAR(50) NOT NULL,
+  type_reduction ENUM('POURCENTAGE', 'FIXE') NOT NULL,
+  valeur_reduction DOUBLE NOT NULL,
+  date_expiration DATETIME NOT NULL,
+  max_utilisations INT(11) NOT NULL DEFAULT 1,
+  nombre_utilisations INT(11) NOT NULL DEFAULT 0,
+  montant_minimum DOUBLE NOT NULL DEFAULT 0,
+  actif TINYINT(1) NOT NULL DEFAULT 1,
+  date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_coupon),
+  UNIQUE KEY uk_coupon_code (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE coupon_usage (
+  id_usage INT(11) NOT NULL AUTO_INCREMENT,
+  id_coupon INT(11) NOT NULL,
+  id_utilisateur BIGINT(20) NOT NULL,
+  id_commande INT(11) NOT NULL,
+  date_utilisation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_usage),
+  CONSTRAINT fk_usage_coupon FOREIGN KEY (id_coupon) REFERENCES coupon (id_coupon) ON DELETE CASCADE,
+  CONSTRAINT fk_usage_utilisateur FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs (id_utilisateur) ON DELETE CASCADE,
+  CONSTRAINT fk_usage_commande FOREIGN KEY (id_commande) REFERENCES commande (id_commande) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE evaluation (
+  id_evaluation INT(11) NOT NULL AUTO_INCREMENT,
+  id_produit INT(11) NOT NULL,
+  id_utilisateur BIGINT(20) NOT NULL,
+  note INT(1) NOT NULL,
+  commentaire TEXT DEFAULT NULL,
+  date_evaluation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_evaluation),
+  UNIQUE KEY uk_eval_user_prod (id_produit, id_utilisateur),
+  CONSTRAINT fk_eval_produit FOREIGN KEY (id_produit) REFERENCES produit (id_produit) ON DELETE CASCADE,
+  CONSTRAINT fk_eval_utilisateur FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs (id_utilisateur) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE commande (
