@@ -3,7 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreFormController">
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreFormController">
+
     <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
     <VBox maxWidth="800" styleClass="card" spacing="15">
         <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>

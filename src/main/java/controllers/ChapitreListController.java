@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.util.StringConverter;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import java.sql.SQLException;
 import java.util.List;
@@ -56,7 +55,6 @@ public class ChapitreListController {
     }
 
     private void setupCourseSelector() {
-
         try {
             List<Cours> courses = coursService.getAll();
             courseSelector.setItems(FXCollections.observableArrayList(courses));
@@ -81,8 +79,7 @@ public class ChapitreListController {
             return;
         }
         FilteredList<Chapitre> filtered = new FilteredList<>(allChapters, 
-            ch -> ch.getTitre().toLowerCase().contains(query.toLowerCase()) || 
-                  (ch.getResume() != null && ch.getResume().toLowerCase().contains(query.toLowerCase())));
+            ch -> ch.getTitre().toLowerCase().contains(query.toLowerCase()));
         renderChapters(filtered);
     }
 
@@ -102,7 +99,7 @@ public class ChapitreListController {
         // Thumbnail Placeholder
         StackPane thumb = new StackPane();
         thumb.getStyleClass().add("chapter-thumb");
-        Label thumbLabel = new Label("Chapitre " + ch.getOrdre());
+        Label thumbLabel = new Label("Chapitre");
         thumbLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-weight: bold;");
         thumb.getChildren().add(thumbLabel);
 
@@ -125,11 +122,6 @@ public class ChapitreListController {
         title.setWrapText(true);
         title.setMinHeight(50);
 
-        Label resume = new Label(ch.getResume());
-        resume.getStyleClass().add("course-card-desc");
-        resume.setMaxHeight(40);
-        resume.setWrapText(true);
-
         HBox footer = new HBox(10);
         footer.setAlignment(Pos.CENTER_LEFT);
         
@@ -140,7 +132,6 @@ public class ChapitreListController {
 
         footer.getChildren().addAll(viewBtn);
 
-
         if (isAdmin) {
             Button editBtn = new Button("Editer");
             editBtn.getStyleClass().add("btn-secondary");
@@ -148,7 +139,7 @@ public class ChapitreListController {
             footer.getChildren().add(editBtn);
         }
 
-        content.getChildren().addAll(top, title, resume, footer);
+        content.getChildren().addAll(top, title, footer);
         card.getChildren().addAll(thumb, content);
         
         return card;
@@ -161,7 +152,6 @@ public class ChapitreListController {
 
     @FXML
     void onAddChapitre(ActionEvent event) {
-
         Cours selected = courseSelector.getValue();
         if (selected == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);

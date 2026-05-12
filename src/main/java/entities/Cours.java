@@ -11,25 +11,21 @@ public class Cours {
     private String niveau;
     private String duree; // ex: "2h"
     private String objectifSemaine;
-    private String performance;
     private LocalDate dateCreation;
-    private int progression;
 
     // ─── Constructeurs ───────────────────────────────────────────────────────────
 
     public Cours() {}
 
     public Cours(String titre, String description, String categorie, String niveau, 
-                 String duree, String objectifSemaine, String performance, LocalDate dateCreation) {
+                 String duree, String objectifSemaine, LocalDate dateCreation) {
         this.titre = titre;
         this.description = description;
         this.categorie = categorie;
         this.niveau = niveau;
         this.duree = duree;
         this.objectifSemaine = objectifSemaine;
-        this.performance = performance;
         this.dateCreation = dateCreation;
-        this.progression = 0;
     }
 
     // ─── Getters / Setters ────────────────────────────────────────────────────────
@@ -55,14 +51,8 @@ public class Cours {
     public String getObjectifSemaine() { return objectifSemaine; }
     public void setObjectifSemaine(String objectifSemaine) { this.objectifSemaine = objectifSemaine; }
 
-    public String getPerformance() { return performance; }
-    public void setPerformance(String performance) { this.performance = performance; }
-
     public LocalDate getDateCreation() { return dateCreation; }
     public void setDateCreation(LocalDate dateCreation) { this.dateCreation = dateCreation; }
-
-    public int getProgression() { return progression; }
-    public void setProgression(int progression) { this.progression = progression; }
 
     @Override
     public String toString() {
@@ -70,8 +60,6 @@ public class Cours {
                 "idCours=" + idCours +
                 ", titre='" + titre + '\'' +
                 ", duree='" + duree + '\'' +
-                ", progression=" + progression + "%" +
                 '}';
     }
 }
-

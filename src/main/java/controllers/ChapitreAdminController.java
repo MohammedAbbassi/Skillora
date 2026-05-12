@@ -7,7 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class ChapitreAdminController {
@@ -15,14 +18,11 @@ public class ChapitreAdminController {
     @FXML private Label formTitle;
     @FXML private Label courseContextLabel;
     @FXML private TextField titreField;
-    @FXML private TextField ordreField;
     @FXML private TextField dureeField;
     @FXML private ComboBox<String> niveauCombo;
     @FXML private ComboBox<String> typeCombo;
-    @FXML private TextField videoUrlField;
+    @FXML private TextField youtubeLinkField;
     @FXML private TextField pdfUrlField;
-    @FXML private TextField imageUrlField;
-    @FXML private TextArea resumeArea;
     @FXML private TextArea contenuArea;
     @FXML private Button btnDelete;
     @FXML private Button saveButton;
@@ -33,10 +33,18 @@ public class ChapitreAdminController {
 
     @FXML
     public void initialize() {
-        niveauCombo.setItems(FXCollections.observableArrayList("FACILE", "MOYEN", "DIFFICILE"));
-        niveauCombo.setValue("MOYEN");
-        typeCombo.setItems(FXCollections.observableArrayList("TEXTE", "VIDEO"));
-        typeCombo.setValue("VIDEO");
+        if (niveauCombo != null) {
+            niveauCombo.setItems(FXCollections.observableArrayList("FACILE", "MOYEN", "DIFFICILE"));
+            niveauCombo.setValue("MOYEN");
+        }
+        if (typeCombo != null) {
+            typeCombo.setItems(FXCollections.observableArrayList("TEXTE", "VIDEO"));
+            typeCombo.setValue("VIDEO");
+        }
+
+        // Input Validation
+        if (titreField != null) utils.InputValidator.applyLettersOnly(titreField);
+        if (contenuArea != null) utils.InputValidator.applyLettersOnly(contenuArea);
     }
 
     public void setCourseContext(Cours cours) {
@@ -54,14 +62,11 @@ public class ChapitreAdminController {
         btnDelete.setVisible(true);
 
         titreField.setText(ch.getTitre());
-        ordreField.setText(String.valueOf(ch.getOrdre()));
         dureeField.setText(String.valueOf(ch.getDuree()));
-        niveauCombo.setValue(ch.getNiveau());
-        typeCombo.setValue(ch.getTypeExplication());
-        videoUrlField.setText(ch.getVideoUrl());
+        if (niveauCombo != null) niveauCombo.setValue(ch.getNiveau());
+        if (typeCombo != null) typeCombo.setValue(ch.getTypeExplication());
+        youtubeLinkField.setText(ch.getYoutubeLink());
         pdfUrlField.setText(ch.getPdfUrl());
-        imageUrlField.setText(ch.getImageUrl());
-        resumeArea.setText(ch.getResume());
         contenuArea.setText(ch.getContenu());
     }
 
@@ -85,32 +90,70 @@ public class ChapitreAdminController {
     }
 
     @FXML
+    void onOpenYoutube(ActionEvent event) {
+        String url = youtubeLinkField.getText();
+        if (url != null && !url.trim().isEmpty()) {
+            try {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+            } catch (Exception e) {
+                showAlert("Erreur", "Impossible d'ouvrir le lien YouTube.");
+            }
+        }
+    }
+
+    @FXML
+    void onBrowsePdf(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner le support PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+        File selectedFile = fileChooser.showOpenDialog(pdfUrlField.getScene().getWindow());
+        
+        if (selectedFile != null) {
+            pdfUrlField.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
     void onSave(ActionEvent event) {
         try {
-            if (titreField.getText().trim().isEmpty()) {
-                showAlert("Erreur", "Le titre est obligatoire.");
+            // Validation
+            if (isNullOrEmpty(titreField.getText()) ||
+                isNullOrEmpty(dureeField.getText()) ||
+                isNullOrEmpty(contenuArea.getText()) ||
+                (typeCombo != null && typeCombo.getValue() == null)) {
+                showAlert("Champs incomplets", "Veuillez remplir tous les champs obligatoires du chapitre.");
+                return;
+            }
+
+            if (currentCourse == null) {
+                showAlert("Erreur", "Aucun cours n'est sélectionné pour ce chapitre.");
                 return;
             }
 
             Chapitre ch = (chapterToEdit != null) ? chapterToEdit : new Chapitre();
             ch.setTitre(titreField.getText());
             ch.setContenu(contenuArea.getText());
-            ch.setResume(resumeArea.getText());
-            ch.setNiveau(niveauCombo.getValue());
-            ch.setTypeExplication(typeCombo.getValue());
-            ch.setVideoUrl(videoUrlField.getText());
+            if (niveauCombo != null) ch.setNiveau(niveauCombo.getValue());
+            if (typeCombo != null) ch.setTypeExplication(typeCombo.getValue());
+            ch.setYoutubeLink(youtubeLinkField.getText());
             ch.setPdfUrl(pdfUrlField.getText());
-            ch.setImageUrl(imageUrlField.getText());
             ch.setIdCours(currentCourse.getIdCours());
 
-            try { ch.setOrdre(Integer.parseInt(ordreField.getText())); } catch (Exception e) { ch.setOrdre(1); }
             try { ch.setDuree(Integer.parseInt(dureeField.getText())); } catch (Exception e) { ch.setDuree(0); }
 
             if (chapterToEdit == null) chapitreService.add(ch);
             else chapitreService.update(ch);
 
-            onCancel(null);
-        } catch (SQLException e) { e.printStackTrace(); }
+            List<Chapitre> allChapters = chapitreService.getByCours(currentCourse.getIdCours());
+            ChapitreDetailController controller = MainLayoutController.getInstance().loadViewAndGetController("/ui/chapitre-detail.fxml");
+            if (controller != null) {
+                controller.setChapter(ch, allChapters);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur de création", "Détail de l'erreur : " + e.getMessage());
+        }
     }
 
     private void showAlert(String title, String content) {
@@ -119,5 +162,9 @@ public class ChapitreAdminController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 }

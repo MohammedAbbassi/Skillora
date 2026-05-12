@@ -9,8 +9,10 @@
         <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
         <HBox alignment="CENTER_LEFT" maxWidth="1000" spacing="20">
             <Label text="Liste des Cours" styleClass="card-title"/>
-            <TextField fx:id="searchField" promptText="Rechercher par titre ou catégorie..." prefWidth="300" styleClass="text-field-modern" />
+            <TextField fx:id="searchField" promptText="Rechercher un titre..." prefWidth="250" styleClass="text-field-modern" />
+            <ComboBox fx:id="levelFilter" promptText="Tous les niveaux" prefWidth="180" styleClass="combo-box-modern" />
             <Region HBox.hgrow="ALWAYS" />
+
             <Button fx:id="btnNewCours" text="+ Nouveau Cours" styleClass="btn-primary" onAction="#onNewCours" />
         </HBox>
 

@@ -18,9 +18,6 @@ public class CoursFormController {
     @FXML private ComboBox<String> dureeCombo;
     @FXML private TextArea descriptionArea;
     @FXML private TextArea objectifArea;
-    @FXML private TextArea performanceArea;
-    @FXML private Slider progressionSlider;
-    @FXML private Label progressionLabel;
     @FXML private Button saveButton;
 
     private CoursService coursService = new CoursService();
@@ -41,12 +38,11 @@ public class CoursFormController {
             categorieMenu.getItems().add(item);
         }
 
-        // Bind slider value to label
-        progressionSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            progressionLabel.setText(newVal.intValue() + "%");
-        });
+        // Input Validation: Letters Only
+        utils.InputValidator.applyLettersOnly(titreField);
+        utils.InputValidator.applyLettersOnly(descriptionArea);
+        utils.InputValidator.applyLettersOnly(objectifArea);
     }
-
 
     public void setCoursForEdit(Cours cours) {
         this.coursToEdit = cours;
@@ -74,8 +70,6 @@ public class CoursFormController {
         dureeCombo.setValue(cours.getDuree());
         descriptionArea.setText(cours.getDescription());
         objectifArea.setText(cours.getObjectifSemaine());
-        performanceArea.setText(cours.getPerformance());
-        progressionSlider.setValue(cours.getProgression());
     }
 
     @FXML
@@ -86,31 +80,41 @@ public class CoursFormController {
     @FXML
     void onSave(ActionEvent event) {
         try {
-            if (titreField.getText().trim().isEmpty()) {
-                showAlert("Erreur", "Le titre est obligatoire.");
+            // Validation
+            if (isNullOrEmpty(titreField.getText()) || 
+                isNullOrEmpty(descriptionArea.getText()) ||
+                isNullOrEmpty(objectifArea.getText()) ||
+                niveauCombo.getValue() == null ||
+                dureeCombo.getValue() == null) {
+                showAlert("Champs incomplets", "Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
+
+
+            // Collect categories
+            StringBuilder sb = new StringBuilder();
+            int selectedCount = 0;
+            for (MenuItem item : categorieMenu.getItems()) {
+                CheckMenuItem checkItem = (CheckMenuItem) item;
+                if (checkItem.isSelected()) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(checkItem.getText());
+                    selectedCount++;
+                }
+            }
+
+            if (selectedCount == 0) {
+                showAlert("Catégorie manquante", "Veuillez sélectionner au moins une catégorie.");
                 return;
             }
 
             Cours c = (coursToEdit != null) ? coursToEdit : new Cours();
             c.setTitre(titreField.getText());
             c.setDescription(descriptionArea.getText());
-            
-            // Collect categories
-            StringBuilder sb = new StringBuilder();
-            for (MenuItem item : categorieMenu.getItems()) {
-                CheckMenuItem checkItem = (CheckMenuItem) item;
-                if (checkItem.isSelected()) {
-                    if (sb.length() > 0) sb.append(", ");
-                    sb.append(checkItem.getText());
-                }
-            }
             c.setCategorie(sb.toString());
-
             c.setNiveau(niveauCombo.getValue());
             c.setDuree(dureeCombo.getValue());
             c.setObjectifSemaine(objectifArea.getText());
-            c.setPerformance(performanceArea.getText());
-            c.setProgression((int) progressionSlider.getValue());
             
             if (coursToEdit == null) {
                 c.setDateCreation(LocalDate.now());
@@ -134,4 +138,9 @@ public class CoursFormController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
+    }
+
 }

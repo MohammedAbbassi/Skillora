@@ -39,17 +39,9 @@
             <Label text="Durée estimée" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
             <ComboBox fx:id="dureeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="1" />
             
-            <Label text="Progression" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="2" />
-            <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="3">
-                <Slider fx:id="progressionSlider" min="0" max="100" showTickLabels="true" showTickMarks="true" />
-                <Label fx:id="progressionLabel" text="0%" styleClass="card-subtitle" alignment="CENTER" maxWidth="Infinity"/>
-            </VBox>
-
             <Label text="Objectif de la semaine" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
             <TextArea fx:id="objectifArea" prefRowCount="2" promptText="Que devons-nous accomplir cette semaine ?" styleClass="text-area-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
 
-            <Label text="Performance" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-            <TextArea fx:id="performanceArea" prefRowCount="2" promptText="Notes sur la performance actuelle..." styleClass="text-area-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3" />
             
             <Label text="Description" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
             <TextArea fx:id="descriptionArea" prefRowCount="4" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />

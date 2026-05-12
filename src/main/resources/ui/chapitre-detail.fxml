@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-
+<?import javafx.scene.web.WebView?>
 <?import javafx.geometry.Insets?>
+
 <?import javafx.scene.image.ImageView?>
 
 <VBox spacing="0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreDetailController">
@@ -47,13 +48,42 @@
                 <Separator />
 
                 <Label text="Contenu du chapitre" styleClass="card-title"/>
-                <Label fx:id="contenuLabel" wrapText="true" styleClass="detail-content" text="Chargement du contenu..."/>
-                
+                <TextArea fx:id="contenuArea" wrapText="true" editable="true" styleClass="text-area-modern" prefHeight="400" 
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 10; -fx-font-size: 14px;"/>
+
+
+                <Separator />
+
+                <!-- Dictionary API Section -->
+                <VBox spacing="10" style="-fx-background-color: #f8fafc; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #e2e8f0; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🔍 Lexique" style="-fx-font-weight: bold; -fx-text-fill: #3b82f6;"/>
+                        <TextField fx:id="wordSearchField" promptText="Mot technique..." style="-fx-background-radius: 5;" HBox.hgrow="ALWAYS"/>
+                        <Button text="EN" onAction="#onSearchDefinition" styleClass="btn-primary" style="-fx-padding: 5 10; -fx-background-color: #3b82f6;"/>
+                        <Button text="FR" onAction="#onSearchFrenchDefinition" styleClass="btn-primary" style="-fx-padding: 5 10; -fx-background-color: #10b981;"/>
+                        <Button text="WiktAPI" onAction="#onSearchWiktApi" styleClass="btn-primary" style="-fx-padding: 5 10; -fx-background-color: #8b5cf6;"/>
+                    </HBox>
+                    <Label fx:id="definitionLabel" text="Recherchez un mot technique (EN, FR ou WiktAPI)." wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #64748b; -fx-font-style: italic;"/>
+
+
+                </VBox>
+
+                <Separator />
+
                 <HBox spacing="15" style="-fx-padding: 20 0 0 0;">
                     <Button text="Télécharger le chapitre (PDF)" styleClass="btn-primary" onAction="#onDownloadChapter" />
                     <Button text="Lire le PDF du cours" styleClass="btn-secondary" onAction="#onReadPdf"/>
-                    <Button text="Générer résumé" styleClass="btn-secondary" onAction="#onGenerateSummary"/>
+                    <Button fx:id="btnYoutube" text="🎬 Voir sur YouTube" styleClass="btn-secondary" style="-fx-background-color: #fff1f2; -fx-text-fill: #e11d48; -fx-border-color: #fda4af;" onAction="#onOpenYoutube" visible="false" managed="false"/>
                 </HBox>
+
+
+
+
+
+
+
+
+
 
             </VBox>
 

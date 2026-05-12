@@ -26,9 +26,8 @@ public class CoursService implements ICoursService {
     public void add(Cours cours) throws SQLException {
         checkConnection();
         String req = "INSERT INTO cours (titre, description, categorie, niveau, " +
-
-                "duree, objectif_semaine, performance, date_creation, progression) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "duree, objectif_semaine, date_creation) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, cours.getTitre());
@@ -37,11 +36,9 @@ public class CoursService implements ICoursService {
         pst.setString(4, cours.getNiveau());
         pst.setString(5, cours.getDuree());
         pst.setString(6, cours.getObjectifSemaine());
-        pst.setString(7, cours.getPerformance());
-        pst.setDate  (8, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
-        pst.setInt   (9, cours.getProgression());
+        pst.setDate  (7, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
         pst.executeUpdate();
-
+        
         ResultSet rs = pst.getGeneratedKeys();
         if (rs.next()) {
             cours.setIdCours(rs.getInt(1));
@@ -52,8 +49,8 @@ public class CoursService implements ICoursService {
     public void update(Cours cours) throws SQLException {
         checkConnection();
         String req = "UPDATE cours SET titre = ?, description = ?, categorie = ?, " +
-                "niveau = ?, duree = ?, objectif_semaine = ?, performance = ?, " +
-                "date_creation = ?, progression = ? " +
+                "niveau = ?, duree = ?, objectif_semaine = ?, " +
+                "date_creation = ? " +
                 "WHERE id_cours = ?";
 
         PreparedStatement pst = cnx.prepareStatement(req);
@@ -63,10 +60,8 @@ public class CoursService implements ICoursService {
         pst.setString(4, cours.getNiveau());
         pst.setString(5, cours.getDuree());
         pst.setString(6, cours.getObjectifSemaine());
-        pst.setString(7, cours.getPerformance());
-        pst.setDate  (8, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
-        pst.setInt   (9, cours.getProgression());
-        pst.setInt   (10, cours.getIdCours());
+        pst.setDate  (7, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
+        pst.setInt   (8, cours.getIdCours());
         pst.executeUpdate();
     }
 
@@ -119,39 +114,15 @@ public class CoursService implements ICoursService {
         return null;
     }
 
+    /**
+     * @deprecated La progression a été supprimée des exigences du projet.
+     */
     public void calculateAndSaveProgression(int coursId) throws SQLException {
-        checkConnection();
-        
-        // Count total chapters
-        String totalReq = "SELECT COUNT(*) FROM chapitre WHERE id_cours = ?";
-        PreparedStatement pstTotal = cnx.prepareStatement(totalReq);
-        pstTotal.setInt(1, coursId);
-        ResultSet rsTotal = pstTotal.executeQuery();
-        int total = 0;
-        if (rsTotal.next()) total = rsTotal.getInt(1);
-        
-        if (total == 0) return;
-
-        // Count completed chapters
-        String completeReq = "SELECT COUNT(*) FROM chapitre WHERE id_cours = ? AND est_complete = 1";
-        PreparedStatement pstComplete = cnx.prepareStatement(completeReq);
-        pstComplete.setInt(1, coursId);
-        ResultSet rsComplete = pstComplete.executeQuery();
-        int completed = 0;
-        if (rsComplete.next()) completed = rsComplete.getInt(1);
-        
-        int progression = (int) (((double) completed / total) * 100);
-        
-        // Update course
-        String updateReq = "UPDATE cours SET progression = ? WHERE id_cours = ?";
-        PreparedStatement pstUpdate = cnx.prepareStatement(updateReq);
-        pstUpdate.setInt(1, progression);
-        pstUpdate.setInt(2, coursId);
-        pstUpdate.executeUpdate();
+        // Méthode conservée vide pour éviter les erreurs de compilation si elle est appelée ailleurs,
+        // mais elle ne fait plus rien.
     }
 
     private Cours mapRow(ResultSet rs) throws SQLException {
-
         Cours c = new Cours();
         c.setIdCours    (rs.getInt("id_cours"));
         c.setTitre      (rs.getString("titre"));
@@ -160,14 +131,9 @@ public class CoursService implements ICoursService {
         c.setNiveau     (rs.getString("niveau"));
         c.setDuree      (rs.getString("duree"));
         c.setObjectifSemaine(rs.getString("objectif_semaine"));
-        c.setPerformance(rs.getString("performance"));
 
         Date dCreation = rs.getDate("date_creation");
         c.setDateCreation(dCreation != null ? dCreation.toLocalDate() : null);
-
-        c.setProgression(rs.getInt("progression"));
         return c;
     }
 }
-
-

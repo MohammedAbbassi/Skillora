@@ -8,34 +8,51 @@ import javafx.scene.layout.VBox;
 import services.ChapitreService;
 import services.CoursService;
 import services.CertificateService;
+import services.DictionaryService;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.application.Platform;
 
 public class ChapitreDetailController {
     
-    // ... fields ...
     private CertificateService certificateService = new CertificateService();
-
+    private ChapitreService chapitreService = new ChapitreService();
+    private CoursService coursService = new CoursService();
+    private DictionaryService dictionaryService = new DictionaryService();
 
     @FXML private Label chapterTitleLabel;
     @FXML private ProgressBar overallProgressBar;
     @FXML private Label progressTextLabel;
     @FXML private Label niveauLabel;
     @FXML private Label dureeLabel;
-    @FXML private Label contenuLabel;
+    @FXML private TextArea contenuArea;
     @FXML private Button btnPrev;
+
     @FXML private Button btnNext;
     @FXML private ToggleButton btnComplete;
     @FXML private Button btnQuiz;
+    @FXML private Button btnYoutube;
 
+    @FXML private TextField wordSearchField;
+    @FXML private Label definitionLabel;
 
     @FXML private TextArea remarksArea;
+
     @FXML private ListView<String> tpFilesList;
 
     private Chapitre currentChapter;
     private List<Chapitre> contextChapters;
-    private ChapitreService chapitreService = new ChapitreService();
-    private CoursService coursService = new CoursService();
+
+    @FXML
+    public void initialize() {
+        if (remarksArea != null) {
+            utils.InputValidator.applyLettersOnly(remarksArea);
+        }
+        // L'utilisateur normal ne peut pas modifier, seulement copier
+        if (contenuArea != null) {
+            contenuArea.setEditable(MainLayoutController.getInstance().isAdminMode());
+        }
+    }
 
 
     public void setChapter(Chapitre ch, List<Chapitre> allChapters) {
@@ -48,38 +65,52 @@ public class ChapitreDetailController {
         niveauLabel.getStyleClass().add("badge-" + niveauLabel.getText().toLowerCase());
         
         dureeLabel.setText(ch.getDuree() + " min");
-        contenuLabel.setText(ch.getContenu());
+        contenuArea.setText(ch.getContenu());
+
         
-        // Completion status
+        // Handle YouTube Button visibility
+        if (btnYoutube != null) {
+            boolean hasYoutube = ch.getYoutubeLink() != null && !ch.getYoutubeLink().trim().isEmpty();
+            btnYoutube.setVisible(hasYoutube);
+            btnYoutube.setManaged(hasYoutube);
+        }
+
         btnComplete.setSelected(ch.isEstComplete());
         updateBtnCompleteStyle();
 
-        // Load Remarks
         remarksArea.setText(ch.getRemarques() != null ? ch.getRemarques() : "");
         
-        // Load TPs
         tpFilesList.getItems().clear();
         if (ch.getFichiersTp() != null && !ch.getFichiersTp().isEmpty()) {
             String[] files = ch.getFichiersTp().split(";");
             tpFilesList.getItems().addAll(files);
         }
         
-        // Navigation state
-
-        int index = contextChapters.indexOf(ch);
-        btnPrev.setDisable(index <= 0);
-        btnNext.setDisable(index >= contextChapters.size() - 1);
-        
-        // Progress (mock for now based on index)
-        double progress = (double)(index + 1) / contextChapters.size();
-        overallProgressBar.setProgress(progress);
-        progressTextLabel.setText((int)(progress * 100) + "% du cours complété");
+        int index = (contextChapters != null) ? contextChapters.indexOf(ch) : -1;
+        if (index != -1) {
+            btnPrev.setDisable(index <= 0);
+            btnNext.setDisable(index >= contextChapters.size() - 1);
+            
+            double progress = (double)(index + 1) / contextChapters.size();
+            overallProgressBar.setProgress(progress);
+            progressTextLabel.setText((int)(progress * 100) + "% du cours complété");
+        }
     }
 
     @FXML
     void onBack(ActionEvent event) {
-        MainLayoutController.getInstance().loadView("/ui/chapitre-list.fxml");
+        try {
+            entities.Cours cours = coursService.getById(currentChapter.getIdCours());
+            ChapitreListController ctrl = MainLayoutController.getInstance().loadViewAndGetController("/ui/chapitre-list.fxml");
+            if (ctrl != null && cours != null) {
+                ctrl.setCourseContext(cours);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            MainLayoutController.getInstance().loadView("/ui/chapitre-list.fxml");
+        }
     }
+
 
     @FXML
     void onPrev(ActionEvent event) {
@@ -99,10 +130,7 @@ public class ChapitreDetailController {
             boolean status = btnComplete.isSelected();
             currentChapter.setEstComplete(status);
             chapitreService.updateCompletionStatus(currentChapter.getIdChapitre(), status);
-            
-            // Re-calculate course progression
             coursService.calculateAndSaveProgression(currentChapter.getIdCours());
-            
             updateBtnCompleteStyle();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,20 +155,20 @@ public class ChapitreDetailController {
 
     @FXML
     void onQuizClick(ActionEvent event) {
-        MainLayoutController.getInstance().loadView("/ui/quiz-view.fxml");
+        QuizController ctrl = MainLayoutController.getInstance().loadViewAndGetController("/ui/quiz-view.fxml");
+        if (ctrl != null) {
+            ctrl.setChapter(currentChapter);
+        }
     }
 
 
     @FXML 
     void onDownloadChapter(ActionEvent event) {
-
         try {
             String path = certificateService.generateChapterPDF(currentChapter);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Le chapitre a été téléchargé avec succès : " + path);
             alert.show();
-            
-            // Open PDF
             java.io.File file = new java.io.File(path);
             if (file.exists() && java.awt.Desktop.isDesktopSupported()) {
                 java.awt.Desktop.getDesktop().open(file);
@@ -148,13 +176,92 @@ public class ChapitreDetailController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    @FXML void onReadPdf(ActionEvent event) { /* Open PDF from DB if exists */ }
+    @FXML 
+    void onReadPdf(ActionEvent event) {
+        if (currentChapter != null && currentChapter.getPdfUrl() != null && !currentChapter.getPdfUrl().isEmpty()) {
+            try {
+                java.io.File file = new java.io.File(currentChapter.getPdfUrl());
+                if (file.exists()) {
+                    if (java.awt.Desktop.isDesktopSupported()) {
+                        java.awt.Desktop.getDesktop().open(file);
+                    } else {
+                        showAlert("Erreur", "L'ouverture de fichiers n'est pas supportée sur ce système.");
+                    }
+                } else {
+                    showAlert("Fichier introuvable", "Le fichier PDF n'existe pas au chemin spécifié : \n" + currentChapter.getPdfUrl());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Impossible d'ouvrir le fichier : " + e.getMessage());
+            }
+        } else {
+            showAlert("Aucun support", "Ce chapitre ne possède pas de support PDF.");
+        }
+    }
 
-    @FXML void onGenerateSummary(ActionEvent event) { /* AI Summary mock */ }
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    @FXML
+    void onOpenYoutube(ActionEvent event) {
+        if (currentChapter != null && currentChapter.getYoutubeLink() != null) {
+            try {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(currentChapter.getYoutubeLink()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    void onSearchDefinition(ActionEvent event) {
+        String word = wordSearchField.getText();
+        if (word == null || word.isEmpty()) return;
+        definitionLabel.setText("Recherche (EN) en cours...");
+        dictionaryService.getEnglishDefinition(word).thenAccept(definition -> {
+            Platform.runLater(() -> definitionLabel.setText(definition));
+        }).exceptionally(ex -> {
+            Platform.runLater(() -> definitionLabel.setText("Erreur : Dictionnaire EN injoignable."));
+            return null;
+        });
+    }
+
+    @FXML
+    void onSearchFrenchDefinition(ActionEvent event) {
+        String word = wordSearchField.getText();
+        if (word == null || word.isEmpty()) return;
+        definitionLabel.setText("Recherche (FR) en cours...");
+        dictionaryService.getFrenchDefinition(word).thenAccept(definition -> {
+            Platform.runLater(() -> definitionLabel.setText(definition));
+        }).exceptionally(ex -> {
+            Platform.runLater(() -> definitionLabel.setText("Erreur : Wiktionary FR injoignable."));
+            return null;
+        });
+    }
+
+
+    @FXML
+    void onSearchWiktApi(ActionEvent event) {
+        String word = wordSearchField.getText();
+        if (word == null || word.isEmpty()) return;
+        definitionLabel.setText("Recherche (WiktAPI) en cours...");
+        dictionaryService.getWiktApiDefinition(word).thenAccept(definition -> {
+            Platform.runLater(() -> definitionLabel.setText(definition));
+        }).exceptionally(ex -> {
+            Platform.runLater(() -> definitionLabel.setText("Erreur : WiktAPI injoignable."));
+            return null;
+        });
+    }
 
     @FXML
     void onSaveUserData(ActionEvent event) {
         try {
+
             currentChapter.setRemarques(remarksArea.getText());
             StringBuilder sb = new StringBuilder();
             for (String f : tpFilesList.getItems()) {
@@ -162,7 +269,6 @@ public class ChapitreDetailController {
                 sb.append(f);
             }
             currentChapter.setFichiersTp(sb.toString());
-            
             chapitreService.updateUserData(currentChapter.getIdChapitre(), currentChapter.getRemarques(), currentChapter.getFichiersTp());
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -194,5 +300,4 @@ public class ChapitreDetailController {
             } catch (Exception e) { e.printStackTrace(); }
         }
     }
-
 }

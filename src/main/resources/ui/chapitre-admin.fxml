@@ -3,7 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreAdminController">
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ChapitreAdminController">
+
     <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
     <VBox maxWidth="900" styleClass="card" spacing="15">
         <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
@@ -28,32 +29,30 @@
             <Label text="Titre du Chapitre" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0" />
             <TextField fx:id="titreField" promptText="Ex: Introduction au JavaFX" styleClass="text-field-modern" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3" />
             
-            <Label text="Ordre" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-            <TextField fx:id="ordreField" promptText="Position (ex: 1)" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Label text="Durée (min)" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="dureeField" promptText="Ex: 20" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="1" />
             
-            <Label text="Durée (min)" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="2" />
-            <TextField fx:id="dureeField" promptText="Ex: 20" styleClass="text-field-modern" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+            <Label text="Niveau" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+            <ComboBox fx:id="niveauCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="1" GridPane.columnIndex="3" />
             
-            <Label text="Niveau" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-            <ComboBox fx:id="niveauCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label text="Lien YouTube" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                <TextField fx:id="youtubeLinkField" promptText="https://www.youtube.com/watch?v=..." styleClass="text-field-modern" HBox.hgrow="ALWAYS" />
+                <Button text="🌐" styleClass="btn-secondary" onAction="#onOpenYoutube" style="-fx-padding: 5 15;"/>
+            </HBox>
+
+            <Label text="Support PDF" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                <TextField fx:id="pdfUrlField" editable="false" promptText="Sélectionnez un fichier PDF..." styleClass="text-field-modern" HBox.hgrow="ALWAYS" />
+                <Button text="Parcourir..." styleClass="btn-secondary" onAction="#onBrowsePdf"/>
+            </HBox>
             
-            <Label text="Type" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="2" />
-            <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+            <Label text="Type" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" />
             
-            <Label text="URL Vidéo" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-            <TextField fx:id="videoUrlField" promptText="Lien YouTube ou autre" styleClass="text-field-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
-            
-            <Label text="URL PDF" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-            <TextField fx:id="pdfUrlField" promptText="Lien vers le support" styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" />
-            
-            <Label text="URL Image" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="2" />
-            <TextField fx:id="imageUrlField" promptText="Image miniature" styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="3" />
-            
-            <Label text="Résumé" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-            <TextArea fx:id="resumeArea" prefRowCount="2" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />
-            
-            <Label text="Contenu" styleClass="field-label" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-            <TextArea fx:id="contenuArea" prefRowCount="6" styleClass="text-area-modern" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            <Label text="Contenu" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <TextArea fx:id="contenuArea" prefRowCount="8" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
         </GridPane>
         
         <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 20 0 0 0;">
