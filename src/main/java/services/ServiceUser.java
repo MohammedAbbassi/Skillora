@@ -34,6 +34,8 @@ public class ServiceUser implements IService<User> {
                 addColumnIfMissing("est_en_ligne", "ALTER TABLE utilisateurs ADD COLUMN est_en_ligne tinyint(1) NOT NULL DEFAULT 0;");
                 addColumnIfMissing("ranked_points", "ALTER TABLE utilisateurs ADD COLUMN ranked_points int(11) NOT NULL DEFAULT 0 AFTER xp_points;");
                 addColumnIfMissing("certificates_count", "ALTER TABLE utilisateurs ADD COLUMN certificates_count int(11) NOT NULL DEFAULT 0 AFTER streak_days;");
+                addColumnIfMissing("reset_token", "ALTER TABLE utilisateurs ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL AFTER certificates_count;");
+                addColumnIfMissing("reset_token_expiry", "ALTER TABLE utilisateurs ADD COLUMN reset_token_expiry TIMESTAMP NULL DEFAULT NULL AFTER reset_token;");
             }
         } catch (SQLException e) {
             System.err.println("Auto-migration failed: " + e.getMessage());
@@ -300,6 +302,43 @@ public class ServiceUser implements IService<User> {
         }
     }
 
+    public void setResetToken(String email, String token) throws SQLException {
+        checkConnection();
+        String req = "UPDATE utilisateurs SET reset_token = ?, reset_token_expiry = ? WHERE email = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(req)) {
+            pst.setString(1, token);
+            pst.setTimestamp(2, new Timestamp(System.currentTimeMillis() + 3600000)); // 1 hour expiry
+            pst.setString(3, email);
+            pst.executeUpdate();
+        }
+    }
+
+    public User getUserByResetToken(String token) throws SQLException {
+        checkConnection();
+        String req = "SELECT * FROM utilisateurs WHERE reset_token = ? AND reset_token_expiry > ?";
+        try (PreparedStatement pst = cnx.prepareStatement(req)) {
+            pst.setString(1, token);
+            pst.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return mapUser(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    public void updatePassword(int userId, String newPassword) throws SQLException {
+        checkConnection();
+        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        String req = "UPDATE utilisateurs SET mot_de_passe = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id_utilisateur = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(req)) {
+            pst.setString(1, hashedPassword);
+            pst.setInt(2, userId);
+            pst.executeUpdate();
+        }
+    }
+
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();
         u.setId(rs.getInt("id_utilisateur"));
@@ -317,6 +356,8 @@ public class ServiceUser implements IService<User> {
         u.setStreakDays(rs.getInt("streak_days"));
         u.setCertificatesCount(rs.getInt("certificates_count"));
         u.setEstEnLigne(rs.getBoolean("est_en_ligne"));
+        u.setResetToken(rs.getString("reset_token"));
+        u.setResetTokenExpiry(rs.getTimestamp("reset_token_expiry"));
         u.setDateCreation(rs.getTimestamp("date_creation"));
         u.setDateModification(rs.getTimestamp("date_modification"));
         return u;

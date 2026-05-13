@@ -1,14 +1,17 @@
 package controllers;
 
 import entities.User;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.shape.Circle;
 import services.ServiceUser;
 import utils.BadgeUtils;
+import utils.CountryService;
 import utils.Session;
 
 import java.sql.SQLException;
@@ -22,6 +25,7 @@ public class ProfileController {
     @FXML private TextField lastNameField;
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
+    @FXML private ComboBox<String> countryComboBox;
     @FXML private Label badgeCountLabel;
     @FXML private FlowPane achievementsFlow;
 
@@ -35,7 +39,20 @@ public class ProfileController {
             setEmptyState();
             return;
         }
+        
+        loadCountries();
         populateForm();
+    }
+
+    private void loadCountries() {
+        CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
+            Platform.runLater(() -> {
+                countryComboBox.getItems().setAll(countries);
+                if (user != null && user.getPays() != null) {
+                    countryComboBox.setValue(user.getPays());
+                }
+            });
+        });
     }
 
     @FXML
@@ -48,6 +65,7 @@ public class ProfileController {
         user.setPrenom(firstNameField.getText().trim());
         user.setNom(lastNameField.getText().trim());
         user.setNomUtilisateur(usernameField.getText().trim());
+        user.setPays(countryComboBox.getValue());
 
         try {
             serviceUser.update(user);
@@ -74,6 +92,11 @@ public class ProfileController {
         lastNameField.setText(nullToEmpty(user.getNom()));
         usernameField.setText(nullToEmpty(user.getNomUtilisateur()));
         emailField.setText(nullToEmpty(user.getEmail()));
+        if (countryComboBox.getItems().isEmpty()) {
+            loadCountries();
+        } else {
+            countryComboBox.setValue(user.getPays());
+        }
         fullNameLabel.setText(formatName(user));
         roleBadge.setText(nullToEmpty(user.getRole()));
         emailDisplayLabel.setText(nullToEmpty(user.getEmail()));

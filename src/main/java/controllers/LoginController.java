@@ -7,13 +7,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.application.Platform;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
+import javafx.geometry.Insets;
 import entities.User;
 import entities.UserPreferences;
 import services.ServiceUser;
 import services.ServiceUserPreferences;
+import utils.EmailService;
+import utils.SocialAuthService;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,7 +33,9 @@ public class LoginController implements Initializable {
     @FXML private Label    formTitle;
     @FXML private Label    formSubtitle;
     @FXML private VBox     nameFieldBox;
+    @FXML private VBox     countryFieldBox;
     @FXML private TextField nameField;
+    @FXML private ComboBox<String> countryComboBox;
     @FXML private TextField    emailField;
     @FXML private PasswordField passwordField;
     @FXML private Label    forgotLabel;
@@ -42,6 +52,13 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cardEntrance();
+        loadCountries();
+    }
+
+    private void loadCountries() {
+        utils.CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
+            Platform.runLater(() -> countryComboBox.getItems().setAll(countries));
+        });
     }
 
     public void setPrimaryStage(Stage stage) {
@@ -86,6 +103,8 @@ public class LoginController implements Initializable {
             forgotLabel.setManaged(true);
             nameFieldBox.setVisible(false);
             nameFieldBox.setManaged(false);
+            countryFieldBox.setVisible(false);
+            countryFieldBox.setManaged(false);
         } else {
             formTitle.setText("Create account");
             formSubtitle.setText("Join the learning community");
@@ -96,10 +115,205 @@ public class LoginController implements Initializable {
             forgotLabel.setManaged(false);
             nameFieldBox.setVisible(true);
             nameFieldBox.setManaged(true);
+            countryFieldBox.setVisible(true);
+            countryFieldBox.setManaged(true);
         }
         emailField.clear();
         passwordField.clear();
         if (nameField != null) nameField.clear();
+    }
+
+    @FXML
+    private void onForgotPassword() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Forgot Password");
+        dialog.setHeaderText("Reset your password");
+        dialog.setContentText("Please enter your email address:");
+
+        dialog.showAndWait().ifPresent(email -> {
+            if (email.isEmpty() || !email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                showError("Please enter a valid email address.");
+                return;
+            }
+
+            new Thread(() -> {
+                try {
+                    if (serviceUser.emailExists(email)) {
+                        String token = String.format("%06d", (int) (Math.random() * 1000000));
+                        serviceUser.setResetToken(email, token);
+                        
+                        boolean sent = EmailService.getInstance().sendPasswordResetEmail(email, token);
+                        
+                        Platform.runLater(() -> {
+                            if (sent) {
+                                showResetPasswordDialog(email);
+                            } else {
+                                showError("Failed to send reset email. Please try again.");
+                            }
+                        });
+                    } else {
+                        Platform.runLater(() -> showError("Email not found."));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> showError("Database error occurred."));
+                }
+            }).start();
+        });
+    }
+
+    @FXML
+    private void onGoogleLogin() {
+        handleSocialLogin("google");
+    }
+
+    @FXML
+    private void onGithubLogin() {
+        handleSocialLogin("github");
+    }
+
+    private void handleSocialLogin(String provider) {
+        actionBtn.setDisable(true);
+        actionBtn.setText("Authenticating...");
+
+        SocialAuthService.getInstance().authenticate(provider).thenAccept(userInfo -> {
+            if (userInfo == null) {
+                Platform.runLater(() -> {
+                    showError("Authentication failed with " + provider);
+                    actionBtn.setDisable(false);
+                    actionBtn.setText(isLoginMode ? "SIGN IN" : "REGISTER");
+                });
+                return;
+            }
+
+            try {
+                String email = userInfo.optString("email");
+                if (email == null || email.isEmpty()) {
+                    // GitHub might not return email in some cases, use id
+                    if ("github".equals(provider)) {
+                        email = userInfo.optString("login") + "@github.com";
+                    }
+                }
+
+                if (email == null || email.isEmpty()) {
+                    Platform.runLater(() -> {
+                        showError("Could not retrieve email from " + provider);
+                        actionBtn.setDisable(false);
+                        actionBtn.setText(isLoginMode ? "SIGN IN" : "REGISTER");
+                    });
+                    return;
+                }
+
+                User user = serviceUser.findByEmail(email);
+                if (user == null) {
+                    // Register new user
+                    user = new User();
+                    user.setEmail(email);
+                    user.setNomUtilisateur(email.split("@")[0]);
+                    
+                    String name = userInfo.optString("name", userInfo.optString("login", "Social User"));
+                    String[] parts = name.split(" ", 2);
+                    user.setPrenom(parts.length > 0 ? parts[0] : "");
+                    user.setNom(parts.length > 1 ? parts[1] : "");
+                    
+                    user.setMotDePasse("social_auth_" + provider); // Dummy password
+                    user.setRole("ETUDIANT");
+                    serviceUser.add(user);
+                    user = serviceUser.findByEmail(email);
+                }
+
+                User finalUser = user;
+                UserPreferences prefs = getUserPreferences(finalUser);
+                prefs.setUserName(formatUserName(finalUser));
+                prefs.setUserRole(finalUser.getRole());
+                prefs.setUserEmail(finalUser.getEmail());
+                prefs.setXpPoints(finalUser.getXpPoints());
+                prefs.setStreakDays(finalUser.getStreakDays());
+
+                Platform.runLater(() -> {
+                    try {
+                        loadMainShell(prefs);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showError("Login failed: " + e.getMessage());
+                        actionBtn.setDisable(false);
+                        actionBtn.setText(isLoginMode ? "SIGN IN" : "REGISTER");
+                    }
+                });
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    showError("Database error during social login");
+                    actionBtn.setDisable(false);
+                    actionBtn.setText(isLoginMode ? "SIGN IN" : "REGISTER");
+                });
+            }
+        });
+    }
+
+    private void showResetPasswordDialog(String email) {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Reset Password");
+        dialog.setHeaderText("Enter the token sent to " + email);
+
+        ButtonType resetButtonType = new ButtonType("Reset", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(resetButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField tokenField = new TextField();
+        tokenField.setPromptText("6-digit token");
+        PasswordField newPasswordField = new PasswordField();
+        newPasswordField.setPromptText("New Password");
+
+        grid.add(new Label("Token:"), 0, 0);
+        grid.add(tokenField, 1, 0);
+        grid.add(new Label("New Password:"), 0, 1);
+        grid.add(newPasswordField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == resetButtonType) {
+                return new Pair<>(tokenField.getText(), newPasswordField.getText());
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(result -> {
+            String token = result.getKey();
+            String newPassword = result.getValue();
+
+            if (token.isEmpty() || newPassword.isEmpty()) {
+                showError("Please fill in all fields.");
+                return;
+            }
+
+            new Thread(() -> {
+                try {
+                    User user = serviceUser.getUserByResetToken(token);
+                    if (user != null && user.getEmail().equals(email)) {
+                        serviceUser.updatePassword(user.getId(), newPassword);
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Success");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Your password has been reset successfully.");
+                            alert.showAndWait();
+                        });
+                    } else {
+                        Platform.runLater(() -> showError("Invalid or expired token."));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> showError("Database error occurred."));
+                }
+            }).start();
+        });
     }
 
     @FXML
@@ -151,6 +365,12 @@ public class LoginController implements Initializable {
                 shake(nameField);
                 return;
             }
+
+            if (countryComboBox.getValue() == null) {
+                showError("Please select your country.");
+                shake(countryComboBox);
+                return;
+            }
         }
 
         actionBtn.setText("Loading...");
@@ -162,7 +382,7 @@ public class LoginController implements Initializable {
                 if (isLoginMode) {
                     user = serviceUser.login(email, pass);
                     if (user == null) {
-                        javafx.application.Platform.runLater(() -> {
+                        Platform.runLater(() -> {
                             showError("Invalid email or password.");
                             actionBtn.setText("SIGN IN");
                             actionBtn.setDisable(false);
@@ -172,7 +392,7 @@ public class LoginController implements Initializable {
                     }
                 } else {
                     if (serviceUser.emailExists(email)) {
-                        javafx.application.Platform.runLater(() -> {
+                        Platform.runLater(() -> {
                             showError("Email already registered.");
                             actionBtn.setText("REGISTER");
                             actionBtn.setDisable(false);
@@ -188,6 +408,7 @@ public class LoginController implements Initializable {
                     String[] nameParts = name.split(" ", 2);
                     user.setPrenom(nameParts.length > 0 ? nameParts[0] : "");
                     user.setNom(nameParts.length > 1 ? nameParts[1] : "");
+                    user.setPays(countryComboBox.getValue());
                     user.setRole("ETUDIANT");
                     serviceUser.add(user);
                     user = serviceUser.login(email, pass);
@@ -200,7 +421,7 @@ public class LoginController implements Initializable {
                 prefs.setXpPoints(user.getXpPoints());
                 prefs.setStreakDays(user.getStreakDays());
 
-                javafx.application.Platform.runLater(() -> {
+                Platform.runLater(() -> {
                     try {
                         loadMainShell(prefs);
                     } catch (Exception ex) {
@@ -211,7 +432,7 @@ public class LoginController implements Initializable {
                     }
                 });
             } catch (SQLException ex) {
-                javafx.application.Platform.runLater(() -> {
+                Platform.runLater(() -> {
                     showError("Database error. Please try again.");
                     actionBtn.setText(isLoginMode ? "SIGN IN" : "REGISTER");
                     actionBtn.setDisable(false);
@@ -245,12 +466,6 @@ public class LoginController implements Initializable {
             name = user.getEmail().split("@")[0];
         }
         return name;
-    }
-
-    @FXML
-    private void onForgotPassword() {
-        shake(emailField);
-        emailField.requestFocus();
     }
 
     private void loadMainShell(UserPreferences prefs) throws Exception {

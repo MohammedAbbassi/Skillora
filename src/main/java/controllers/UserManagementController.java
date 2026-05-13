@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import services.ServiceUser;
+import utils.CountryService;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -173,6 +174,12 @@ public class UserManagementController implements Initializable {
         roleBox.getItems().addAll("ETUDIANT", "INSTRUCTEUR", "ADMIN");
         roleBox.setValue("ETUDIANT");
 
+        ComboBox<String> countryBox = new ComboBox<>();
+        countryBox.setPromptText("Select country");
+        CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
+            javafx.application.Platform.runLater(() -> countryBox.getItems().setAll(countries));
+        });
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -188,6 +195,8 @@ public class UserManagementController implements Initializable {
         grid.add(passwordField, 1, 4);
         grid.add(new Label("Role:"), 0, 5);
         grid.add(roleBox, 1, 5);
+        grid.add(new Label("Country:"), 0, 6);
+        grid.add(countryBox, 1, 6);
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {
@@ -200,6 +209,7 @@ public class UserManagementController implements Initializable {
             String firstName = firstNameField.getText().trim();
             String lastName = lastNameField.getText().trim();
             String password = passwordField.getText();
+            String country = countryBox.getValue();
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Validation Error", "Username, email, and password are required.");
@@ -213,6 +223,7 @@ public class UserManagementController implements Initializable {
             newUser.setNom(lastName);
             newUser.setMotDePasse(password);
             newUser.setRole(roleBox.getValue());
+            newUser.setPays(country);
             newUser.setEstActif(true);
             return newUser;
         });

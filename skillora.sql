@@ -331,6 +331,8 @@ CREATE TABLE `utilisateurs` (
   `streak_days` int(11) NOT NULL DEFAULT 0,
   `certificates_count` int(11) NOT NULL DEFAULT 0,
   `quizzes_done` int(11) NOT NULL DEFAULT 0,
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expiry` timestamp NULL DEFAULT NULL,
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

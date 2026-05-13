@@ -22,6 +22,8 @@ public class User {
     private int streakDays;
     private int certificatesCount;
     private boolean estEnLigne;
+    private String resetToken;
+    private Timestamp resetTokenExpiry;
 
     public User() {
     }
@@ -89,6 +91,12 @@ public class User {
 
     public int getCertificatesCount() { return certificatesCount; }
     public void setCertificatesCount(int certificatesCount) { this.certificatesCount = certificatesCount; }
+
+    public String getResetToken() { return resetToken; }
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+
+    public Timestamp getResetTokenExpiry() { return resetTokenExpiry; }
+    public void setResetTokenExpiry(Timestamp resetTokenExpiry) { this.resetTokenExpiry = resetTokenExpiry; }
 
     @Override
     public String toString() {

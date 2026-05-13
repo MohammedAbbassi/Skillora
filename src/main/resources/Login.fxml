@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -107,6 +108,11 @@
                                 <TextField fx:id="nameField" promptText="Your name" styleClass="auth-input-premium" />
                             </VBox>
 
+                            <VBox fx:id="countryFieldBox" managed="false" spacing="8" visible="false">
+                                <Label styleClass="field-label-premium" text="COUNTRY" />
+                                <ComboBox fx:id="countryComboBox" maxWidth="Infinity" promptText="Select your country" styleClass="auth-input-premium" />
+                            </VBox>
+
                             <VBox spacing="8">
                                 <Label styleClass="field-label-premium" text="EMAIL ADDRESS" />
                                 <TextField fx:id="emailField" promptText="you@example.com" styleClass="auth-input-premium" />
@@ -128,6 +134,21 @@
                             <HBox alignment="CENTER" spacing="6" styleClass="login-toggle-row">
                                 <Label fx:id="toggleLabel" styleClass="toggle-label-premium" text="Don't have an account?" />
                                 <Label fx:id="toggleLink" onMouseClicked="#onToggleMode" styleClass="toggle-link-premium" text="Register" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10">
+                                <children>
+                                    <Line endX="60" stroke="#444444" />
+                                    <Label styleClass="toggle-label-premium" text="OR CONTINUE WITH" />
+                                    <Line endX="60" stroke="#444444" />
+                                </children>
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="15">
+                                <children>
+                                    <Button maxWidth="Infinity" onAction="#onGoogleLogin" styleClass="social-btn-premium" text="Google" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="Infinity" onAction="#onGithubLogin" styleClass="social-btn-premium" text="GitHub" HBox.hgrow="ALWAYS" />
+                                </children>
                             </HBox>
                         </children>
                     </VBox>
