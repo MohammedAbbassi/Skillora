@@ -80,6 +80,10 @@ public class MainController implements Initializable {
     @FXML private Button navCommunity;
     @FXML private Button navProfile;
     @FXML private Button navAdmin;
+    @FXML private Button navAdminCourses;
+    @FXML private Button navAdminShop;
+    @FXML private Button navAdminEvents;
+    @FXML private Button navAdminReservations;
     @FXML private Button navSettings;
     @FXML private Button navLogout;
 
@@ -94,6 +98,10 @@ public class MainController implements Initializable {
     @FXML private Label  lblCommunity;
     @FXML private Label  lblProfile;
     @FXML private Label  lblAdmin;
+    @FXML private Label  lblAdminCourses;
+    @FXML private Label  lblAdminShop;
+    @FXML private Label  lblAdminEvents;
+    @FXML private Label  lblAdminReservations;
     @FXML private Label  lblSettings;
     @FXML private Label  lblLogout;
 
@@ -205,6 +213,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navReservation, "navReservation");
         addIfNotNull(allNavBtns, navCommunity, "navCommunity");
         addIfNotNull(allNavBtns, navAdmin, "navAdmin");
+        addIfNotNull(allNavBtns, navAdminCourses, "navAdminCourses");
+        addIfNotNull(allNavBtns, navAdminShop, "navAdminShop");
+        addIfNotNull(allNavBtns, navAdminEvents, "navAdminEvents");
+        addIfNotNull(allNavBtns, navAdminReservations, "navAdminReservations");
         addIfNotNull(allNavBtns, navSettings, "navSettings");
         addIfNotNull(allNavBtns, navLogout, "navLogout");
 
@@ -219,6 +231,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblReservation, "lblReservation");
         addIfNotNull(allNavLabels, lblCommunity, "lblCommunity");
         addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
+        addIfNotNull(allNavLabels, lblAdminCourses, "lblAdminCourses");
+        addIfNotNull(allNavLabels, lblAdminShop, "lblAdminShop");
+        addIfNotNull(allNavLabels, lblAdminEvents, "lblAdminEvents");
+        addIfNotNull(allNavLabels, lblAdminReservations, "lblAdminReservations");
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
         addIfNotNull(allNavLabels, lblLogout, "lblLogout");
         allPages = new java.util.ArrayList<>();
@@ -550,6 +566,10 @@ public class MainController implements Initializable {
         populateProfileFields();
     }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
+    @FXML private void onNavAdminCourses() { navigateTo(pageCourses, navAdminCourses); }
+    @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop);    }
+    @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents);  }
+    @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
 
     @FXML

@@ -163,6 +163,26 @@
                                     <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f465;" /><Label fx:id="lblAdmin" styleClass="text-sm" text="Users" /></HBox>
                                 </graphic>
                             </Button>
+                            <Button fx:id="navAdminCourses" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavAdminCourses" styleClass="nav-btn">
+                                <graphic>
+                                    <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4da;" /><Label fx:id="lblAdminCourses" styleClass="text-sm" text="Manage Courses" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navAdminShop" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavAdminShop" styleClass="nav-btn">
+                                <graphic>
+                                    <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f6cd;" /><Label fx:id="lblAdminShop" styleClass="text-sm" text="Manage Shop" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navAdminEvents" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavAdminEvents" styleClass="nav-btn">
+                                <graphic>
+                                    <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f3c0;" /><Label fx:id="lblAdminEvents" styleClass="text-sm" text="Manage Events" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navAdminReservations" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavAdminReservations" styleClass="nav-btn">
+                                <graphic>
+                                    <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4cb;" /><Label fx:id="lblAdminReservations" styleClass="text-sm" text="Manage Reservations" /></HBox>
+                                </graphic>
+                            </Button>
                         </children>
                     </VBox>
                 </VBox>
@@ -184,7 +204,6 @@
                             </HBox>
                         </graphic>
                     </Button>
-                </VBox>
             </children>
         </VBox>
     </left>
