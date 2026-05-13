@@ -2,7 +2,7 @@ package services;
 
 import entities.Quiz;
 import entities.Quiz.Matiere;
-import interffaces.InterfaceCRUD;
+import interfaces.InterfaceCRUD;
 import utils.MyBD;
 
 import java.sql.*;

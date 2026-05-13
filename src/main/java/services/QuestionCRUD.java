@@ -2,7 +2,7 @@ package services;
 
 import entities.Question;
 import entities.Question.TypeQuestion;
-import interffaces.InterfaceCRUD;
+import interfaces.InterfaceCRUD;
 import utils.MyBD;
 
 import java.sql.*;

@@ -1,4 +1,4 @@
-package interffaces;
+package interfaces;
 
 import java.sql.SQLException;
 import java.util.List;

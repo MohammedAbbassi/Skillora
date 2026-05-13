@@ -1,7 +1,7 @@
 package services;
 
 import entities.Reponse;
-import interffaces.InterfaceCRUD;
+import interfaces.InterfaceCRUD;
 import utils.MyBD;
 
 import java.sql.*;
