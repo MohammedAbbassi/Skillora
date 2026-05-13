@@ -17,7 +17,6 @@ public class NavigationController {
     @FXML private Button questionsButton;
     @FXML private Button answersButton;
     @FXML private Button historyButton;
-    @FXML private Button roleToggleButton;
     @FXML private Button themeToggleButton;
 
     @FXML
@@ -31,25 +30,10 @@ public class NavigationController {
         if (SessionManager.isAdmin()) {
             configureAdminNavigation();
             showDashboard();
-            if (roleToggleButton != null) roleToggleButton.setText("Passer en Utilisateur");
         } else {
             configureUserNavigation();
             showUserQuizSelection();
-            if (roleToggleButton != null) roleToggleButton.setText("Passer en Admin");
         }
-    }
-
-    @FXML
-    void toggleRole() {
-        if (blockNavigationDuringQuiz()) {
-            return;
-        }
-        if (SessionManager.isAdmin()) {
-            SessionManager.setRole(SessionManager.Role.USER);
-        } else {
-            SessionManager.setRole(SessionManager.Role.ADMIN);
-        }
-        updateNavigationForRole();
     }
 
     @FXML

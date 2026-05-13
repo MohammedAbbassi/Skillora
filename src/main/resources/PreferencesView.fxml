@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane stylesheets="/styles.css" xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controllers.PreferencesController"
+           styleClass="prefs-root">
+
+    <VBox styleClass="prefs-container" spacing="0">
+
+        <!-- Header -->
+        <VBox styleClass="prefs-header" spacing="4">
+            <padding><Insets top="24" right="30" bottom="16" left="30"/></padding>
+            <Label text="Reading Preferences" styleClass="prefs-title"/>
+            <Label text="Customize your reading experience" styleClass="prefs-subtitle"/>
+        </VBox>
+
+        <!-- Main Content -->
+        <HBox styleClass="prefs-body" VBox.vgrow="ALWAYS">
+
+            <!-- Left Panel - Controls -->
+            <ScrollPane styleClass="prefs-controls-scroll" fitToWidth="true">
+                <VBox styleClass="prefs-controls" spacing="20">
+
+                    <padding><Insets top="10" right="24" bottom="24" left="24"/></padding>
+
+                    <!-- Typography Section -->
+                    <VBox styleClass="prefs-card" spacing="16">
+                        <Label text="TYPOGRAPHY" styleClass="section-title"/>
+
+                        <VBox spacing="8">
+                            <Label text="Font Family" styleClass="field-label"/>
+                            <ComboBox fx:id="fontFamilyCombo" styleClass="prefs-combo" prefWidth="250"/>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Font Size" styleClass="field-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="fontSizeValue" text="15px" styleClass="value-display"/>
+                            </HBox>
+                            <Slider fx:id="fontSizeSlider" styleClass="prefs-slider"
+                                    min="12" max="30" value="15" blockIncrement="1" majorTickUnit="6" minorTickCount="2" showTickLabels="true"/>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Line Spacing" styleClass="field-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="lineSpacingValue" text="1.6" styleClass="value-display"/>
+                            </HBox>
+                            <Slider fx:id="lineSpacingSlider" styleClass="prefs-slider"
+                                    min="1.0" max="2.5" value="1.6" blockIncrement="0.1" majorTickUnit="0.5" showTickLabels="true"/>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Letter Spacing" styleClass="field-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="letterSpacingValue" text="0.0px" styleClass="value-display"/>
+                            </HBox>
+                            <Slider fx:id="letterSpacingSlider" styleClass="prefs-slider"
+                                    min="0.0" max="3.0" value="0.0" blockIncrement="0.1" majorTickUnit="1.0" showTickLabels="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Colors Section -->
+                    <VBox styleClass="prefs-card" spacing="16">
+                        <Label text="COLORS" styleClass="section-title"/>
+
+                        <HBox spacing="24" alignment="CENTER_LEFT">
+                            <VBox spacing="8">
+                                <Label text="Background" styleClass="field-label"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <ColorPicker fx:id="bgColorPicker" styleClass="prefs-color-picker"/>
+                                    <Label fx:id="bgColorHex" text="#FFFFFF" styleClass="color-code"/>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="8">
+                                <Label text="Text" styleClass="field-label"/>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <ColorPicker fx:id="textColorPicker" styleClass="prefs-color-picker"/>
+                                    <Label fx:id="textColorHex" text="#1A1A2E" styleClass="color-code"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Accessibility Section -->
+                    <VBox styleClass="prefs-card" spacing="12">
+                        <Label text="ACCESSIBILITY" styleClass="section-title"/>
+
+                        <CheckBox fx:id="voiceReadingCheck" text="Enable voice reading" styleClass="prefs-check"/>
+                        <CheckBox fx:id="highlightTextCheck" text="Highlight text while reading" styleClass="prefs-check"/>
+                        <CheckBox fx:id="reduceAnimationsCheck" text="Reduce animations" styleClass="prefs-check"/>
+                    </VBox>
+
+                    <!-- Action Buttons -->
+                    <HBox spacing="12" alignment="CENTER">
+                        <Button text="Reset Defaults" styleClass="btn-secondary" onAction="#onResetDefaults"/>
+                        <Button text="Save Preferences" styleClass="btn-primary" onAction="#onSavePreferences"/>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+
+            <!-- Right Panel - Preview -->
+            <VBox styleClass="prefs-preview-panel" prefWidth="360">
+                <padding><Insets top="24" right="24" bottom="24" left="16"/></padding>
+
+                <Label text="LIVE PREVIEW" styleClass="section-title"/>
+
+                <VBox styleClass="preview-card" VBox.vgrow="ALWAYS">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                    <ScrollPane fitToWidth="true" styleClass="preview-scroll">
+                        <TextArea fx:id="previewTextArea" styleClass="preview-text"
+                                  editable="false" wrapText="true"
+                                  text="Learning becomes easier when the content is adapted to your needs. Adjust the settings on the left to find what feels most comfortable for you.
+
+Different fonts, sizes, and spacing can make reading more accessible for everyone. Take your time to explore the options and see how they affect this preview."/>
+                    </ScrollPane>
+                </VBox>
+
+            </VBox>
+
+        </HBox>
+
+    </VBox>
+
+</StackPane>

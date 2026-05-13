@@ -37,7 +37,6 @@
             <Region VBox.vgrow="ALWAYS"/>
 
             <Button fx:id="themeToggleButton" maxWidth="Infinity" onAction="#toggleTheme" text="Mode sombre" styleClass="nav-button"/>
-            <Button fx:id="roleToggleButton" maxWidth="Infinity" onAction="#toggleRole" text="Passer en Utilisateur" styleClass="nav-button"/>
 
             <VBox spacing="8" styleClass="sidebar-card">
                 <Label text="Parcours de création" styleClass="sidebar-card-title"/>

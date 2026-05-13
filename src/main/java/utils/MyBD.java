@@ -3,7 +3,7 @@ package utils;
 import java.sql.*;
 
 public class MyBD {
-    String url = "jdbc:mysql://localhost:3307/skillora";
+    String url = "jdbc:mysql://localhost:3307/skillora_combined";
     String user = "root";
     String password = "";
     private Connection conn;

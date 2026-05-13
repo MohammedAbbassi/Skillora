@@ -1,0 +1,9 @@
+Rapport anti-triche
+Utilisateur: amuse
+Quiz: Quiz Java
+Debut: 13/05/2026 23:38:40
+Fin: 13/05/2026 23:38:57
+Resume: 2 incident(s), dont 1 critique(s).
+
+13/05/2026 23:38:51 | question 2 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+13/05/2026 23:38:51 | question 2 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.

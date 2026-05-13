@@ -1,33 +1,56 @@
 package tests;
 
-import entities.Question;
-import entities.Quiz;
-import entities.Reponse;
-import services.QuestionCRUD;
-import services.QuizCRUD;
-import services.ReponseCRUD;
-
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import services.ServiceUser;
+import controllers.LoginController;
+import javafx.stage.StageStyle;
 import java.sql.SQLException;
 
-public class Main {
-    public static void main(String[] args) {
-        QuizCRUD quizCRUD = new QuizCRUD();
-        QuestionCRUD questionCRUD = new QuestionCRUD();
-        ReponseCRUD reponseCRUD = new ReponseCRUD();
+public class Main extends Application {
 
+    @Override
+    public void start(Stage stage) throws Exception {
         try {
-            Quiz quiz = new Quiz("Java basics", "Controle des fondamentaux Java", "Debutant", Quiz.Matiere.JAVA);
-            quizCRUD.ajouterQuiz(quiz);
-
-            Question question = new Question(quiz.getId(), "Quel mot-cle declare une classe ?", Question.TypeQuestion.QCU);
-            questionCRUD.ajouterQuestion(question);
-
-            reponseCRUD.ajouterReponse(new Reponse(question.getId(), "class", true));
-            reponseCRUD.ajouterReponse(new Reponse(question.getId(), "function", false));
-
-            System.out.println("Quiz cree avec ID: " + quiz.getId());
+            new ServiceUser().createAdminIfNotExists();
         } catch (SQLException e) {
-            System.out.println("Erreur SQL: " + e.getMessage());
+            System.err.println("Could not verify/create admin: " + e.getMessage());
         }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        Parent root = loader.load();
+
+        LoginController controller = loader.getController();
+        controller.setPrimaryStage(stage);
+
+        // Remove the top bar (Undecorated)
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root, 1000, 700);
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
+        // Make window draggable (since it's undecorated)
+        final double[] xOffset = {0};
+        final double[] yOffset = {0};
+        root.setOnMousePressed(event -> {
+            xOffset[0] = event.getSceneX();
+            yOffset[0] = event.getSceneY();
+        });
+        root.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() - xOffset[0]);
+            stage.setY(event.getScreenY() - yOffset[0]);
+        });
+
+        stage.setScene(scene);
+        stage.setTitle("Skillora - Login");
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
