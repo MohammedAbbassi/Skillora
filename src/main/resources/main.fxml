@@ -5,109 +5,141 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 
-<StackPane fx:id="rootPane" prefHeight="700.0" prefWidth="1000.0" styleClass="bg-base" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
-   <children>
-      <!-- Decorative Background Elements -->
-      <StackPane mouseTransparent="true">
-         <children>
-            <Circle fx:id="orb1" fill="#4a90e2" opacity="0.1" radius="250.0" StackPane.alignment="TOP_LEFT">
-               <StackPane.margin>
-                  <Insets left="-100.0" top="-100.0" />
-               </StackPane.margin>
-            </Circle>
-            <Circle fx:id="orb2" fill="#4a90e2" opacity="0.1" radius="200.0" StackPane.alignment="BOTTOM_RIGHT">
-               <StackPane.margin>
-                  <Insets bottom="-80.0" right="-80.0" />
-               </StackPane.margin>
-            </Circle>
-         </children>
-      </StackPane>
+<StackPane fx:id="rootPane" prefHeight="700" prefWidth="1000" styleClass="login-full-root" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+    <children>
+        <GridPane maxHeight="640" maxWidth="940" styleClass="login-shell">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="52" />
+                <ColumnConstraints percentWidth="48" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100" />
+            </rowConstraints>
 
-      <!-- Main Auth Card -->
-      <VBox fx:id="formCard" alignment="CENTER" fillWidth="false" maxWidth="420.0" spacing="0.0" styleClass="form-card">
-         <children>
-            <!-- Logo Area -->
-            <VBox alignment="CENTER" spacing="10.0">
-               <children>
-                  <StackPane fx:id="logoRing" maxHeight="60.0" maxWidth="60.0" prefHeight="60.0" prefWidth="60.0">
-                     <children>
-                        <Circle fx:id="logoCircle" fill="TRANSPARENT" radius="28.0" stroke="#4a90e2" strokeWidth="2.0" />
-                        <Label fx:id="logoIcon" styleClass="logo-icon" text="S" />
-                     </children>
-                  </StackPane>
-                  <Label fx:id="titleLabel" styleClass="title-label" text="Welcome Back" />
-                  <Label fx:id="subtitleLabel" styleClass="subtitle-label" text="Please enter your details to sign in" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="30.0" />
-               </VBox.margin>
+            <StackPane styleClass="login-brand-panel">
+                <children>
+                    <Pane mouseTransparent="true" styleClass="login-grid-overlay">
+                        <children>
+                            <Line endX="430" layoutX="42" layoutY="110" startX="0" styleClass="login-map-line" />
+                            <Line endX="430" layoutX="42" layoutY="240" startX="0" styleClass="login-map-line" />
+                            <Line endX="430" layoutX="42" layoutY="370" startX="0" styleClass="login-map-line" />
+                            <Line endY="500" layoutX="128" layoutY="60" startY="0" styleClass="login-map-line" />
+                            <Line endY="500" layoutX="252" layoutY="60" startY="0" styleClass="login-map-line" />
+                            <Line endY="500" layoutX="376" layoutY="60" startY="0" styleClass="login-map-line" />
+                            <Rectangle arcHeight="18" arcWidth="18" height="76" layoutX="54" layoutY="82" styleClass="login-blue-tile" width="76" />
+                            <Rectangle arcHeight="18" arcWidth="18" height="118" layoutX="310" layoutY="148" styleClass="login-cyan-tile" width="118" />
+                            <Rectangle arcHeight="18" arcWidth="18" height="92" layoutX="104" layoutY="392" styleClass="login-navy-tile" width="170" />
+                        </children>
+                    </Pane>
+
+                    <VBox alignment="TOP_LEFT" spacing="28" styleClass="login-brand-content">
+                        <padding>
+                            <Insets bottom="42" left="46" right="42" top="42" />
+                        </padding>
+                        <children>
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <StackPane styleClass="login-logo-holder">
+                                    <Label styleClass="login-logo-mark-small" text="S" />
+                                </StackPane>
+                                <VBox spacing="1">
+                                    <Label styleClass="login-brand-name" text="Skillora" />
+                                    <Label styleClass="login-brand-kicker" text="Adaptive learning workspace" />
+                                </VBox>
+                            </HBox>
+
+                            <Region VBox.vgrow="ALWAYS" />
+
+                            <VBox spacing="14">
+                                <Label styleClass="login-hero-title" text="Learn sharper. Build faster. Stay in flow." wrapText="true" />
+                                <Label styleClass="login-hero-copy" text="A focused blue command center for courses, quizzes, community progress, and the next skill waiting for you." wrapText="true" />
+                            </VBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <VBox styleClass="login-metric">
+                                    <Label styleClass="login-metric-value" text="24K" />
+                                    <Label styleClass="login-metric-label" text="XP tracked" />
+                                </VBox>
+                                <VBox styleClass="login-metric">
+                                    <Label styleClass="login-metric-value" text="98%" />
+                                    <Label styleClass="login-metric-label" text="Focus score" />
+                                </VBox>
+                                <VBox styleClass="login-metric">
+                                    <Label styleClass="login-metric-value" text="12" />
+                                    <Label styleClass="login-metric-label" text="Badges live" />
+                                </VBox>
+                            </HBox>
+                        </children>
+                    </VBox>
+                </children>
+            </StackPane>
+
+            <VBox fx:id="loginCard" alignment="CENTER_LEFT" spacing="0" styleClass="login-card-premium" GridPane.columnIndex="1">
+                <padding>
+                    <Insets bottom="50" left="46" right="46" top="50" />
+                </padding>
+                <children>
+                    <Label styleClass="login-panel-eyebrow" text="SECURE ACCESS" />
+                    <Label fx:id="formTitle" styleClass="form-title-premium" text="Welcome back">
+                        <VBox.margin>
+                            <Insets top="12" />
+                        </VBox.margin>
+                    </Label>
+                    <Label fx:id="formSubtitle" styleClass="form-subtitle-premium" text="Sign in to continue learning" wrapText="true" />
+
+                    <VBox maxWidth="360" spacing="18">
+                        <VBox.margin>
+                            <Insets top="32" />
+                        </VBox.margin>
+                        <children>
+                            <VBox fx:id="nameFieldBox" managed="false" spacing="8" visible="false">
+                                <Label styleClass="field-label-premium" text="FULL NAME" />
+                                <TextField fx:id="nameField" promptText="Your name" styleClass="auth-input-premium" />
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label styleClass="field-label-premium" text="EMAIL ADDRESS" />
+                                <TextField fx:id="emailField" promptText="you@example.com" styleClass="auth-input-premium" />
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label styleClass="field-label-premium" text="PASSWORD" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="forgotLabel" onMouseClicked="#onForgotPassword" styleClass="link-label-premium" text="Forgot password?" />
+                                </HBox>
+                                <PasswordField fx:id="passwordField" promptText="Password" styleClass="auth-input-premium" />
+                            </VBox>
+
+                            <Label fx:id="errorLabel" managed="false" styleClass="error-label-premium" text="" visible="false" wrapText="true" />
+
+                            <Button fx:id="actionBtn" maxWidth="Infinity" onAction="#onActionButton" styleClass="auth-btn-premium" text="SIGN IN" />
+
+                            <HBox alignment="CENTER" spacing="6" styleClass="login-toggle-row">
+                                <Label fx:id="toggleLabel" styleClass="toggle-label-premium" text="Don't have an account?" />
+                                <Label fx:id="toggleLink" onMouseClicked="#onToggleMode" styleClass="toggle-link-premium" text="Register" />
+                            </HBox>
+                        </children>
+                    </VBox>
+                </children>
             </VBox>
+        </GridPane>
 
-            <!-- Form Fields Container -->
-            <VBox prefWidth="340.0" spacing="15.0">
-               <children>
-                  <!-- Username Field (Hidden by default) -->
-                  <VBox fx:id="nameFieldBox" managed="false" spacing="8.0" visible="false">
-                     <children>
-                        <Label styleClass="field-label" text="Full Name" />
-                        <TextField fx:id="nameField" promptText="Enter your name" styleClass="auth-field" />
-                     </children>
-                  </VBox>
-
-                  <!-- Email Field -->
-                  <VBox spacing="8.0">
-                     <children>
-                        <Label styleClass="field-label" text="Email Address" />
-                        <TextField fx:id="emailField" promptText="name@company.com" styleClass="auth-field" />
-                     </children>
-                  </VBox>
-
-                  <!-- Password Field -->
-                  <VBox spacing="8.0">
-                     <children>
-                        <Label styleClass="field-label" text="Password" />
-                        <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="auth-field" />
-                        <HBox alignment="CENTER_RIGHT">
-                           <children>
-                              <Label fx:id="forgotLabel" onMouseClicked="#onForgotPassword" styleClass="link-label" text="Forgot password?" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-
-                  <VBox fx:id="confirmPasswordBox" managed="false" spacing="8.0" visible="false">
-                     <children>
-                        <Label styleClass="field-label" text="Confirm Password" />
-                        <PasswordField fx:id="confirmPasswordField" promptText="••••••••" styleClass="auth-field" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-
-            <!-- Action Area -->
-            <VBox alignment="CENTER" prefWidth="340.0" spacing="20.0">
-               <children>
-                  <Button fx:id="actionButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onActionButton" styleClass="action-btn" text="Sign In" />
-                  <HBox alignment="CENTER" spacing="5.0">
-                     <children>
-                        <Label fx:id="toggleLabel" styleClass="toggle-label" text="Don't have an account?" />
-                        <Label fx:id="toggleLink" onMouseClicked="#onToggleMode" styleClass="toggle-link" text="Sign up" />
-                     </children>
-                  </HBox>
-               </children>
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-            </VBox>
-         </children>
-         <padding>
-            <Insets bottom="50.0" left="40.0" right="40.0" top="50.0" />
-         </padding>
-      </VBox>
-   </children>
+        <VBox alignment="TOP_RIGHT" pickOnBounds="false">
+            <padding>
+                <Insets right="22" top="22" />
+            </padding>
+            <Button onAction="#onCloseApp" styleClass="close-btn" text="X" />
+        </VBox>
+    </children>
 </StackPane>

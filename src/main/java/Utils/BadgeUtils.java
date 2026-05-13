@@ -36,10 +36,8 @@ public class BadgeUtils {
         if (user.getXpPoints() >= 3000) pane.getChildren().add(buildBadgeCard("Multi-Threaded", "Parallel learning active.", "rare", "10.png"));
         
         // Category 5: Projects (Epic)
-        if (user.getQuizzesDone() >= 5) pane.getChildren().add(buildBadgeCard("Builder", "First project constructed.", "epic", "11.png"));
         if (user.getCertificatesCount() >= 1) pane.getChildren().add(buildBadgeCard("Deployer", "Live and operational.", "epic", "12.png"));
         if (user.getXpPoints() >= 10000) pane.getChildren().add(buildBadgeCard("Engineer", "Intricate system construction.", "epic", null));
-        if (user.getQuizzesDone() >= 20) pane.getChildren().add(buildBadgeCard("System Designer", "Layered architecture mastery.", "epic", null));
         
         // Rank-based (Legendary)
         if (user.getRankedPoints() >= 2000) pane.getChildren().add(buildBadgeCard("Dynamic Mastery", "Unstable red plasma core.", "legendary", null));
@@ -158,10 +156,11 @@ public class BadgeUtils {
 
     private static String getBadgeSymbol(String name) {
         if (name.contains("Root")) return "#";
-        if (name.contains("Engineer")) return "⚙";
-        if (name.contains("Designer")) return "△";
+        if (name.contains("Engineer")) return "*";
+        if (name.contains("Designer")) return "^";
         if (name.contains("Mastery")) return "~>";
         if (name.contains("Authority")) return "::";
-        return "🏆";
+        return "T";
     }
 }
+

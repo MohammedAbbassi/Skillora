@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -40,7 +41,7 @@
                   <StackPane>
                      <children>
                         <Circle fx:id="profileCircle" fill="#4a90e2" radius="70.0" stroke="WHITE" strokeWidth="4.0" styleClass="avatar-circle" />
-                        <Button mnemonicParsing="false" onAction="#handleUploadPhoto" styleClass="avatar-upload-button" text="📷" StackPane.alignment="BOTTOM_RIGHT">
+                        <Button mnemonicParsing="false" onAction="#handleUploadPhoto" styleClass="avatar-upload-button" text="Camera" StackPane.alignment="BOTTOM_RIGHT">
                            <StackPane.margin>
                               <Insets bottom="5.0" right="5.0" />
                            </StackPane.margin>
@@ -158,4 +159,5 @@
       </VBox>
    </content>
 </ScrollPane>
+
 

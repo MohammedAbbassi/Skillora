@@ -24,7 +24,7 @@ CREATE DATABASE IF NOT EXISTS `skillora`;
 USE `skillora`;
 
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS `chapitre`, `commande`, `commande_produit`, `commentaire`, `cours`, `evenement`, `jaime`, `post`, `preferences_utilisateur`, `produit`, `progression_cours`, `question`, `reponse`, `reservation`, `statistiques_utilisateur`, `utilisateurs`;
+DROP TABLE IF EXISTS `chapitre`, `commande`, `commande_produit`, `commentaire`, `cours`, `evenement`, `jaime`, `messages`, `post`, `preferences_utilisateur`, `produit`, `progression_cours`, `question`, `reponse`, `reservation`, `statistiques_utilisateur`, `utilisateurs`;
 DROP VIEW IF EXISTS `vue_cours_details`, `vue_post_stats`, `vue_profil_utilisateur`;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -314,9 +314,28 @@ CREATE TABLE `utilisateurs` (
   `est_actif` tinyint(1) NOT NULL DEFAULT 1,
   `est_en_ligne` tinyint(1) NOT NULL DEFAULT 0,
   `xp_points` int(11) NOT NULL DEFAULT 0,
+  `ranked_points` int(11) NOT NULL DEFAULT 0,
   `streak_days` int(11) NOT NULL DEFAULT 0,
+  `quizzes_done` int(11) NOT NULL DEFAULT 0,
+  `certificates_count` int(11) NOT NULL DEFAULT 0,
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `expediteur_id` bigint(20) NOT NULL,
+  `destinataire_id` bigint(20) NOT NULL,
+  `contenu` text NOT NULL,
+  `date_envoi` timestamp NOT NULL DEFAULT current_timestamp(),
+  `est_lu` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_messages_expediteur` (`expediteur_id`),
+  KEY `idx_messages_destinataire` (`destinataire_id`),
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`expediteur_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE,
+  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`destinataire_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

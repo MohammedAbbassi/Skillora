@@ -23,15 +23,9 @@ import javafx.util.Duration;
 import entities.User;
 import entities.UserPreferences;
 import entities.Message;
-import entities.Quiz;
-import entities.Question;
-import entities.Reponse;
 import services.ServiceUser;
 import services.ServiceUserPreferences;
 import services.ServiceMessage;
-import services.QuizService;
-import services.QuestionService;
-import services.ReponseService;
 import utils.BadgeUtils;
 
 import java.io.ByteArrayInputStream;
@@ -97,13 +91,9 @@ public class MainController implements Initializable {
 
     @FXML private ScrollPane contentScroll;
     @FXML private VBox   pageHome;
-    @FXML private VBox   pageCourses;
-    @FXML private VBox   pageQuizzes;
-    @FXML private VBox   quizListContainer;
-    @FXML private TextField quizSearchField;
-    @FXML private ComboBox<String> quizNiveauFilter;
-    @FXML private ComboBox<Quiz.Matiere> quizMatiereFilter;
-    @FXML private VBox   pageLeaderboard;
+    @FXML private VBox pageCourses;
+    @FXML private VBox pageQuizzes;
+    @FXML private VBox pageLeaderboard;
     @FXML private VBox   leaderboardContainer;
     @FXML private ComboBox<String> sortMetricCombo;
     @FXML private ComboBox<String> countryFilterCombo;
@@ -118,8 +108,6 @@ public class MainController implements Initializable {
     @FXML private Label kpiStreak;
     @FXML private Label kpiXP;
     @FXML private Label kpiCourses;
-    @FXML private Label kpiQuizzes;
-
     @FXML private Label       greetingLabel;
     @FXML private Label       streakCount;
     @FXML private ProgressBar prog1;
@@ -141,6 +129,7 @@ public class MainController implements Initializable {
     @FXML private Label  statStreak;
     @FXML private Label  statXP;
 
+    @FXML private VBox profileFriendsContainer;
     @FXML private TextField adminSearchField;
     @FXML private ComboBox<String> roleFilter;
     @FXML private ComboBox<String> statusFilter;
@@ -155,27 +144,6 @@ public class MainController implements Initializable {
     
     @FXML private VBox pagePublicProfile;
     @FXML private VBox publicProfileContainer;
-    @FXML private VBox pageFriends;
-    @FXML private VBox friendsContainer;
-    @FXML private VBox activityFeedContainer;
-    @FXML private TextField friendSearchField;
-    @FXML private Button navFriends;
-    @FXML private Label lblFriends;
-    @FXML private Button navCommunity;
-    @FXML private Label lblCommunity;
-    @FXML private VBox pageCommunity;
-    @FXML private VBox communityFeedContainer;
-    @FXML private javafx.scene.control.TextField communityPostTitle;
-    @FXML private javafx.scene.control.TextArea communityPostContent;
-    @FXML private Button navShop;
-    @FXML private Button navOrders;
-    @FXML private Button navAdminProducts;
-    @FXML private Label lblShop;
-    @FXML private Label lblOrders;
-    @FXML private Label lblAdminProducts;
-    @FXML private VBox pageShop;
-    @FXML private VBox pageOrders;
-    @FXML private VBox pageAdminProducts;
 
     private static final double SIDEBAR_FULL      = 230;
     private static final double SIDEBAR_COLLAPSED = 80;
@@ -204,12 +172,7 @@ public class MainController implements Initializable {
 
     private final ServiceUser serviceUser = new ServiceUser();
     private final ServiceUserPreferences servicePrefs = new ServiceUserPreferences();
-    private final QuizService quizService = new QuizService();
-    private final QuestionService questionService = new QuestionService();
-    private final ReponseService reponseService = new ReponseService();
-    private final CommunityController communityController = new CommunityController();
     private List<User> allUsers;
-    private List<Quiz> allQuizzes;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -219,15 +182,9 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navQuizzes, "navQuizzes");
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
         addIfNotNull(allNavBtns, navProgress, "navProgress");
-        addIfNotNull(allNavBtns, navProfile, "navProfile");
         addIfNotNull(allNavBtns, navAdmin, "navAdmin");
         addIfNotNull(allNavBtns, navSettings, "navSettings");
         addIfNotNull(allNavBtns, navLogout, "navLogout");
-        addIfNotNull(allNavBtns, navFriends, "navFriends");
-        addIfNotNull(allNavBtns, navCommunity, "navCommunity");
-        addIfNotNull(allNavBtns, navShop, "navShop");
-        addIfNotNull(allNavBtns, navOrders, "navOrders");
-        addIfNotNull(allNavBtns, navAdminProducts, "navAdminProducts");
 
         allNavLabels = new java.util.ArrayList<>();
         addIfNotNull(allNavLabels, lblHome, "lblHome");
@@ -235,16 +192,9 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizzes, "lblQuizzes");
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
         addIfNotNull(allNavLabels, lblProgress, "lblProgress");
-        addIfNotNull(allNavLabels, lblProfile, "lblProfile");
         addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
         addIfNotNull(allNavLabels, lblLogout, "lblLogout");
-        addIfNotNull(allNavLabels, lblFriends, "lblFriends");
-        addIfNotNull(allNavLabels, lblCommunity, "lblCommunity");
-        addIfNotNull(allNavLabels, lblShop, "lblShop");
-        addIfNotNull(allNavLabels, lblOrders, "lblOrders");
-        addIfNotNull(allNavLabels, lblAdminProducts, "lblAdminProducts");
-
         allPages = new java.util.ArrayList<>();
         addIfNotNull(allPages, pageHome, "pageHome");
         addIfNotNull(allPages, pageCourses, "pageCourses");
@@ -255,26 +205,12 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pageAdmin, "pageAdmin");
         addIfNotNull(allPages, pageSettings, "pageSettings");
         addIfNotNull(allPages, pagePublicProfile, "pagePublicProfile");
-        addIfNotNull(allPages, pageFriends, "pageFriends");
-        addIfNotNull(allPages, pageCommunity, "pageCommunity");
-        addIfNotNull(allPages, pageShop, "pageShop");
-        addIfNotNull(allPages, pageOrders, "pageOrders");
-        addIfNotNull(allPages, pageAdminProducts, "pageAdminProducts");
-
-        if (friendSearchField != null) {
-            friendSearchField.textProperty().addListener((obs, old, val) -> loadFriends());
-        }
-
-        communityController.init(communityFeedContainer, communityPostTitle, communityPostContent);
 
         setupLeaderboardFilters();
-        setupQuizFilters();
         setGreeting();
         populateFilters();
         loadUserTable();
-        loadFriends();
         setupSearch();
-        setupQuizSearch();
         try {
             initProgressCharts();
         } catch (Exception e) {
@@ -566,779 +502,18 @@ public class MainController implements Initializable {
 
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
     @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
-    @FXML private void onNavQuizzes()  { navigateTo(pageQuizzes,  navQuizzes); loadQuizList(); }
+    @FXML private void onNavQuizzes()  { navigateTo(pageQuizzes,  navQuizzes);  }
     @FXML private void onNavLeaderboard()  { 
         navigateTo(pageLeaderboard,  navLeaderboard);
         loadLeaderboard();
     }
     @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
-    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); }
+    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); loadProfileFriends(); }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
 
-    @FXML private void onNavCommunity() {
-        navigateTo(pageCommunity, navCommunity);
-        communityController.loadFeed();
-    }
 
-    @FXML private void onCommunityRefresh() {
-        communityController.loadFeed();
-    }
-
-    @FXML private void onSubmitCommunityPost() {
-        communityController.onSubmitPost();
-    }
-
-    // ──────────────────────────────────────────────
-
-    private void setupQuizFilters() {
-        if (quizNiveauFilter != null) {
-            quizNiveauFilter.getItems().addAll("All Levels", "DEBUTANT", "INTERMEDIAIRE", "AVANCE", "EXPERT");
-            quizNiveauFilter.setValue("All Levels");
-        }
-        if (quizMatiereFilter != null) {
-            quizMatiereFilter.getItems().addAll(Quiz.Matiere.values());
-        }
-    }
-
-    private void setupQuizSearch() {
-        if (quizSearchField != null) {
-            quizSearchField.textProperty().addListener((obs, old, val) -> loadQuizList());
-        }
-        if (quizNiveauFilter != null) {
-            quizNiveauFilter.valueProperty().addListener((obs, old, val) -> loadQuizList());
-        }
-        if (quizMatiereFilter != null) {
-            quizMatiereFilter.valueProperty().addListener((obs, old, val) -> loadQuizList());
-        }
-    }
-
-    @FXML
-    private void onQuizRefresh() {
-        loadQuizList();
-    }
-
-    private void loadQuizList() {
-        if (quizListContainer == null) return;
-        try {
-            String search = quizSearchField != null ? quizSearchField.getText() : null;
-            String niveauFiltre = null;
-            if (quizNiveauFilter != null && quizNiveauFilter.getValue() != null) {
-                String v = quizNiveauFilter.getValue();
-                if (!"All Levels".equalsIgnoreCase(v)) {
-                    niveauFiltre = v;
-                }
-            }
-            String matiere = null;
-            if (quizMatiereFilter != null && quizMatiereFilter.getValue() != null) {
-                matiere = quizMatiereFilter.getValue().name();
-            }
-
-            allQuizzes = quizService.rechercher(search, null, matiere, niveauFiltre);
-            quizListContainer.getChildren().clear();
-            for (Quiz quiz : allQuizzes) {
-                quizListContainer.getChildren().add(buildQuizCard(quiz));
-            }
-            if (allQuizzes.isEmpty()) {
-                Label empty = new Label("No quizzes found. Click + Add Quiz to create one.");
-                empty.setStyle("-fx-font-size: 14px; -fx-text-fill: #94a3b8; -fx-padding: 40;");
-                quizListContainer.getChildren().add(empty);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private HBox buildQuizCard(Quiz quiz) {
-        HBox card = new HBox(16);
-        card.getStyleClass().add("table-row");
-        card.setPadding(new javafx.geometry.Insets(14, 20, 14, 20));
-        card.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-        VBox info = new VBox(4);
-        Label title = new Label(quiz.getTitre() != null ? quiz.getTitre() : "");
-        title.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #1e293b;");
-        Label meta = new Label(
-            (quiz.getMatiereValue() != null ? quiz.getMatiereValue() : "N/A") +
-            "  ·  " + (quiz.getNiveau() != null ? quiz.getNiveau() : "N/A") +
-            (quiz.getCreateurNom() != null && !quiz.getCreateurNom().isEmpty() ? "  ·  by " + quiz.getCreateurNom() : "")
-        );
-        meta.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748b;");
-        Label desc = new Label(quiz.getDescription() != null ? quiz.getDescription().trim() : "");
-        desc.setWrapText(true);
-        desc.setStyle("-fx-font-size: 13px; -fx-text-fill: #475569;");
-        if (!desc.getText().isEmpty()) info.getChildren().addAll(title, meta, desc);
-        else info.getChildren().addAll(title, meta);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        Button questionsBtn = new Button("Questions");
-        questionsBtn.getStyleClass().add("row-action-btn");
-        questionsBtn.setOnAction(e -> showManageQuestionsDialog(quiz));
-
-        Button takeBtn = new Button("Take Quiz");
-        takeBtn.getStyleClass().add("primary-btn");
-        takeBtn.setStyle("-fx-padding: 6 16; -fx-font-size: 12px;");
-        takeBtn.setOnAction(e -> showTakeQuizDialog(quiz));
-
-        Button editBtn = new Button("Edit");
-        editBtn.getStyleClass().add("row-action-btn");
-        editBtn.setOnAction(e -> showAddQuizDialog(quiz));
-
-        Button deleteBtn = new Button("✕");
-        deleteBtn.getStyleClass().addAll("row-action-btn", "row-delete-btn");
-        deleteBtn.setOnAction(e -> deleteQuiz(quiz));
-
-        HBox actions = new HBox(6, takeBtn, questionsBtn, editBtn, deleteBtn);
-        card.getChildren().addAll(info, spacer, actions);
-        return card;
-    }
-
-    @FXML
-    private void onAddQuiz() {
-        showAddQuizDialog(null);
-    }
-
-    private void showAddQuizDialog(Quiz existing) {
-        Stage dialog = new Stage();
-        dialog.setTitle(existing == null ? "Add Quiz" : "Edit Quiz");
-        dialog.initOwner(topbar.getScene().getWindow());
-        dialog.setResizable(false);
-
-        VBox root = new VBox(20);
-        root.setPadding(new javafx.geometry.Insets(30));
-        root.setStyle("-fx-background-color: #FFFFFF;");
-
-        Label titleLabel = new Label(existing == null ? "Create New Quiz" : "Edit Quiz");
-        titleLabel.setStyle("-fx-font-family: Georgia; -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1A1A2E;");
-
-        TextField titreField = new TextField();
-        titreField.getStyleClass().add("dialog-text-field");
-        titreField.setPromptText("Quiz Title");
-        if (existing != null) titreField.setText(existing.getTitre());
-
-        TextArea descArea = new TextArea();
-        descArea.getStyleClass().add("dialog-text-field");
-        descArea.setPromptText("Description");
-        descArea.setPrefHeight(80);
-        if (existing != null) descArea.setText(existing.getDescription());
-
-        ComboBox<String> niveauCombo = new ComboBox<>();
-        niveauCombo.getStyleClass().add("dialog-combo-box");
-        niveauCombo.getItems().addAll("DEBUTANT", "INTERMEDIAIRE", "AVANCE", "EXPERT");
-        niveauCombo.setValue(existing != null ? existing.getNiveau() : "DEBUTANT");
-
-        ComboBox<Quiz.Matiere> matiereCombo = new ComboBox<>();
-        matiereCombo.getStyleClass().add("dialog-combo-box");
-        matiereCombo.getItems().addAll(Quiz.Matiere.values());
-        if (existing != null) matiereCombo.setValue(existing.getMatiere());
-        else matiereCombo.setValue(Quiz.Matiere.JAVA);
-
-        HBox buttons = new HBox(12);
-        buttons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-        Button cancelBtn = new Button("Cancel");
-        cancelBtn.getStyleClass().add("dialog-cancel-btn");
-        cancelBtn.setOnAction(e -> dialog.close());
-
-        Button saveBtn = new Button(existing == null ? "Create" : "Save");
-        saveBtn.getStyleClass().add("dialog-ok-btn");
-        saveBtn.setOnAction(e -> {
-            if (titreField.getText().trim().isEmpty()) {
-                showStyledAlert(javafx.scene.control.Alert.AlertType.WARNING, "Warning", "Title is required.");
-                return;
-            }
-            try {
-                Quiz q = existing != null ? existing : new Quiz();
-                q.setTitre(titreField.getText().trim());
-                q.setDescription(descArea.getText().trim());
-                q.setNiveau(niveauCombo.getValue());
-                q.setMatiere(matiereCombo.getValue());
-                if (existing == null) {
-                    q.setIdCreateur(currentUser != null ? currentUser.getId() : 0);
-                    quizService.add(q);
-                } else {
-                    quizService.update(q);
-                }
-                dialog.close();
-                loadQuizList();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                showStyledAlert(javafx.scene.control.Alert.AlertType.ERROR, "Error", "Failed to save quiz: " + ex.getMessage());
-            }
-        });
-
-        buttons.getChildren().addAll(cancelBtn, saveBtn);
-
-        VBox form = new VBox(12);
-        form.getChildren().addAll(
-            createField("Title", titreField),
-            createField("Description", descArea),
-            createField("Level", niveauCombo),
-            createField("Subject", matiereCombo)
-        );
-
-        root.getChildren().addAll(titleLabel, form, buttons);
-        Scene scene = new Scene(root, 440, 480);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        dialog.setScene(scene);
-        dialog.showAndWait();
-    }
-
-    private void deleteQuiz(Quiz quiz) {
-        boolean confirmed = showStyledConfirm("Delete Quiz",
-            "Delete quiz \"" + quiz.getTitre() + "\"? This will also delete all questions and answers.");
-        if (confirmed) {
-            try {
-                List<Question> questions = questionService.getByQuiz(quiz.getId());
-                for (Question q : questions) {
-                    List<Reponse> reponses = reponseService.getByQuestion(q.getId());
-                    for (Reponse r : reponses) reponseService.delete(r);
-                    questionService.delete(q);
-                }
-                quizService.delete(quiz);
-                loadQuizList();
-            } catch (Exception e) {
-                e.printStackTrace();
-                showStyledAlert(javafx.scene.control.Alert.AlertType.ERROR, "Error", "Could not delete quiz.");
-            }
-        }
-    }
-
-    // ── Consolidated Question & Answer Management (single window) ──────────
-
-    private void showManageQuestionsDialog(Quiz quiz) {
-        Stage dialog = new Stage();
-        dialog.setTitle("Questions: " + quiz.getTitre());
-        dialog.initOwner(topbar.getScene().getWindow());
-        dialog.setResizable(false);
-
-        VBox root = new VBox(16);
-        root.setPadding(new javafx.geometry.Insets(24));
-        root.setStyle("-fx-background-color: #FFFFFF;");
-
-        StackPane views = new StackPane();
-
-        // ── VIEW 1: Question List ──────────────────────────────────────────
-        VBox questionListView = new VBox(16);
-        Label qlTitle = new Label("Questions for: " + quiz.getTitre());
-        qlTitle.setStyle("-fx-font-family: Georgia; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1A1A2E;");
-
-        HBox qlTopBar = new HBox(12);
-        qlTopBar.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-        Button qlAddBtn = new Button("+ Add Question");
-        qlAddBtn.getStyleClass().add("dialog-ok-btn");
-        Button qlCloseBtn = new Button("Close");
-        qlCloseBtn.getStyleClass().add("dialog-cancel-btn");
-        qlCloseBtn.setOnAction(e -> dialog.close());
-        qlTopBar.getChildren().addAll(qlAddBtn, qlCloseBtn);
-
-        ScrollPane qlScroll = new ScrollPane();
-        qlScroll.setFitToWidth(true);
-        qlScroll.setPrefHeight(400);
-        VBox questionsList = new VBox(8);
-        qlScroll.setContent(questionsList);
-
-        questionListView.getChildren().addAll(qlTitle, qlTopBar, qlScroll);
-
-        // ── VIEW 2: Question Form ──────────────────────────────────────────
-        VBox questionFormView = new VBox(16);
-        Label qfTitle = new Label("New Question");
-        qfTitle.setStyle("-fx-font-family: Georgia; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1A1A2E;");
-
-        TextArea qfEnonce = new TextArea();
-        qfEnonce.getStyleClass().add("dialog-text-field");
-        qfEnonce.setPromptText("Question text...");
-        qfEnonce.setPrefHeight(80);
-
-        ComboBox<Question.TypeQuestion> qfType = new ComboBox<>();
-        qfType.getStyleClass().add("dialog-combo-box");
-        qfType.getItems().addAll(Question.TypeQuestion.QCU, Question.TypeQuestion.QCM);
-        qfType.setValue(Question.TypeQuestion.QCU);
-
-        TextField qfPoint = new TextField();
-        qfPoint.getStyleClass().add("dialog-text-field");
-        qfPoint.setPromptText("Points (default: 1)");
-
-        HBox qfButtons = new HBox(12);
-        qfButtons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-
-        Button qfBackBtn = new Button("← Back");
-        qfBackBtn.getStyleClass().add("dialog-cancel-btn");
-
-        Button qfSaveBtn = new Button("Save & Add Answers");
-        qfSaveBtn.getStyleClass().add("dialog-ok-btn");
-
-        qfButtons.getChildren().addAll(qfBackBtn, qfSaveBtn);
-
-        VBox qfForm = new VBox(12);
-        qfForm.getChildren().addAll(
-            createField("Question", qfEnonce),
-            createField("Type", qfType),
-            createField("Points", qfPoint)
-        );
-        questionFormView.getChildren().addAll(qfTitle, qfForm, qfButtons);
-
-        // ── VIEW 3: Answer Management ──────────────────────────────────────
-        VBox answerView = new VBox(16);
-        Label avBackTitle = new Label("Answers");
-        avBackTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #64748b;");
-        Label avQuestionLabel = new Label();
-        avQuestionLabel.setWrapText(true);
-        avQuestionLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #1e293b;");
-
-        HBox avTopBar = new HBox(12);
-        avTopBar.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-
-        Button avBackBtn = new Button("← Back to Questions");
-        avBackBtn.getStyleClass().add("dialog-cancel-btn");
-
-        Button avAddBtn = new Button("+ Add Answer");
-        avAddBtn.getStyleClass().add("dialog-ok-btn");
-
-        avTopBar.getChildren().addAll(avBackBtn, avAddBtn);
-
-        ScrollPane avScroll = new ScrollPane();
-        avScroll.setFitToWidth(true);
-        avScroll.setPrefHeight(240);
-        VBox answersList = new VBox(8);
-        avScroll.setContent(answersList);
-
-        // Inline add answer form (hidden by default)
-        HBox avInlineForm = new HBox(8);
-        avInlineForm.setVisible(false);
-        avInlineForm.setManaged(false);
-        avInlineForm.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-        TextField avNewText = new TextField();
-        avNewText.getStyleClass().add("dialog-text-field");
-        avNewText.setPromptText("Answer text...");
-        HBox.setHgrow(avNewText, Priority.ALWAYS);
-
-        CheckBox avNewCorrect = new CheckBox("Correct");
-        avNewCorrect.setStyle("-fx-font-size: 12px; -fx-font-weight: 600;");
-
-        Button avNewAddBtn = new Button("Add");
-        avNewAddBtn.getStyleClass().add("dialog-ok-btn");
-        avNewAddBtn.setStyle("-fx-padding: 6 14; -fx-font-size: 12px;");
-
-        Button avNewCancelBtn = new Button("Cancel");
-        avNewCancelBtn.getStyleClass().add("dialog-cancel-btn");
-        avNewCancelBtn.setStyle("-fx-padding: 6 14; -fx-font-size: 12px;");
-        avNewCancelBtn.setOnAction(e -> {
-            avInlineForm.setVisible(false);
-            avInlineForm.setManaged(false);
-            avNewText.clear();
-            avNewCorrect.setSelected(false);
-        });
-
-        avInlineForm.getChildren().addAll(avNewText, avNewCorrect, avNewAddBtn, avNewCancelBtn);
-        answerView.getChildren().addAll(avBackTitle, avQuestionLabel, avTopBar, avScroll, avInlineForm);
-
-        // ── State ──────────────────────────────────────────────────────────
-        final Question[] editingQuestion = {null};
-        final Question[] currentAnswerQuestion = {null};
-
-        Runnable[] refreshAnswersList = new Runnable[1];
-        Runnable[] loadQuestions = new Runnable[1];
-
-        refreshAnswersList[0] = () -> {
-            if (currentAnswerQuestion[0] == null) return;
-            answersList.getChildren().clear();
-            try {
-                List<Reponse> reponses = reponseService.getByQuestion(currentAnswerQuestion[0].getId());
-                if (reponses.isEmpty()) {
-                    Label empty = new Label("No answers yet. Use the form above to add one.");
-                    empty.setStyle("-fx-font-size: 13px; -fx-text-fill: #94a3b8; -fx-padding: 20;");
-                    answersList.getChildren().add(empty);
-                } else {
-                    for (Reponse r : reponses) {
-                        HBox row = new HBox(12);
-                        row.setPadding(new javafx.geometry.Insets(8, 12, 8, 12));
-                        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-                        row.setStyle("-fx-border-color: transparent transparent #f1f5f9 transparent; -fx-border-width: 0 0 1 0;");
-
-                        Label badge = new Label(r.isCorrecte() ? "CORRECT" : "WRONG");
-                        badge.setStyle(r.isCorrecte()
-                            ? "-fx-background-color: #dcfce7; -fx-text-fill: #16a34a; -fx-font-size: 10px; -fx-font-weight: 800; -fx-padding: 2 8; -fx-background-radius: 4;"
-                            : "-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-font-size: 10px; -fx-font-weight: 800; -fx-padding: 2 8; -fx-background-radius: 4;");
-                        badge.setMinWidth(70);
-                        badge.setAlignment(javafx.geometry.Pos.CENTER);
-
-                        Label txt = new Label(r.getTexte());
-                        txt.setStyle("-fx-font-size: 13px; -fx-text-fill: #334155;");
-
-                        Region sp = new Region();
-                        HBox.setHgrow(sp, Priority.ALWAYS);
-
-                        CheckBox tog = new CheckBox();
-                        tog.setSelected(r.isCorrecte());
-                        tog.setOnAction(ev -> {
-                            r.setCorrecte(tog.isSelected());
-                            try { reponseService.update(r); refreshAnswersList[0].run(); } catch (Exception ex) {}
-                        });
-
-                        Button del = new Button("✕");
-                        del.getStyleClass().addAll("row-action-btn", "row-delete-btn");
-                        del.setOnAction(ev -> {
-                            try { reponseService.delete(r); refreshAnswersList[0].run(); } catch (Exception ex) {}
-                        });
-
-                        row.getChildren().addAll(badge, txt, sp, tog, del);
-                        answersList.getChildren().add(row);
-                    }
-                }
-            } catch (Exception e) { e.printStackTrace(); }
-        };
-
-        loadQuestions[0] = () -> {
-            questionsList.getChildren().clear();
-            try {
-                List<Question> questions = questionService.getByQuiz(quiz.getId());
-                if (questions.isEmpty()) {
-                    Label empty = new Label("No questions yet. Click + Add Question to add one.");
-                    empty.setStyle("-fx-font-size: 13px; -fx-text-fill: #94a3b8; -fx-padding: 20;");
-                    questionsList.getChildren().add(empty);
-                } else {
-                    for (Question q : questions) {
-                        HBox card = new HBox(12);
-                        card.setPadding(new javafx.geometry.Insets(10, 16, 10, 16));
-                        card.setStyle("-fx-border-color: transparent transparent #f1f5f9 transparent; -fx-border-width: 0 0 1 0;");
-                        card.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-                        Label typeBadge = new Label(q.getTypeQuestionValue());
-                        typeBadge.setStyle("-fx-background-color: #ede9fe; -fx-text-fill: #7c3aed; -fx-font-size: 11px; -fx-font-weight: 800; -fx-padding: 2 8; -fx-background-radius: 4;");
-                        typeBadge.setMinWidth(48);
-                        typeBadge.setAlignment(javafx.geometry.Pos.CENTER);
-
-                        VBox info = new VBox(2);
-                        Label en = new Label(q.getEnonce());
-                        en.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #1e293b;");
-                        Label meta = new Label("Point: " + q.getPoint());
-                        meta.setStyle("-fx-font-size: 11px; -fx-text-fill: #94a3b8;");
-                        info.getChildren().addAll(en, meta);
-
-                        Region sp = new Region();
-                        HBox.setHgrow(sp, Priority.ALWAYS);
-
-                        Button ansBtn = new Button("Answers");
-                        ansBtn.getStyleClass().add("row-action-btn");
-                        ansBtn.setOnAction(ev -> {
-                            currentAnswerQuestion[0] = q;
-                            avQuestionLabel.setText(q.getEnonce());
-                            refreshAnswersList[0].run();
-                            views.getChildren().setAll(answerView);
-                        });
-
-                        Button editBtn = new Button("Edit");
-                        editBtn.getStyleClass().add("row-action-btn");
-                        editBtn.setOnAction(ev -> {
-                            editingQuestion[0] = q;
-                            qfTitle.setText("Edit Question");
-                            qfEnonce.setText(q.getEnonce());
-                            qfType.setValue(q.getTypeQuestion());
-                            qfPoint.setText(String.valueOf(q.getPoint()));
-                            qfSaveBtn.setText("Save");
-                            qfBackBtn.setVisible(true);
-                            qfBackBtn.setManaged(true);
-                            views.getChildren().setAll(questionFormView);
-                        });
-
-                        Button delBtn = new Button("✕");
-                        delBtn.getStyleClass().addAll("row-action-btn", "row-delete-btn");
-                        delBtn.setOnAction(ev -> {
-                            try {
-                                List<Reponse> reps = reponseService.getByQuestion(q.getId());
-                                for (Reponse r : reps) reponseService.delete(r);
-                                questionService.delete(q);
-                                loadQuestions[0].run();
-                            } catch (Exception ex) { ex.printStackTrace(); }
-                        });
-
-                        card.getChildren().addAll(typeBadge, info, sp, ansBtn, editBtn, delBtn);
-                        questionsList.getChildren().add(card);
-                    }
-                }
-            } catch (Exception e) { e.printStackTrace(); }
-        };
-
-        // ── Navigation wiring ──────────────────────────────────────────────
-        Runnable showQuestionForm = () -> {
-            editingQuestion[0] = null;
-            qfTitle.setText("New Question");
-            qfEnonce.clear();
-            qfType.setValue(Question.TypeQuestion.QCU);
-            qfPoint.clear();
-            qfSaveBtn.setText("Save & Add Answers");
-            qfBackBtn.setVisible(true);
-            qfBackBtn.setManaged(true);
-            views.getChildren().setAll(questionFormView);
-        };
-
-        qlAddBtn.setOnAction(e -> showQuestionForm.run());
-
-        qfBackBtn.setOnAction(e -> {
-            views.getChildren().setAll(questionListView);
-            loadQuestions[0].run();
-        });
-
-        qfSaveBtn.setOnAction(e -> {
-            String enonce = qfEnonce.getText().trim();
-            if (enonce.isEmpty()) {
-                showStyledAlert(javafx.scene.control.Alert.AlertType.WARNING, "Warning", "Question text is required.");
-                return;
-            }
-            try {
-                Question q = editingQuestion[0] != null ? editingQuestion[0] : new Question();
-                q.setQuizId(quiz.getId());
-                q.setEnonce(enonce);
-                q.setTypeQuestion(qfType.getValue());
-                q.setPoint(qfPoint.getText().trim().isEmpty() ? 1 : Integer.parseInt(qfPoint.getText().trim()));
-                q.setEstActive(true);
-                q.setIdUtilisateur(currentUser != null ? currentUser.getId() : 0);
-
-                if (editingQuestion[0] == null) {
-                    questionService.add(q);
-                } else {
-                    questionService.update(q);
-                    editingQuestion[0] = null;
-                }
-
-                // Navigate to answers for new questions
-                if (qfSaveBtn.getText().equals("Save & Add Answers")) {
-                    currentAnswerQuestion[0] = q;
-                    avQuestionLabel.setText(q.getEnonce());
-                    refreshAnswersList[0].run();
-                    views.getChildren().setAll(answerView);
-                } else {
-                    views.getChildren().setAll(questionListView);
-                    loadQuestions[0].run();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                showStyledAlert(javafx.scene.control.Alert.AlertType.ERROR, "Error", "Failed to save question: " + ex.getMessage());
-            }
-        });
-
-        avBackBtn.setOnAction(e -> {
-            views.getChildren().setAll(questionListView);
-            loadQuestions[0].run();
-        });
-
-        avAddBtn.setOnAction(e -> {
-            avInlineForm.setVisible(true);
-            avInlineForm.setManaged(true);
-            avNewText.requestFocus();
-        });
-
-        avNewAddBtn.setOnAction(e -> {
-            if (avNewText.getText().trim().isEmpty()) {
-                showStyledAlert(javafx.scene.control.Alert.AlertType.WARNING, "Warning", "Answer text is required.");
-                return;
-            }
-            if (currentAnswerQuestion[0] == null) return;
-            try {
-                if (avNewCorrect.isSelected() && currentAnswerQuestion[0].getTypeQuestion() == Question.TypeQuestion.QCU) {
-                    List<Reponse> existingCorrect = reponseService.getCorrectByQuestion(currentAnswerQuestion[0].getId());
-                    if (!existingCorrect.isEmpty()) {
-                        showStyledAlert(javafx.scene.control.Alert.AlertType.WARNING, "QCU Rule",
-                            "QCU questions can only have one correct answer.");
-                        return;
-                    }
-                }
-                Reponse r = new Reponse(currentAnswerQuestion[0].getId(), avNewText.getText().trim(), avNewCorrect.isSelected());
-                reponseService.add(r);
-                avNewText.clear();
-                avNewCorrect.setSelected(false);
-                avInlineForm.setVisible(false);
-                avInlineForm.setManaged(false);
-                refreshAnswersList[0].run();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                showStyledAlert(javafx.scene.control.Alert.AlertType.ERROR, "Error", "Failed to save answer.");
-            }
-        });
-
-        views.getChildren().setAll(questionListView);
-        root.getChildren().add(views);
-        loadQuestions[0].run();
-
-        Scene scene = new Scene(root, 640, 540);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        dialog.setScene(scene);
-        dialog.showAndWait();
-    }
-
-    // ── Take Quiz Dialog ────────────────────────────────────────────────────
-
-    private void showTakeQuizDialog(Quiz quiz) {
-        try {
-            List<Question> questions = questionService.getByQuiz(quiz.getId());
-            if (questions.isEmpty()) {
-                showStyledAlert(javafx.scene.control.Alert.AlertType.INFORMATION, "Empty Quiz",
-                    "This quiz has no questions yet. Add some questions first.");
-                return;
-            }
-
-            Stage dialog = new Stage();
-            dialog.setTitle("Quiz: " + quiz.getTitre());
-            dialog.initOwner(topbar.getScene().getWindow());
-            dialog.setResizable(false);
-
-            VBox root = new VBox(20);
-            root.setPadding(new javafx.geometry.Insets(28));
-            root.setStyle("-fx-background-color: #FFFFFF;");
-
-            // Header
-            HBox header = new HBox(16);
-            header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            Label progressLbl = new Label("Question 1 / " + questions.size());
-            progressLbl.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #64748b;");
-            Label scoreLbl = new Label("Score: 0 / 0");
-            scoreLbl.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #7c3aed;");
-            Region hdrSpacer = new Region();
-            HBox.setHgrow(hdrSpacer, Priority.ALWAYS);
-            Button exitBtn = new Button("✕");
-            exitBtn.getStyleClass().addAll("row-action-btn", "row-delete-btn");
-            exitBtn.setOnAction(e -> dialog.close());
-            header.getChildren().addAll(progressLbl, scoreLbl, hdrSpacer, exitBtn);
-
-            // Question text
-            Label questionLbl = new Label();
-            questionLbl.setWrapText(true);
-            questionLbl.setStyle("-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: #1e293b;");
-
-            // Options container
-            VBox optionsBox = new VBox(10);
-            optionsBox.setPadding(new javafx.geometry.Insets(8, 0, 8, 0));
-
-            // Next button
-            Button nextBtn = new Button("Next →");
-            nextBtn.getStyleClass().add("dialog-ok-btn");
-            nextBtn.setStyle("-fx-font-size: 14px; -fx-padding: 10 28;");
-
-            root.getChildren().addAll(header, questionLbl, optionsBox, nextBtn);
-
-            // State
-            ToggleGroup qcuGroup = new ToggleGroup();
-            int[] currentIdx = {0};
-            int[] correctCount = {0};
-            int[] earnedPoints = {0};
-
-            Runnable loadQuestion = () -> {
-                try {
-                    optionsBox.getChildren().clear();
-                    if (currentIdx[0] >= questions.size()) {
-                        showQuizResult(dialog, quiz, correctCount[0], questions.size(), earnedPoints[0]);
-                        return;
-                    }
-                    Question q = questions.get(currentIdx[0]);
-                    progressLbl.setText("Question " + (currentIdx[0] + 1) + " / " + questions.size());
-                    scoreLbl.setText("Score: " + correctCount[0] + " / " + questions.size());
-                    questionLbl.setText(q.getEnonce());
-
-                    List<Reponse> reponses = reponseService.getByQuestion(q.getId());
-                    if (q.getTypeQuestion() == Question.TypeQuestion.QCU) {
-                        qcuGroup.getToggles().clear();
-                        for (Reponse r : reponses) {
-                            RadioButton rb = new RadioButton(r.getTexte());
-                            rb.setUserData(r);
-                            rb.setToggleGroup(qcuGroup);
-                            rb.setStyle("-fx-font-size: 14px; -fx-padding: 6 0;");
-                            optionsBox.getChildren().add(rb);
-                        }
-                    } else {
-                        for (Reponse r : reponses) {
-                            CheckBox cb = new CheckBox(r.getTexte());
-                            cb.setUserData(r);
-                            cb.setStyle("-fx-font-size: 14px; -fx-padding: 6 0;");
-                            optionsBox.getChildren().add(cb);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-
-            nextBtn.setOnAction(e -> {
-                if (currentIdx[0] >= questions.size()) return;
-                Question q = questions.get(currentIdx[0]);
-                boolean correct = false;
-
-                if (q.getTypeQuestion() == Question.TypeQuestion.QCU) {
-                    Toggle selected = qcuGroup.getSelectedToggle();
-                    correct = selected != null && ((Reponse) selected.getUserData()).isCorrecte();
-                } else {
-                    try {
-                        List<Reponse> correctReponses = reponseService.getCorrectByQuestion(q.getId());
-                        java.util.Set<Integer> correctIds = new java.util.HashSet<>();
-                        for (Reponse cr : correctReponses) correctIds.add(cr.getId());
-
-                        java.util.Set<Integer> selectedIds = new java.util.HashSet<>();
-                        for (javafx.scene.Node node : optionsBox.getChildren()) {
-                            if (node instanceof CheckBox && ((CheckBox) node).isSelected()) {
-                                selectedIds.add(((Reponse) ((CheckBox) node).getUserData()).getId());
-                            }
-                        }
-                        correct = !correctIds.isEmpty() && selectedIds.equals(correctIds);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (correct) {
-                    correctCount[0]++;
-                    earnedPoints[0] += Math.max(1, q.getPoint());
-                }
-                currentIdx[0]++;
-                loadQuestion.run();
-            });
-
-            loadQuestion.run();
-
-            Scene scene = new Scene(root, 560, 500);
-            scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-            dialog.setScene(scene);
-            dialog.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showQuizResult(Stage dialog, Quiz quiz, int correct, int total, int points) {
-        dialog.close();
-        Stage resultStage = new Stage();
-        resultStage.setTitle("Quiz Complete!");
-        resultStage.initOwner(topbar.getScene().getWindow());
-        resultStage.setResizable(false);
-
-        VBox root = new VBox(24);
-        root.setPadding(new javafx.geometry.Insets(40));
-        root.setStyle("-fx-background-color: #FFFFFF;");
-        root.setAlignment(javafx.geometry.Pos.CENTER);
-
-        Label resultTitle = new Label(correct == total ? "🎉 Perfect Score! 🎉" : "Quiz Complete!");
-        resultTitle.setStyle("-fx-font-family: Georgia; -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: " +
-            (correct == total ? "#16a34a" : "#1A1A2E") + ";");
-
-        Label scoreLabel = new Label(correct + " / " + total + " correct  (" + points + " pts)");
-        scoreLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: #475569;");
-
-        double pct = total > 0 ? (double) correct / total * 100 : 0;
-        Label pctLabel = new Label(String.format("%.0f%%", pct));
-        pctLabel.setStyle("-fx-font-size: 42px; -fx-font-weight: 900; -fx-text-fill: #7c3aed;");
-
-        Button doneBtn = new Button("Done");
-        doneBtn.getStyleClass().add("dialog-ok-btn");
-        doneBtn.setStyle("-fx-font-size: 14px; -fx-padding: 10 40;");
-        doneBtn.setOnAction(e -> resultStage.close());
-
-        root.getChildren().addAll(resultTitle, scoreLabel, pctLabel, doneBtn);
-        Scene scene = new Scene(root, 400, 340);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        resultStage.setScene(scene);
-        resultStage.showAndWait();
-    }
+    
 
     @FXML
     private void onOpenPreferences() {
@@ -1400,6 +575,7 @@ public class MainController implements Initializable {
     @FXML
     private void onProfileClick() {
         navigateTo(pageProfile, null);
+        loadProfileFriends();
     }
 
     private void closeDropdown() {
@@ -2089,8 +1265,7 @@ public class MainController implements Initializable {
         sg.getColumnConstraints().addAll(col1, col2);
         sg.add(buildStatTile("⚡", "XP Points",    String.format("%,d", user.getXpPoints()), "#8b5cf6"), 0, 0);
         sg.add(buildStatTile("🔥", "Day Streak",   user.getStreakDays() + " days",         "#f97316"), 1, 0);
-        sg.add(buildStatTile("🧠", "Quizzes Done", String.valueOf(user.getQuizzesDone()),  "#0ea5e9"), 0, 1);
-        sg.add(buildStatTile("🎓", "Certificates", String.valueOf(user.getCertificatesCount()), "#10b981"), 1, 1);
+        sg.add(buildStatTile("🎓", "Certificates", String.valueOf(user.getCertificatesCount()), "#10b981"), 0, 1);
 
         leftCol.getChildren().addAll(rankCard, sg);
 
@@ -2228,110 +1403,6 @@ public class MainController implements Initializable {
         return row;
     }
 
-    @FXML
-    private void onNavFriends() {
-        navigateTo(pageFriends, navFriends);
-        loadFriends();
-    }
-
-    @FXML private void onNavShop()         { navigateTo(pageShop,         navShop);         }
-    @FXML private void onNavOrders()       { navigateTo(pageOrders,       navOrders);       }
-    @FXML private void onNavAdminProducts(){ navigateTo(pageAdminProducts, navAdminProducts); }
-
-    private void loadFriends() {
-        if (friendsContainer == null || currentUser == null) return;
-        String search = (friendSearchField != null) ? friendSearchField.getText().toLowerCase() : "";
-        
-        try {
-            List<Integer> friendIds = serviceRelation.getFriendsIds(currentUser.getId());
-            VBox onlineContainer = new VBox(10);
-            VBox offlineContainer = new VBox(10);
-            
-            for (int id : friendIds) {
-                User u = serviceUser.getById(id);
-                if (u == null) continue;
-                
-                String fullName = formatUserName(u).toLowerCase();
-                if (!search.isEmpty() && !fullName.contains(search)) continue;
-                
-                if (u.isEstEnLigne()) {
-                    onlineContainer.getChildren().add(buildFriendCard(u));
-                } else {
-                    offlineContainer.getChildren().add(buildFriendCard(u));
-                }
-            }
-            
-            javafx.application.Platform.runLater(() -> {
-                friendsContainer.getChildren().clear();
-                if (!onlineContainer.getChildren().isEmpty()) {
-                    Label onlineLabel = new Label("🟢 Online - " + onlineContainer.getChildren().size());
-                    onlineLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #16a34a; -fx-padding: 10 0 5 0;");
-                    friendsContainer.getChildren().addAll(onlineLabel, onlineContainer);
-                }
-                
-                if (!offlineContainer.getChildren().isEmpty()) {
-                    Label offlineLabel = new Label("⚪ Offline - " + offlineContainer.getChildren().size());
-                    offlineLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #64748b; -fx-padding: 10 0 5 0;");
-                    friendsContainer.getChildren().addAll(offlineLabel, offlineContainer);
-                }
-                
-                if (friendsContainer.getChildren().isEmpty()) {
-                    Label empty = new Label(search.isEmpty() ? "No neural connections yet. Find players in the Leaderboard!" : "No connections match your search.");
-                    empty.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 14px; -fx-padding: 20;");
-                    friendsContainer.getChildren().add(empty);
-                }
-            });
-            
-            loadActivityFeed(friendIds);
-        } catch (Exception e) { e.printStackTrace(); }
-    }
-
-    private HBox buildFriendCard(User u) {
-        HBox card = new HBox(16);
-        card.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        card.setPadding(new javafx.geometry.Insets(16, 24, 16, 24));
-        card.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 16; -fx-border-color: #e2e8f0; -fx-border-radius: 16; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4); -fx-cursor: hand;");
-        
-        // Avatar
-        StackPane avStack = new StackPane();
-        Circle ring = new Circle(24);
-        String accent = getRankAccent(u.getRankedPoints());
-        ring.setStyle("-fx-fill: " + accent + "22; -fx-stroke: " + accent + "44; -fx-stroke-width: 1;");
-        Circle av = new Circle(22);
-        av.setStyle("-fx-fill: #f1f5f9;");
-        Label initLbl = new Label("?");
-        initLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #94a3b8;");
-        
-        setAvatar(av, initLbl, u);
-        avStack.getChildren().addAll(ring, av, initLbl);
-
-        Circle statusBadge = new Circle(6);
-        statusBadge.setStyle("-fx-fill: " + (u.isEstEnLigne() ? "#22c55e" : "#cbd5e1") + "; -fx-stroke: white; -fx-stroke-width: 2;");
-        StackPane.setAlignment(statusBadge, javafx.geometry.Pos.BOTTOM_RIGHT);
-        avStack.getChildren().add(statusBadge);
-
-        VBox info = new VBox(2);
-        Label name = new Label(formatUserName(u));
-        name.setStyle("-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;");
-        Label rank = new Label(getRankName(u.getRankedPoints()).toUpperCase() + " • " + u.getRankedPoints() + " RP");
-        rank.setStyle("-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: " + accent + ";");
-        info.getChildren().addAll(name, rank);
-        
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        
-        Button viewBtn = new Button("View Profile");
-        viewBtn.setStyle("-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: 700; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;");
-        viewBtn.setOnAction(e -> showPublicProfile(u));
-        
-        card.getChildren().addAll(avStack, info, spacer, viewBtn);
-        card.setOnMouseClicked(e -> { if (e.getClickCount() == 2) showPublicProfile(u); });
-        
-        card.setOnContextMenuRequested(e -> createFriendContextMenu(u).show(card, e.getScreenX(), e.getScreenY()));
-        
-        return card;
-    }
-
     private ContextMenu createFriendContextMenu(User u) {
         ContextMenu menu = new ContextMenu();
         menu.getStyleClass().add("premium-context-menu");
@@ -2347,7 +1418,6 @@ public class MainController implements Initializable {
         removeItem.setOnAction(e -> {
             try {
                 serviceRelation.removeRelation(currentUser.getId(), u.getId());
-                loadFriends();
                 loadRightFriends();
             } catch (Exception ex) { ex.printStackTrace(); }
         });
@@ -2356,52 +1426,12 @@ public class MainController implements Initializable {
         blockItem.setOnAction(e -> {
             try {
                 serviceRelation.blockUser(currentUser.getId(), u.getId());
-                loadFriends();
                 loadRightFriends();
             } catch (Exception ex) { ex.printStackTrace(); }
         });
         
         menu.getItems().addAll(msgItem, profileItem, new SeparatorMenuItem(), removeItem, blockItem);
         return menu;
-    }
-
-    private void loadActivityFeed(List<Integer> friendIds) {
-        if (activityFeedContainer == null) return;
-        activityFeedContainer.getChildren().clear();
-        
-        if (friendIds.isEmpty()) {
-            Label empty = new Label("Add friends to see their recent achievements here.");
-            empty.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px; -fx-wrap-text: true;");
-            activityFeedContainer.getChildren().add(empty);
-            return;
-        }
-
-        // Mock activities (In a real app, this would come from a database table)
-        try {
-            for (int i = 0; i < Math.min(friendIds.size(), 5); i++) {
-                User u = serviceUser.getById(friendIds.get(i));
-                if (u == null) continue;
-                
-                VBox act = new VBox(4);
-                act.setPadding(new javafx.geometry.Insets(10));
-                act.setStyle("-fx-background-color: #f8fafc; -fx-background-radius: 12; -fx-border-color: #f1f5f9; -fx-border-radius: 12;");
-                
-                HBox hdr = new HBox(8);
-                hdr.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-                Circle tinyAv = new Circle(10);
-                tinyAv.setStyle("-fx-fill: #e2e8f0;");
-                Label n = new Label(u.getPrenom()); n.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #1e293b;");
-                Label t = new Label("2h ago"); t.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 10px;");
-                Region s = new Region(); HBox.setHgrow(s, Priority.ALWAYS);
-                hdr.getChildren().addAll(tinyAv, n, s, t);
-                
-                Label desc = new Label(getRandomActivity(u));
-                desc.setStyle("-fx-font-size: 11px; -fx-text-fill: #64748b; -fx-wrap-text: true;");
-                
-                act.getChildren().addAll(hdr, desc);
-                activityFeedContainer.getChildren().add(act);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void loadRightFriends() {
@@ -2507,9 +1537,6 @@ public class MainController implements Initializable {
 
             // Refresh friends status
             loadRightFriends();
-            if (pageFriends != null && pageFriends.isVisible()) {
-                loadFriends();
-            }
 
             List<Message> unread = serviceMessage.getUnreadMessages(currentUser.getId());
             
@@ -2646,18 +1673,61 @@ public class MainController implements Initializable {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private String getRandomActivity(User u) {
-        String[] activities = {
-            "Reached " + getRankName(u.getRankedPoints()) + " rank!",
-            "Completed a difficult quiz with 90% accuracy.",
-            "Earned the 'On Fire' achievement!",
-            "Just started a new course: Advanced Neural Networks.",
-            "Surpassed a new personal best in daily XP!"
-        };
-        return activities[new java.util.Random().nextInt(activities.length)];
+    private void loadProfileFriends() {
+        if (profileFriendsContainer == null || currentUser == null) return;
+        
+        try {
+            List<Integer> friendIds = serviceRelation.getFriendsIds(currentUser.getId());
+            profileFriendsContainer.getChildren().clear();
+            
+            if (friendIds.isEmpty()) {
+                Label empty = new Label("No connections yet. Find players in the Leaderboard!");
+                empty.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 13px; -fx-padding: 10;");
+                profileFriendsContainer.getChildren().add(empty);
+                return;
+            }
+            
+            for (int id : friendIds) {
+                User u = serviceUser.getById(id);
+                if (u == null) continue;
+                profileFriendsContainer.getChildren().add(buildFriendProfileCard(u));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
+    private HBox buildFriendProfileCard(User u) {
+        HBox card = new HBox(16);
+        card.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        card.setPadding(new javafx.geometry.Insets(12, 16, 12, 16));
+        card.setStyle("-fx-background-color: #f8fafc; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-radius: 12; -fx-cursor: hand;");
+        
+        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-radius: 12; -fx-cursor: hand;"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #f8fafc; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-radius: 12; -fx-cursor: hand;"));
+        card.setOnMouseClicked(e -> showPublicProfile(u));
 
+        StackPane avStack = new StackPane();
+        Circle av = new Circle(20);
+        av.setStyle("-fx-fill: #e2e8f0;");
+        Label initLbl = new Label("?");
+        initLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #94a3b8;");
+        setAvatar(av, initLbl, u);
+        avStack.getChildren().addAll(av, initLbl);
+
+        Circle statusBadge = new Circle(5);
+        statusBadge.setStyle("-fx-fill: " + (u.isEstEnLigne() ? "#22c55e" : "#cbd5e1") + "; -fx-stroke: white; -fx-stroke-width: 2;");
+        StackPane.setAlignment(statusBadge, javafx.geometry.Pos.BOTTOM_RIGHT);
+        avStack.getChildren().add(statusBadge);
+
+        VBox info = new VBox(2);
+        Label name = new Label(formatUserName(u));
+        name.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #1e293b;");
+        Label rank = new Label(getRankName(u.getRankedPoints()).toUpperCase());
+        rank.setStyle("-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: #94a3b8;");
+        info.getChildren().addAll(name, rank);
+
+        card.getChildren().addAll(avStack, info);
+        return card;
+    }
 
     private void setupWindowDragging() {
         final double[] xOffset = {0};

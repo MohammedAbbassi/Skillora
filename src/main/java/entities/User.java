@@ -20,7 +20,6 @@ public class User {
     private int xpPoints;
     private int rankedPoints;
     private int streakDays;
-    private int quizzesDone;
     private int certificatesCount;
     private boolean estEnLigne;
 
@@ -36,7 +35,6 @@ public class User {
         this.xpPoints = 0;
         this.rankedPoints = 0;
         this.streakDays = 0;
-        this.quizzesDone = 0;
         this.certificatesCount = 0;
         this.pays = "Tunisia";
     }
@@ -88,9 +86,6 @@ public class User {
 
     public int getStreakDays() { return streakDays; }
     public void setStreakDays(int streakDays) { this.streakDays = streakDays; }
-
-    public int getQuizzesDone() { return quizzesDone; }
-    public void setQuizzesDone(int quizzesDone) { this.quizzesDone = quizzesDone; }
 
     public int getCertificatesCount() { return certificatesCount; }
     public void setCertificatesCount(int certificatesCount) { this.certificatesCount = certificatesCount; }

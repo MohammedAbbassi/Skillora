@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceMessage {
-    private Connection cnx;
+    private final Connection cnx;
 
     public ServiceMessage() {
         cnx = MyDatabase.getInstance().getCnx();
@@ -20,20 +20,22 @@ public class ServiceMessage {
     private void autoMigrate() {
         try {
             DatabaseMetaData meta = cnx.getMetaData();
-            ResultSet rs = meta.getTables(null, null, "messages", null);
-            if (!rs.next()) {
-                Statement st = cnx.createStatement();
-                st.executeUpdate("CREATE TABLE messages (" +
-                        "id INT AUTO_INCREMENT PRIMARY KEY," +
-                        "expediteur_id BIGINT NOT NULL," +
-                        "destinataire_id BIGINT NOT NULL," +
-                        "contenu TEXT NOT NULL," +
-                        "date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                        "est_lu BOOLEAN DEFAULT FALSE," +
-                        "FOREIGN KEY (expediteur_id) REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE," +
-                        "FOREIGN KEY (destinataire_id) REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE" +
-                        ")");
-                System.out.println("Auto-migrated database: created messages table.");
+            try (ResultSet rs = meta.getTables(null, null, "messages", null)) {
+                if (!rs.next()) {
+                    try (Statement st = cnx.createStatement()) {
+                        st.executeUpdate("CREATE TABLE messages (" +
+                                "id INT AUTO_INCREMENT PRIMARY KEY," +
+                                "expediteur_id BIGINT NOT NULL," +
+                                "destinataire_id BIGINT NOT NULL," +
+                                "contenu TEXT NOT NULL," +
+                                "date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                                "est_lu BOOLEAN DEFAULT FALSE," +
+                                "FOREIGN KEY (expediteur_id) REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE," +
+                                "FOREIGN KEY (destinataire_id) REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE" +
+                                ")");
+                    }
+                    System.out.println("Auto-migrated database: created messages table.");
+                }
             }
         } catch (SQLException e) {
             System.err.println("Auto-migration for messages failed: " + e.getMessage());
@@ -61,16 +63,10 @@ public class ServiceMessage {
             pst.setInt(2, userId2);
             pst.setInt(3, userId2);
             pst.setInt(4, userId1);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Message m = new Message();
-                m.setId(rs.getInt("id"));
-                m.setExpediteurId(rs.getInt("expediteur_id"));
-                m.setDestinataireId(rs.getInt("destinataire_id"));
-                m.setContenu(rs.getString("contenu"));
-                m.setDateEnvoi(rs.getTimestamp("date_envoi"));
-                m.setEstLu(rs.getBoolean("est_lu"));
-                list.add(m);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapMessage(rs));
+                }
             }
         }
         return list;
@@ -86,21 +82,14 @@ public class ServiceMessage {
                 "ORDER BY date_envoi DESC";
         try (PreparedStatement pst = cnx.prepareStatement(req)) {
             pst.setInt(1, destinataireId);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Message m = new Message();
-                m.setId(rs.getInt("id"));
-                m.setExpediteurId(rs.getInt("expediteur_id"));
-                m.setDestinataireId(rs.getInt("destinataire_id"));
-                m.setContenu(rs.getString("contenu"));
-                m.setDateEnvoi(rs.getTimestamp("date_envoi"));
-                m.setEstLu(rs.getBoolean("est_lu"));
-                
-                String prenom = rs.getString("expediteur_prenom");
-                String nom = rs.getString("expediteur_nom");
-                m.setExpediteurNom(nom.isEmpty() ? prenom : prenom + " " + nom);
-                
-                list.add(m);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Message m = mapMessage(rs);
+                    String prenom = rs.getString("expediteur_prenom");
+                    String nom = rs.getString("expediteur_nom");
+                    m.setExpediteurNom(nom.isEmpty() ? prenom : prenom + " " + nom);
+                    list.add(m);
+                }
             }
         }
         return list;
@@ -120,5 +109,16 @@ public class ServiceMessage {
             pst.setInt(1, userId);
             pst.executeUpdate();
         }
+    }
+
+    private Message mapMessage(ResultSet rs) throws SQLException {
+        Message m = new Message();
+        m.setId(rs.getInt("id"));
+        m.setExpediteurId(rs.getInt("expediteur_id"));
+        m.setDestinataireId(rs.getInt("destinataire_id"));
+        m.setContenu(rs.getString("contenu"));
+        m.setDateEnvoi(rs.getTimestamp("date_envoi"));
+        m.setEstLu(rs.getBoolean("est_lu"));
+        return m;
     }
 }

@@ -47,7 +47,7 @@ public class AjouterUserController {
     @javafx.fxml.FXML
     public void allerVersList(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/AfficherUser.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/UserManagement.fxml"));
             tfNomUtilisateur.getScene().setRoot(root);
         } catch (IOException e) {
             System.out.println(e.getMessage());
