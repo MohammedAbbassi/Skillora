@@ -1,6 +1,7 @@
 package services;
 
 import entities.User;
+import interfaces.IService;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.MyDatabase;
 
