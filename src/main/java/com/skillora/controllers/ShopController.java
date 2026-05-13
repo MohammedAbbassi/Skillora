@@ -14,10 +14,15 @@ import com.skillora.Session;
 import com.skillora.model.CartLine;
 import com.skillora.model.OrderLine;
 import com.skillora.model.CatalogStats;
+import com.skillora.payment.PaymentController;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.image.Image;
@@ -27,6 +32,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.*;
@@ -461,28 +468,42 @@ public class ShopController {
             long uid = Session.getUser().getIdUtilisateur();
             var copy = List.copyOf(Session.getCart());
             double finalTotal = Session.getCart().stream().mapToDouble(CartLine::getSousTotal).sum() - currentDiscount;
+            
+            // 1. Créer la commande en attente
             long idCommande = orderService.placeOrder(uid, copy, "EN_ATTENTE", finalTotal);
             
-            // Récupérer les lignes de la commande pour la facture (converties en OrderLine)
-            List<OrderLine> orderLines = orderService.listLines(idCommande);
-            
-            // Enregistrer l'utilisation du coupon si applicable
+            // 2. Enregistrer l'utilisation du coupon si applicable
             if (appliedCoupon != null) {
                 couponService.registerUsage(appliedCoupon.getIdCoupon(), uid, idCommande);
             }
             
-            // Génération automatique de la facture PDF avec les OrderLines
-            invoiceService.generateAndOpenInvoice(idCommande, Session.getUser(), orderLines);
+            // 3. Ouvrir l'interface de paiement Stripe
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/shop/PaymentView.fxml"));
+            Parent root = loader.load();
+            PaymentController controller = loader.getController();
             
-            Session.getCart().clear();
-            appliedCoupon = null;
-            currentDiscount = 0;
-            couponField.clear();
-            couponStatusMsg.setVisible(false);
-            updateTotal();
-            shopMessage.setText("Commande enregistrée. La facture a été générée.");
+            controller.setData(idCommande, finalTotal, () -> {
+                // Action à effectuer après le succès du paiement
+                Platform.runLater(() -> {
+                    Session.getCart().clear();
+                    appliedCoupon = null;
+                    currentDiscount = 0;
+                    couponField.clear();
+                    couponStatusMsg.setVisible(false);
+                    updateTotal();
+                    shopMessage.setText("Paiement réussi ! Votre commande #" + idCommande + " est confirmée.");
+                });
+            });
+            
+            Stage stage = new Stage();
+            stage.setTitle("Paiement de la commande #" + idCommande);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+            
         } catch (Exception e) {
             shopMessage.setText("Erreur : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
