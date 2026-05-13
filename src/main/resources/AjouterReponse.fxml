@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+            styleClass="workflow-scroll"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjoutReponse">
+    <content>
+        <VBox spacing="22">
+            <padding>
+                <Insets top="34" right="40" bottom="34" left="40"/>
+            </padding>
+
+            <VBox spacing="6">
+                <Label text="Ajouter les reponses" styleClass="page-title"/>
+                <Label fx:id="typeQuestionLabel" text="Type :" styleClass="page-subtitle"/>
+                <Label fx:id="workflowMessageLabel" text="Completez les reponses, puis terminez cette question." styleClass="workflow-hint"/>
+            </VBox>
+
+            <VBox spacing="12" maxWidth="820" styleClass="review-card">
+                <Label text="Question actuelle" styleClass="section-title"/>
+                <Label fx:id="questionLabel" wrapText="true" styleClass="question-title"/>
+                <VBox spacing="8">
+                    <Label text="POINT" styleClass="field-label"/>
+                    <TextField fx:id="pointTextField" maxWidth="120"/>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="18" maxWidth="820" styleClass="form-card">
+                <VBox spacing="8">
+                    <Label text="Texte de la reponse" styleClass="field-label"/>
+                    <TextField fx:id="texteTextField" promptText="Saisir une option ou une reponse modele."/>
+                </VBox>
+                <CheckBox fx:id="correcteCheck" text="Marquer comme correcte"/>
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Button fx:id="ajouterReponseButton" minWidth="176" text="Ajouter reponse"
+                            onAction="#ajouterReponse" styleClass="secondary-button"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="terminerButton" minWidth="118" text="Terminer"
+                            onAction="#terminer" styleClass="primary-button"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10" maxWidth="820" styleClass="review-card">
+                <Label text="Reponses ajoutees" styleClass="section-title"/>
+                <ListView fx:id="reponsesListView" minHeight="240" prefHeight="320" maxHeight="320"
+                          styleClass="answers-list"/>
+            </VBox>
+
+            <VBox fx:id="completionPanel" spacing="14" maxWidth="820" styleClass="workflow-complete-card">
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <Button text="+" onAction="#ajouterNouvelleQuestion" styleClass="floating-add-button"/>
+                    <VBox spacing="3">
+                        <Label text="Question sauvegardee" styleClass="workflow-complete-title"/>
+                        <Label text="Ajoutez la prochaine question au meme quiz sans revenir au tableau de bord."
+                               wrapText="true" styleClass="workflow-complete-text"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Finaliser le quiz" onAction="#finaliserQuiz" styleClass="minimal-finish-button"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10" maxWidth="820" styleClass="timeline-card">
+                <Label text="Progression du quiz" styleClass="section-title"/>
+                <ListView fx:id="questionsTimelineListView" minHeight="150" prefHeight="230" maxHeight="230"
+                          styleClass="timeline-list"/>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

@@ -1,0 +1,11 @@
+Rapport anti-triche
+Utilisateur: amuse
+Quiz: iaagenerator
+Debut: 10/05/2026 01:39:36
+Fin: 10/05/2026 01:39:44
+Resume: 4 incident(s), dont 3 critique(s).
+
+10/05/2026 01:39:40 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+10/05/2026 01:39:41 | question 1 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+10/05/2026 01:39:43 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+10/05/2026 01:39:44 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.

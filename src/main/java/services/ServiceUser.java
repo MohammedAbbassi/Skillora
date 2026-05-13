@@ -58,8 +58,13 @@ public class ServiceUser implements IService<User> {
     public void add(User user) throws SQLException {
         checkConnection();
         String hashedPassword = BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt());
+<<<<<<< HEAD
         String req = "INSERT INTO utilisateurs(nom_utilisateur, email, mot_de_passe, prenom, nom, role, pays, est_actif, xp_points, ranked_points, streak_days, certificates_count, photo_profil) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+=======
+        String req = "INSERT INTO utilisateurs(nom_utilisateur, email, mot_de_passe, prenom, nom, role, pays, est_actif, xp_points, ranked_points, streak_days, certificates_count) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+>>>>>>> mouayed
         try (PreparedStatement pst = cnx.prepareStatement(req)) {
             pst.setString(1, user.getNomUtilisateur());
             pst.setString(2, user.getEmail());
@@ -73,7 +78,10 @@ public class ServiceUser implements IService<User> {
             pst.setInt(10, user.getRankedPoints());
             pst.setInt(11, user.getStreakDays());
             pst.setInt(12, user.getCertificatesCount());
+<<<<<<< HEAD
             pst.setString(13, user.getPhotoProfil());
+=======
+>>>>>>> mouayed
             pst.executeUpdate();
         }
         System.out.println("User added to database with BCrypt");
@@ -82,7 +90,11 @@ public class ServiceUser implements IService<User> {
     @Override
     public void update(User user) throws SQLException {
         checkConnection();
+<<<<<<< HEAD
         String req = "UPDATE utilisateurs SET nom_utilisateur=?, email=?, prenom=?, nom=?, role=?, pays=?, est_actif=?, xp_points=?, ranked_points=?, streak_days=?, certificates_count=?, photo_profil=? WHERE id_utilisateur=?";
+=======
+        String req = "UPDATE utilisateurs SET nom_utilisateur=?, email=?, prenom=?, nom=?, role=?, pays=?, est_actif=?, xp_points=?, ranked_points=?, streak_days=?, certificates_count=? WHERE id_utilisateur=?";
+>>>>>>> mouayed
         try (PreparedStatement pst = cnx.prepareStatement(req)) {
             pst.setString(1, user.getNomUtilisateur());
             pst.setString(2, user.getEmail());
@@ -95,13 +107,18 @@ public class ServiceUser implements IService<User> {
             pst.setInt(9, user.getRankedPoints());
             pst.setInt(10, user.getStreakDays());
             pst.setInt(11, user.getCertificatesCount());
+<<<<<<< HEAD
             pst.setString(12, user.getPhotoProfil());
             pst.setInt(13, user.getId());
+=======
+            pst.setInt(12, user.getId());
+>>>>>>> mouayed
             pst.executeUpdate();
         }
         System.out.println("User modifie");
     }
 
+<<<<<<< HEAD
     public void updateProfilePhotoByEmail(String email, String base64Photo) throws SQLException {
         checkConnection();
         String req = "UPDATE utilisateurs SET photo_profil = ? WHERE email = ?";
@@ -112,6 +129,8 @@ public class ServiceUser implements IService<User> {
         }
     }
 
+=======
+>>>>>>> mouayed
     public void updateRole(int userId, String newRole) throws SQLException {
         checkConnection();
         String req = "UPDATE utilisateurs SET role=? WHERE id_utilisateur=?";
@@ -246,6 +265,19 @@ public class ServiceUser implements IService<User> {
         return null;
     }
 
+<<<<<<< HEAD
+=======
+    public void updateProfilePhotoByEmail(String email, String base64Photo) throws SQLException {
+        checkConnection();
+        String req = "UPDATE utilisateurs SET photo_profil = ? WHERE email = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(req)) {
+            pst.setString(1, base64Photo);
+            pst.setString(2, email);
+            pst.executeUpdate();
+        }
+    }
+
+>>>>>>> mouayed
     public void createAdminIfNotExists() throws SQLException {
         checkConnection();
         String checkReq = "SELECT COUNT(*) FROM utilisateurs WHERE role = 'ADMIN'";

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.QuizManagementController">
+    <padding>
+        <Insets top="34" right="40" bottom="34" left="40"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="14">
+        <VBox spacing="6">
+            <Label text="QUIZ" styleClass="page-title"/>
+            <Label text="gerer vos quiz seulement" styleClass="page-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <VBox spacing="10" styleClass="action-toolbar">
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Button minWidth="142" text="Nouveau Quiz" onAction="#addQuiz" styleClass="primary-button"/>
+            <Button minWidth="118" text="Modifier" onAction="#editQuiz" styleClass="secondary-button"/>
+            <Button minWidth="118" text="Supprimer" onAction="#deleteQuiz" styleClass="danger-button"/>
+            <Button minWidth="168" text="Ajouter Question" onAction="#addQuestion" styleClass="secondary-button"/>
+            <Button minWidth="154" text="Generer avec IA" onAction="#generateWithAi" styleClass="ai-button"/>
+            <Button minWidth="128" text="Voir Détails" onAction="#passQuiz" styleClass="secondary-button"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <CheckBox fx:id="corrigeCheck" text="Corrige" styleClass="field-label"/>
+            <Button minWidth="142" text="Exporter le quiz" onAction="#exportQuizPdf" styleClass="secondary-button"/>
+        </HBox>
+    </VBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <TextField fx:id="searchTitreField" promptText="Rechercher par titre" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="niveauTriCombo" promptText="Tous les niveaux" prefWidth="180" />
+        <ComboBox fx:id="searchMatiereCombo" promptText="Matière" prefWidth="180" />
+        <ComboBox fx:id="dateTriCombo" promptText="Tri date" prefWidth="160" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="searchCountLabel" text="0 résultat(s)" styleClass="page-subtitle" />
+    </HBox>
+
+    <VBox spacing="12" styleClass="table-panel" VBox.vgrow="ALWAYS">
+        <Label text="Liste des quiz" styleClass="section-title"/>
+        <ListView fx:id="quizList" VBox.vgrow="ALWAYS" styleClass="cards-list"/>
+    </VBox>
+</VBox>
