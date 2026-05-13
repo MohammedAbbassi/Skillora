@@ -1,0 +1,16 @@
+Rapport anti-triche
+Utilisateur: amuse
+Quiz: jesser
+Debut: 12/05/2026 18:35:03
+Fin: 12/05/2026 18:35:56
+Resume: 9 incident(s), dont 4 critique(s).
+
+12/05/2026 18:35:06 | question 1 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+12/05/2026 18:35:06 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+12/05/2026 18:35:15 | question 1 | WARNING | CLIC_DROIT | Clic droit detecte pendant le quiz.
+12/05/2026 18:35:15 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+12/05/2026 18:35:15 | question 1 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+12/05/2026 18:35:35 | question 3 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+12/05/2026 18:35:35 | question 3 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+12/05/2026 18:35:55 | question 4 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+12/05/2026 18:35:55 | question 4 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
