@@ -1,7 +1,7 @@
 /* Futuristic Neon & Glassmorphism Design System */
 .root {
     -neon-blue: #0ea5e9;
-    -neon-purple: #a855f7;
+    -neon-purple: #60a5fa;
     -neon-cyan: #22d3ee;
     -glass-bg: rgba(255, 255, 255, 0.05);
     -glass-border: rgba(255, 255, 255, 0.1);
@@ -16,7 +16,7 @@
 }
 
 .neon-text-blue { -fx-text-fill: -neon-blue; -fx-effect: dropshadow(gaussian, #0ea5e9, 10, 0, 0, 0); }
-.neon-text-purple { -fx-text-fill: -neon-purple; -fx-effect: dropshadow(gaussian, #a855f7, 10, 0, 0, 0); }
+.neon-text-purple { -fx-text-fill: -neon-purple; -fx-effect: dropshadow(gaussian, #60a5fa, 10, 0, 0, 0); }
 .neon-text-cyan { -fx-text-fill: -neon-cyan; -fx-effect: dropshadow(gaussian, #22d3ee, 10, 0, 0, 0); }
 
 .neon-progress-bar .bar {
@@ -41,11 +41,11 @@
     -fx-font-family: "Lexend", "Segoe UI", "Open Sans", sans-serif;
     -fx-font-size: 14px;
     -fx-background-color: #F8FAFC;
-    -fx-accent: #4A90E2;
+    -fx-accent: #2563eb;
     
     /* Global Brand Variables */
-    -fx-primary: #4F46E5;
-    -fx-secondary: #7C3AED;
+    -fx-primary: #2563eb;
+    -fx-secondary: #3b82f6;
     -fx-accent-gold: #F59E0B;
     -fx-streak-orange: #EF4444;
 }
@@ -59,8 +59,8 @@
 .text-slate-500 { -fx-text-fill: #64748b; }
 .text-slate-700 { -fx-text-fill: #334155; }
 .text-slate-800 { -fx-text-fill: #1e293b; }
-.text-primary   { -fx-text-fill: #4F46E5; }
-.text-secondary { -fx-text-fill: #7C3AED; }
+.text-primary   { -fx-text-fill: #2563eb; }
+.text-secondary { -fx-text-fill: #3b82f6; }
 .text-gold      { -fx-text-fill: #F59E0B; }
 .text-white     { -fx-text-fill: #ffffff; }
 
@@ -87,16 +87,16 @@
 }
 
 .sidebar-icon-bg {
-    -fx-background-color: #4F46E5;
+    -fx-background-color: #2563eb;
     -fx-background-radius: 12px;
-    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.3), 10, 0, 0, 4);
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.3), 10, 0, 0, 4);
 }
 
 .battle-pass-widget {
-    -fx-background-color: linear-gradient(to bottom right, #4F46E5, #3730a3);
+    -fx-background-color: linear-gradient(to bottom right, #2563eb, #1e40af);
     -fx-background-radius: 16px;
     -fx-padding: 16px;
-    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.4), 15, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.4), 15, 0, 0, 5);
 }
 
 .battle-pass-widget .label {
@@ -105,7 +105,7 @@
 
 .battle-pass-btn {
     -fx-background-color: white;
-    -fx-text-fill: #4F46E5;
+    -fx-text-fill: #2563eb;
     -fx-background-radius: 8px;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
@@ -122,12 +122,12 @@
 }
 
 .nav-btn:hover {
-    -fx-background-color: rgba(79, 70, 229, 0.05);
+    -fx-background-color: rgba(37, 99, 235, 0.05);
 }
 
 .nav-btn.nav-active {
-    -fx-background-color: rgba(79, 70, 229, 0.12);
-    -fx-border-color: #4F46E5;
+    -fx-background-color: rgba(37, 99, 235, 0.12);
+    -fx-border-color: #2563eb;
     -fx-border-width: 0 0 0 4px;
     -fx-border-radius: 0;
     -fx-background-radius: 0 12px 12px 0;
@@ -144,7 +144,7 @@
 }
 
 .nav-btn.nav-active .label {
-    -fx-text-fill: #4F46E5;
+    -fx-text-fill: #2563eb;
     -fx-font-weight: 800;
 }
 
@@ -177,12 +177,12 @@
     -fx-padding: 40px;
     -fx-border-color: #e2e8f0;
     -fx-border-radius: 24px;
-    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.08), 20, 0, 0, 10);
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 20, 0, 0, 10);
 }
 
 .role-badge-premium {
-    -fx-background-color: rgba(79, 70, 229, 0.1);
-    -fx-text-fill: #4F46E5;
+    -fx-background-color: rgba(37, 99, 235, 0.1);
+    -fx-text-fill: #2563eb;
     -fx-padding: 6 16;
     -fx-background-radius: 999;
     -fx-font-weight: 900;
@@ -199,12 +199,12 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);
 }
 .stat-card-premium:hover {
-    -fx-border-color: #4F46E5;
+    -fx-border-color: #2563eb;
     -fx-translate-y: -4px;
 }
 
 .avatar-edit-btn {
-    -fx-background-color: #4F46E5;
+    -fx-background-color: #2563eb;
     -fx-text-fill: white;
     -fx-background-radius: 999;
     -fx-padding: 8;
@@ -303,7 +303,7 @@
 
 /* ── XP BARS ────────────────────────────────────────────────── */
 .xp-bar {
-    -fx-accent: #4F46E5;
+    -fx-accent: #2563eb;
     -fx-control-inner-background: #f1f5f9;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
@@ -352,7 +352,7 @@
     -fx-spacing: 8px;
     -fx-cursor: hand;
 }
-.collectible-card:hover { -fx-border-color: rgba(79, 70, 229, 0.3); }
+.collectible-card:hover { -fx-border-color: rgba(37, 99, 235, 0.3); }
 
 /* ── CONTENT LAYOUT ─────────────────────────────────────────── */
 .content-scroll {
@@ -405,10 +405,10 @@
     -fx-border-radius: 12;
     -fx-padding: 12 16;
 }
-.auth-input-premium:focused { -fx-border-color: #4F46E5; -fx-border-width: 2; }
+.auth-input-premium:focused { -fx-border-color: #2563eb; -fx-border-width: 2; }
 
 .auth-btn-premium {
-    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+    -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
     -fx-text-fill: white;
     -fx-font-weight: 900;
     -fx-background-radius: 12;
@@ -416,7 +416,7 @@
 }
 
 .primary-btn {
-    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+    -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: 800;
@@ -426,7 +426,7 @@
 }
 
 .primary-btn:hover {
-    -fx-background-color: linear-gradient(to right, #4338CA, #6D28D9);
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #2563eb);
 }
 
 .primary-btn:pressed {
@@ -470,7 +470,7 @@
 }
 
 .add-user-btn {
-    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+    -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
     -fx-text-fill: white;
     -fx-font-weight: 800;
     -fx-background-radius: 10px;
@@ -503,7 +503,7 @@
 }
 
 .row-avatar-circle {
-    -fx-fill: #4F46E5;
+    -fx-fill: #2563eb;
 }
 
 .row-avatar-init {
@@ -534,8 +534,8 @@
 }
 
 .badge-learner {
-    -fx-background-color: rgba(79, 70, 229, 0.12);
-    -fx-text-fill: #4338ca;
+    -fx-background-color: rgba(37, 99, 235, 0.12);
+    -fx-text-fill: #1d4ed8;
 }
 
 .row-rank {
@@ -561,15 +561,15 @@
 }
 
 .row-action-btn {
-    -fx-background-color: #eef2ff;
-    -fx-text-fill: #4338ca;
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #1d4ed8;
     -fx-background-radius: 8px;
     -fx-font-weight: 700;
     -fx-cursor: hand;
 }
 
 .row-action-btn:hover {
-    -fx-background-color: #e0e7ff;
+    -fx-background-color: #dbeafe;
 }
 
 .row-delete-btn {
@@ -590,7 +590,7 @@
 }
 
 .dialog-ok-btn {
-    -fx-background-color: #4F46E5;
+    -fx-background-color: #2563eb;
     -fx-text-fill: white;
     -fx-background-radius: 8px;
     -fx-font-weight: 800;
@@ -699,7 +699,7 @@
 
 .action-btn-secondary {
     -fx-background-color: #ffffff;
-    -fx-text-fill: #4F46E5;
+    -fx-text-fill: #2563eb;
     -fx-font-weight: bold;
     -fx-padding: 10 20;
     -fx-background-radius: 10;

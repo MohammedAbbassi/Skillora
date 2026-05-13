@@ -16,7 +16,7 @@ public class CountryService {
     private static final String API_URL = "https://restcountries.com/v3.1/all?fields=name,cca2,flags";
     private static CountryService instance;
     private final HttpClient httpClient;
-    private List<String> cachedCountryNames;
+    private volatile List<String> cachedCountryNames;
 
     private CountryService() {
         this.httpClient = HttpClient.newBuilder()
@@ -68,7 +68,14 @@ public class CountryService {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject countryObj = jsonArray.getJSONObject(i);
             JSONObject nameObj = countryObj.getJSONObject("name");
-            countries.add(nameObj.getString("common"));
+            String countryName = nameObj.getString("common");
+            String flag = countryObj.optString("flag", "");
+            
+            if (!flag.isEmpty()) {
+                countries.add(countryName + " " + flag);
+            } else {
+                countries.add(countryName);
+            }
         }
         Collections.sort(countries);
         return countries;

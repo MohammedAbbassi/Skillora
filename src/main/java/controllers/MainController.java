@@ -74,6 +74,10 @@ public class MainController implements Initializable {
     @FXML private Button navQuizzes;
     @FXML private Button navLeaderboard;
     @FXML private Button navProgress;
+    @FXML private Button navShop;
+    @FXML private Button navEvent;
+    @FXML private Button navReservation;
+    @FXML private Button navCommunity;
     @FXML private Button navProfile;
     @FXML private Button navAdmin;
     @FXML private Button navSettings;
@@ -84,6 +88,10 @@ public class MainController implements Initializable {
     @FXML private Label  lblQuizzes;
     @FXML private Label  lblLeaderboard;
     @FXML private Label  lblProgress;
+    @FXML private Label  lblShop;
+    @FXML private Label  lblEvent;
+    @FXML private Label  lblReservation;
+    @FXML private Label  lblCommunity;
     @FXML private Label  lblProfile;
     @FXML private Label  lblAdmin;
     @FXML private Label  lblSettings;
@@ -98,6 +106,10 @@ public class MainController implements Initializable {
     @FXML private ComboBox<String> sortMetricCombo;
     @FXML private ComboBox<String> countryFilterCombo;
     @FXML private VBox   pageProgress;
+    @FXML private VBox   pageShop;
+    @FXML private VBox   pageEvent;
+    @FXML private VBox   pageReservation;
+    @FXML private VBox   pageCommunity;
     @FXML private VBox   pageProfile;
     @FXML private VBox   pageAdmin;
     @FXML private VBox   pageSettings;
@@ -128,6 +140,12 @@ public class MainController implements Initializable {
     @FXML private Label  profileRoleBadge;
     @FXML private Label  statStreak;
     @FXML private Label  statXP;
+
+    @FXML private TextField profileFirstNameField;
+    @FXML private TextField profileLastNameField;
+    @FXML private TextField profileUsernameField;
+    @FXML private TextField profileEmailField;
+    @FXML private ComboBox<String> profileCountryCombo;
 
     @FXML private VBox profileFriendsContainer;
     @FXML private TextField adminSearchField;
@@ -182,6 +200,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navQuizzes, "navQuizzes");
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
         addIfNotNull(allNavBtns, navProgress, "navProgress");
+        addIfNotNull(allNavBtns, navShop, "navShop");
+        addIfNotNull(allNavBtns, navEvent, "navEvent");
+        addIfNotNull(allNavBtns, navReservation, "navReservation");
+        addIfNotNull(allNavBtns, navCommunity, "navCommunity");
         addIfNotNull(allNavBtns, navAdmin, "navAdmin");
         addIfNotNull(allNavBtns, navSettings, "navSettings");
         addIfNotNull(allNavBtns, navLogout, "navLogout");
@@ -192,6 +214,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizzes, "lblQuizzes");
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
         addIfNotNull(allNavLabels, lblProgress, "lblProgress");
+        addIfNotNull(allNavLabels, lblShop, "lblShop");
+        addIfNotNull(allNavLabels, lblEvent, "lblEvent");
+        addIfNotNull(allNavLabels, lblReservation, "lblReservation");
+        addIfNotNull(allNavLabels, lblCommunity, "lblCommunity");
         addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
         addIfNotNull(allNavLabels, lblLogout, "lblLogout");
@@ -201,6 +227,10 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pageQuizzes, "pageQuizzes");
         addIfNotNull(allPages, pageLeaderboard, "pageLeaderboard");
         addIfNotNull(allPages, pageProgress, "pageProgress");
+        addIfNotNull(allPages, pageShop, "pageShop");
+        addIfNotNull(allPages, pageEvent, "pageEvent");
+        addIfNotNull(allPages, pageReservation, "pageReservation");
+        addIfNotNull(allPages, pageCommunity, "pageCommunity");
         addIfNotNull(allPages, pageProfile, "pageProfile");
         addIfNotNull(allPages, pageAdmin, "pageAdmin");
         addIfNotNull(allPages, pageSettings, "pageSettings");
@@ -211,6 +241,7 @@ public class MainController implements Initializable {
         populateFilters();
         loadUserTable();
         setupSearch();
+        loadProfileCountries();
         try {
             initProgressCharts();
         } catch (Exception e) {
@@ -508,12 +539,95 @@ public class MainController implements Initializable {
         loadLeaderboard();
     }
     @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
-    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); loadProfileFriends(); }
+    @FXML private void onNavShop()      { navigateTo(pageShop,      navShop);      }
+    @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent);     }
+    @FXML private void onNavReservation() { navigateTo(pageReservation, navReservation); }
+    @FXML private void onNavCommunity() { navigateTo(pageCommunity, navCommunity); }
+    @FXML private void onGoProfile()   { 
+        navigateTo(pageProfile,  navProfile); 
+        closeDropdown(); 
+        loadProfileFriends(); 
+        populateProfileFields();
+    }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
 
-
+    @FXML
+    private void onSaveProfile() {
+        if (currentUser == null) return;
+        
+        currentUser.setPrenom(profileFirstNameField.getText().trim());
+        currentUser.setNom(profileLastNameField.getText().trim());
+        currentUser.setNomUtilisateur(profileUsernameField.getText().trim());
+        
+        String fullCountry = profileCountryCombo.getValue();
+        if (fullCountry != null && fullCountry.contains(" ")) {
+            currentUser.setPays(fullCountry.substring(0, fullCountry.lastIndexOf(" ")).trim());
+        } else {
+            currentUser.setPays(fullCountry);
+        }
+        
+        try {
+            serviceUser.update(currentUser);
+            utils.Session.setUser(currentUser);
+            
+            // Update other UI parts
+            if (prefs != null) {
+                prefs.setUserName(formatUserName(currentUser));
+                applyPreferences(prefs);
+            }
+            
+            showStyledAlert(Alert.AlertType.INFORMATION, "Profile Updated", "Your profile has been updated successfully!");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            showStyledAlert(Alert.AlertType.ERROR, "Update Failed", "Could not update profile: " + e.getMessage());
+        }
+    }
     
+    @FXML
+    private void onResetProfile() {
+        populateProfileFields();
+    }
+    
+    private void populateProfileFields() {
+        if (currentUser == null) return;
+        
+        profileFirstNameField.setText(currentUser.getPrenom() != null ? currentUser.getPrenom() : "");
+        profileLastNameField.setText(currentUser.getNom() != null ? currentUser.getNom() : "");
+        profileUsernameField.setText(currentUser.getNomUtilisateur() != null ? currentUser.getNomUtilisateur() : "");
+        profileEmailField.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "");
+        
+        if (profileCountryCombo.getItems().isEmpty()) {
+            loadProfileCountries();
+        } else {
+            String userCountry = currentUser.getPays();
+            if (userCountry != null) {
+                String match = profileCountryCombo.getItems().stream()
+                        .filter(c -> c.startsWith(userCountry))
+                        .findFirst()
+                        .orElse(userCountry);
+                profileCountryCombo.setValue(match);
+            }
+        }
+    }
+    
+    private void loadProfileCountries() {
+        if (profileCountryCombo == null) return;
+        utils.CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
+            javafx.application.Platform.runLater(() -> {
+                profileCountryCombo.getItems().setAll(countries);
+                if (currentUser != null && currentUser.getPays() != null) {
+                    String userCountry = currentUser.getPays();
+                    String match = countries.stream()
+                            .filter(c -> c.startsWith(userCountry))
+                            .findFirst()
+                            .orElse(userCountry);
+                    profileCountryCombo.setValue(match);
+                }
+            });
+        });
+    }
 
     @FXML
     private void onOpenPreferences() {
@@ -576,6 +690,7 @@ public class MainController implements Initializable {
     private void onProfileClick() {
         navigateTo(pageProfile, null);
         loadProfileFriends();
+        populateProfileFields();
     }
 
     private void closeDropdown() {
@@ -1008,28 +1123,25 @@ public class MainController implements Initializable {
         countryFilterCombo.setValue("All Countries");
         countryFilterCombo.setOnAction(e -> loadLeaderboard());
         
-        // Populate countries from users later
+        // Populate countries with flags
+        utils.CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
+            javafx.application.Platform.runLater(() -> {
+                countryFilterCombo.getItems().addAll(countries);
+            });
+        });
     }
 
     private void loadLeaderboard() {
         if (leaderboardContainer == null) return;
         try {
             List<User> users = serviceUser.getAll();
-            
-            // Populate country filter if empty (except "All Countries")
-            if (countryFilterCombo.getItems().size() <= 1) {
-                users.stream()
-                     .map(User::getPays)
-                     .filter(p -> p != null && !p.isEmpty())
-                     .distinct()
-                     .sorted()
-                     .forEach(p -> countryFilterCombo.getItems().add(p));
-            }
-            
+          
             // Filter by country
             String selectedCountry = countryFilterCombo.getValue();
             if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
-                users.removeIf(u -> !selectedCountry.equals(u.getPays()));
+                // Since selectedCountry now has a flag (e.g. "Morocco 🇲🇦"), 
+                // we check if the user's country is the prefix
+                users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
             }
             
             // Sort by metric
@@ -1156,7 +1268,7 @@ public class MainController implements Initializable {
         // ── HERO ──────────────────────────────────────────────────────────
         StackPane hero = new StackPane();
         hero.setPrefHeight(180);
-        hero.setStyle("-fx-background-color: linear-gradient(to bottom right, #4F46E5, #7C3AED);");
+        hero.setStyle("-fx-background-color: linear-gradient(to bottom right, #2563eb, #3b82f6);");
 
         HBox heroContent = new HBox(28);
         heroContent.setAlignment(javafx.geometry.Pos.BOTTOM_LEFT);
@@ -1168,7 +1280,7 @@ public class MainController implements Initializable {
         ring.setEffect(new DropShadow(16, javafx.scene.paint.Color.web(accent, 0.5)));
         Circle av = new Circle(46); av.setStyle("-fx-fill: #ffffff;");
         Label initL = new Label(formatUserName(user).substring(0,1).toUpperCase());
-        initL.setStyle("-fx-font-size: 30px; -fx-font-weight: 900; -fx-text-fill: #4F46E5;");
+        initL.setStyle("-fx-font-size: 30px; -fx-font-weight: 900; -fx-text-fill: #2563eb;");
         if (user.getPhotoProfil() != null && !user.getPhotoProfil().isEmpty()) {
             try { byte[] b = Base64.getDecoder().decode(user.getPhotoProfil());
                 av.setFill(new ImagePattern(new Image(new ByteArrayInputStream(b))));
@@ -1191,7 +1303,7 @@ public class MainController implements Initializable {
         Region sp2 = new Region(); HBox.setHgrow(sp2, Priority.ALWAYS);
         Button addBtn = new Button(); addBtn.setPrefWidth(140);
         Button blockBtn = new Button(); blockBtn.setPrefWidth(110);
-        styleSocialBtn(addBtn, "+  Add Friend", "#ffffff", "#4F46E5");
+        styleSocialBtn(addBtn, "+  Add Friend", "#ffffff", "#2563eb");
         styleSocialBtn(blockBtn, "Block", "transparent", "#ffffff");
         updateSocialButtons(user, addBtn, blockBtn);
         HBox socialRow = new HBox(10, sp2, addBtn, blockBtn);
@@ -1307,7 +1419,7 @@ public class MainController implements Initializable {
                 addBtn.setOnAction(e -> handleRelationAction(target, "REMOVE", addBtn, blockBtn));
             } else {
                 String ac = getRankAccent(target.getRankedPoints());
-                styleSocialBtn(addBtn, "+  Add Friend", "#4F46E5", "#ffffff");
+                styleSocialBtn(addBtn, "+  Add Friend", "#2563eb", "#ffffff");
                 addBtn.setOnAction(e -> handleRelationAction(target, "FRIEND", addBtn, blockBtn));
             }
             if ("BLOCKED".equals(status)) {

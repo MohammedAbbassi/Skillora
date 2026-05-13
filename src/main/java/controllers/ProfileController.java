@@ -49,7 +49,13 @@ public class ProfileController {
             Platform.runLater(() -> {
                 countryComboBox.getItems().setAll(countries);
                 if (user != null && user.getPays() != null) {
-                    countryComboBox.setValue(user.getPays());
+                    // Try to find the matching entry with flag
+                    String userCountry = user.getPays();
+                    String match = countries.stream()
+                            .filter(c -> c.startsWith(userCountry))
+                            .findFirst()
+                            .orElse(userCountry);
+                    countryComboBox.setValue(match);
                 }
             });
         });
@@ -65,7 +71,14 @@ public class ProfileController {
         user.setPrenom(firstNameField.getText().trim());
         user.setNom(lastNameField.getText().trim());
         user.setNomUtilisateur(usernameField.getText().trim());
-        user.setPays(countryComboBox.getValue());
+        
+        // Save country without the flag emoji
+        String fullCountry = countryComboBox.getValue();
+        if (fullCountry != null && fullCountry.contains(" ")) {
+            user.setPays(fullCountry.substring(0, fullCountry.lastIndexOf(" ")).trim());
+        } else {
+            user.setPays(fullCountry);
+        }
 
         try {
             serviceUser.update(user);

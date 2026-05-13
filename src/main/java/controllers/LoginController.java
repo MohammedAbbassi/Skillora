@@ -408,7 +408,15 @@ public class LoginController implements Initializable {
                     String[] nameParts = name.split(" ", 2);
                     user.setPrenom(nameParts.length > 0 ? nameParts[0] : "");
                     user.setNom(nameParts.length > 1 ? nameParts[1] : "");
-                    user.setPays(countryComboBox.getValue());
+
+                    // Save country without the flag emoji
+                    String fullCountry = countryComboBox.getValue();
+                    if (fullCountry != null && fullCountry.contains(" ")) {
+                        user.setPays(fullCountry.substring(0, fullCountry.lastIndexOf(" ")).trim());
+                    } else {
+                        user.setPays(fullCountry);
+                    }
+
                     user.setRole("ETUDIANT");
                     serviceUser.add(user);
                     user = serviceUser.login(email, pass);
