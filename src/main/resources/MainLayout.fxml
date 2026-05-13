@@ -15,7 +15,7 @@
 
 <StackPane fx:id="rootPane" prefHeight="800.0" prefWidth="1280.0" styleClass="app-root" stylesheets="/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
     <children>
-        <BorderPane styleClass="main-shell">
+        <BorderPane fx:id="mainShell" styleClass="main-shell">
             <top>
                 <StackPane fx:id="topStack" prefHeight="80.0">
                     <children>
@@ -225,25 +225,25 @@
                                 <!-- ACTIVE QUEST CARD -->
                                 <VBox styleClass="game-card" spacing="24.0">
                                     <HBox alignment="CENTER_LEFT">
-                                        <Label styleClass="text-3xl font-black text-slate-800" text="Advanced JavaFX Architecture" />
+                                        <Label styleClass="quest-card-title" text="Advanced JavaFX Architecture" />
                                         <Region HBox.hgrow="ALWAYS" />
                                         <HBox style="-fx-background-color: #fef3c7; -fx-padding: 6 12; -fx-background-radius: 20px;" alignment="CENTER" spacing="6">
                                             <Label text="&#x2728;" styleClass="text-gold" />
                                             <Label text="ACTIVE QUEST" styleClass="text-xs font-black text-gold" />
                                         </HBox>
                                     </HBox>
-                                    <Label styleClass="text-sm text-slate-500" text="Conquer the final module of Layout Managers to unlock the 'UI Architect' badge and earn massive XP." wrapText="true"/>
+                                    <Label styleClass="quest-card-copy" text="Conquer the final module of Layout Managers to unlock the 'UI Architect' badge and earn massive XP." wrapText="true"/>
                                     
                                     <HBox spacing="16.0">
                                         <VBox style="-fx-background-color: #f8fafc; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
-                                            <Label text="REWARD UPON COMPLETION" styleClass="text-xs font-bold text-slate-400" />
+                                            <Label text="REWARD UPON COMPLETION" styleClass="section-kicker" />
                                             <HBox alignment="CENTER_LEFT" spacing="8.0">
                                                 <Label text="&#x1f48e;" styleClass="text-gold text-xl" />
                                                 <Label text="+500 XP" styleClass="font-black text-slate-700 text-xl" />
                                             </HBox>
                                         </VBox>
                                         <VBox style="-fx-background-color: #f8fafc; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
-                                            <Label text="UNLOCKABLES" styleClass="text-xs font-bold text-slate-400" />
+                                            <Label text="UNLOCKABLES" styleClass="section-kicker" />
                                             <HBox alignment="CENTER_LEFT" spacing="8.0">
                                                 <Label text="&#x1f396;" styleClass="text-secondary text-xl" />
                                                 <Label text="Expert Badge" styleClass="font-black text-slate-700 text-xl" />
@@ -253,7 +253,7 @@
                                     
                                     <VBox spacing="8.0">
                                         <HBox alignment="CENTER_LEFT">
-                                            <Label text="QUEST PROGRESS" styleClass="text-xs font-black text-primary" />
+                                            <Label text="QUEST PROGRESS" styleClass="section-kicker text-primary" />
                                             <Region HBox.hgrow="ALWAYS" />
                                             <Label text="68%" styleClass="text-sm font-black text-primary" />
                                         </HBox>
@@ -266,7 +266,7 @@
                                 <!-- UNLOCKED COLLECTIBLES -->
                                 <VBox spacing="16.0">
                                     <HBox alignment="CENTER_LEFT">
-                                        <Label styleClass="text-xl font-black text-slate-800" text="&#x1f396; Unlocked Collectibles" />
+                                        <Label styleClass="panel-title" text="&#x1f396; Unlocked Collectibles" />
                                         <Region HBox.hgrow="ALWAYS" />
                                         <Label styleClass="text-sm font-bold text-primary" text="Gallery View" style="-fx-cursor: hand;" />
                                     </HBox>
@@ -311,7 +311,7 @@
                             <VBox spacing="32.0" prefWidth="300.0">
                                 <!-- Daily Loot -->
                                 <VBox spacing="16.0">
-                                    <Label styleClass="text-lg font-black text-slate-800" text="Daily Loot" />
+                                    <Label styleClass="panel-title" text="Daily Loot" />
                                     <VBox styleClass="widget-card" spacing="16.0">
                                         <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-cursor: hand;">
                                             <StackPane style="-fx-background-color: #2563eb; -fx-background-radius: 8px;" prefWidth="40" prefHeight="40">

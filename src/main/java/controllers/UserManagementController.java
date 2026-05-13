@@ -1,16 +1,19 @@
 package controllers;
 
 import entities.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import services.ServiceUser;
 import utils.CountryService;
 
@@ -21,103 +24,25 @@ import java.util.ResourceBundle;
 
 public class UserManagementController implements Initializable {
 
-    @FXML private TableView<User> userTable;
-    @FXML private TableColumn<User, Integer> idCol;
-    @FXML private TableColumn<User, String> usernameCol;
-    @FXML private TableColumn<User, String> emailCol;
-    @FXML private TableColumn<User, String> firstNameCol;
-    @FXML private TableColumn<User, String> lastNameCol;
-    @FXML private TableColumn<User, String> roleCol;
-    @FXML private TableColumn<User, Boolean> statusCol;
-    @FXML private TableColumn<User, Void> actionsCol;
-
+    @FXML private VBox userCardsContainer;
     @FXML private TextField searchField;
     @FXML private Label totalUsersLabel;
 
     private final ServiceUser serviceUser = new ServiceUser();
     private ObservableList<User> userList = FXCollections.observableArrayList();
+    private FilteredList<User> filteredData;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setupTable();
         loadUsers();
         setupSearch();
-    }
-
-    private void setupTable() {
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        usernameCol.setCellValueFactory(new PropertyValueFactory<>("nomUtilisateur"));
-        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("prenom"));
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        roleCol.setCellValueFactory(new PropertyValueFactory<>("role"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("estActif"));
-
-        // Custom cell for Status (Active/Inactive)
-        statusCol.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Boolean item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(item ? "Active" : "Inactive");
-                    setTextFill(item ? javafx.scene.paint.Color.GREEN : javafx.scene.paint.Color.RED);
-                    setStyle("-fx-font-weight: bold;");
-                }
-            }
-        });
-
-        setupActionsColumn();
-    }
-
-    private void setupActionsColumn() {
-        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
-            @Override
-            public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                return new TableCell<>() {
-                    private final Button editBtn = new Button("Role");
-                    private final Button toggleBtn = new Button("Status");
-                    private final Button deleteBtn = new Button("Delete");
-                    private final HBox pane = new HBox(5, editBtn, toggleBtn, deleteBtn);
-
-                    {
-                        editBtn.getStyleClass().add("action-btn-small");
-                        toggleBtn.getStyleClass().add("action-btn-small");
-                        deleteBtn.getStyleClass().addAll("action-btn-small", "delete-btn");
-
-                        editBtn.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            handleEditRole(user);
-                        });
-
-                        toggleBtn.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            handleToggleStatus(user);
-                        });
-
-                        deleteBtn.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            handleDelete(user);
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        setGraphic(empty ? null : pane);
-                    }
-                };
-            }
-        };
-        actionsCol.setCellFactory(cellFactory);
     }
 
     private void loadUsers() {
         try {
             userList.setAll(serviceUser.getAll());
             totalUsersLabel.setText("Total Users: " + userList.size());
+            renderUserCards();
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Database Error", "Could not load users.");
@@ -125,7 +50,7 @@ public class UserManagementController implements Initializable {
     }
 
     private void setupSearch() {
-        FilteredList<User> filteredData = new FilteredList<>(userList, p -> true);
+        filteredData = new FilteredList<>(userList, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(user -> {
                 if (newValue == null || newValue.isEmpty()) return true;
@@ -137,8 +62,104 @@ public class UserManagementController implements Initializable {
                 if (user.getNom() != null && user.getNom().toLowerCase().contains(lowerCaseFilter)) return true;
                 return false;
             });
+            renderUserCards();
         });
-        userTable.setItems(filteredData);
+    }
+
+    private void renderUserCards() {
+        userCardsContainer.getChildren().clear();
+        for (User user : filteredData) {
+            userCardsContainer.getChildren().add(createUserCard(user));
+        }
+    }
+
+    private HBox createUserCard(User user) {
+        HBox card = new HBox(15);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(10, 15, 10, 15));
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+
+        VBox userInfo = new VBox(5);
+        Label nameLabel = new Label((user.getPrenom() != null ? user.getPrenom() : "") + " " + (user.getNom() != null ? user.getNom() : ""));
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        Label emailLabel = new Label(user.getEmail() + " (@" + user.getNomUtilisateur() + ")");
+        emailLabel.setStyle("-fx-text-fill: #64748b; -fx-font-size: 12px;");
+        userInfo.getChildren().addAll(nameLabel, emailLabel);
+        HBox.setHgrow(userInfo, Priority.ALWAYS);
+
+        VBox roleInfo = new VBox(5);
+        Label roleLabel = new Label(user.getRole());
+        roleLabel.setStyle("-fx-padding: 2 8; -fx-background-radius: 4; -fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: bold;");
+        Label statusLabel = new Label(user.isEstActif() ? "Active" : "Inactive");
+        statusLabel.setStyle("-fx-text-fill: " + (user.isEstActif() ? "#16a34a" : "#dc2626") + "; -fx-font-size: 11px; -fx-font-weight: bold;");
+        roleInfo.getChildren().addAll(roleLabel, statusLabel);
+        roleInfo.setAlignment(Pos.CENTER);
+        roleInfo.setMinWidth(100);
+
+        HBox actions = new HBox(8);
+        actions.setAlignment(Pos.CENTER_RIGHT);
+        Button editBtn = new Button("Role");
+        Button toggleBtn = new Button("Status");
+        Button deleteBtn = new Button("Delete");
+        
+        editBtn.getStyleClass().add("action-btn-small");
+        toggleBtn.getStyleClass().add("action-btn-small");
+        deleteBtn.getStyleClass().addAll("action-btn-small", "delete-btn");
+
+        editBtn.setOnAction(e -> handleEditRole(user));
+        toggleBtn.setOnAction(e -> handleToggleStatus(user));
+        deleteBtn.setOnAction(e -> handleDelete(user));
+
+        actions.getChildren().addAll(editBtn, toggleBtn, deleteBtn);
+
+        card.getChildren().addAll(userInfo, roleInfo, actions);
+        return card;
+    }
+
+    private void handleEditRole(User user) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(user.getRole(), "ETUDIANT", "INSTRUCTEUR", "ADMIN");
+        dialog.setTitle("Change Role");
+        dialog.setHeaderText("Update role for " + user.getNomUtilisateur());
+        dialog.setContentText("Select new role:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newRole -> {
+            try {
+                serviceUser.updateRole(user.getId(), newRole);
+                loadUsers();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Could not update role.");
+            }
+        });
+    }
+
+    private void handleToggleStatus(User user) {
+        try {
+            serviceUser.toggleStatus(user.getId(), !user.isEstActif());
+            loadUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not toggle status.");
+        }
+    }
+
+    private void handleDelete(User user) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete User: " + user.getNomUtilisateur());
+        alert.setContentText("Are you sure you want to delete this user?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                serviceUser.delete(user);
+                loadUsers();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Could not delete user.");
+            }
+        }
     }
 
     @FXML
@@ -177,7 +198,7 @@ public class UserManagementController implements Initializable {
         ComboBox<String> countryBox = new ComboBox<>();
         countryBox.setPromptText("Select country");
         CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
-            javafx.application.Platform.runLater(() -> countryBox.getItems().setAll(countries));
+            Platform.runLater(() -> countryBox.getItems().setAll(countries));
         });
 
         GridPane grid = new GridPane();
@@ -248,61 +269,16 @@ public class UserManagementController implements Initializable {
             loadUsers();
             showAlert(Alert.AlertType.INFORMATION, "Success", "User added successfully.");
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Add Failed", e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not add user.");
         }
-    }
-
-    private void handleEditRole(User user) {
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(user.getRole(), "ETUDIANT", "INSTRUCTEUR", "ADMIN");
-        dialog.setTitle("Change User Role");
-        dialog.setHeaderText("Change role for: " + user.getNomUtilisateur());
-        dialog.setContentText("Select new role:");
-
-        dialog.showAndWait().ifPresent(newRole -> {
-            try {
-                serviceUser.updateRole(user.getId(), newRole);
-                user.setRole(newRole);
-                userTable.refresh();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Update Failed", e.getMessage());
-            }
-        });
-    }
-
-    private void handleToggleStatus(User user) {
-        boolean newStatus = !user.isEstActif();
-        try {
-            serviceUser.toggleStatus(user.getId(), newStatus);
-            user.setEstActif(newStatus);
-            userTable.refresh();
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Update Failed", e.getMessage());
-        }
-    }
-
-    private void handleDelete(User user) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Delete user: " + user.getNomUtilisateur());
-        alert.setContentText("Are you sure? This action cannot be undone.");
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                try {
-                    serviceUser.delete(user);
-                    userList.remove(user);
-                    totalUsersLabel.setText("Total Users: " + userList.size());
-                } catch (SQLException e) {
-                    showAlert(Alert.AlertType.ERROR, "Delete Failed", e.getMessage());
-                }
-            }
-        });
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(content);
-        alert.show();
+        alert.showAndWait();
     }
 }
