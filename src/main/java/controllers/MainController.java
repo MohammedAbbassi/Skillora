@@ -401,7 +401,7 @@ public class MainController implements Initializable {
         setGreeting();
 
         boolean isAdmin = "ADMIN".equalsIgnoreCase(p.getUserRole());
-        boolean isInstructor = "INSTRUCTEUR".equalsIgnoreCase(p.getUserRole());
+        boolean isInstructor = isInstructorRole(p.getUserRole());
         updateRoleAwareNavigation(isAdmin, isInstructor);
 
         SessionManager.setRole(isAdmin
@@ -459,10 +459,25 @@ public class MainController implements Initializable {
                     : isInstructor ? "Instructor Dashboard" : "Player Dashboard");
         }
 
+        if (lblShop != null) {
+            lblShop.setText(isInstructor ? "Manage Shop" : "Shop");
+        }
+
         setVisibleManaged(navShop, !isAdmin);
         setVisibleManaged(navAdminShop, isAdmin);
         setVisibleManaged(navAdminEvents, isAdmin);
         setVisibleManaged(navAdminReservations, isAdmin);
+    }
+
+    private boolean isInstructorRole(String role) {
+        if (role == null) {
+            return false;
+        }
+        String normalizedRole = role.trim();
+        return "INSTRUCTEUR".equalsIgnoreCase(normalizedRole)
+                || "INSTRUCTOR".equalsIgnoreCase(normalizedRole)
+                || "ENSEIGNANT".equalsIgnoreCase(normalizedRole)
+                || "TEACHER".equalsIgnoreCase(normalizedRole);
     }
 
     private void setVisibleManaged(Node node, boolean visible) {
@@ -734,8 +749,12 @@ public class MainController implements Initializable {
         if (role == null) {
             return com.skillora.shop.entities.Role.ETUDIANT;
         }
+        String normalizedRole = role.trim().toUpperCase();
+        if ("INSTRUCTOR".equals(normalizedRole) || "ENSEIGNANT".equals(normalizedRole) || "TEACHER".equals(normalizedRole)) {
+            return com.skillora.shop.entities.Role.INSTRUCTEUR;
+        }
         try {
-            return com.skillora.shop.entities.Role.valueOf(role.trim().toUpperCase());
+            return com.skillora.shop.entities.Role.valueOf(normalizedRole);
         } catch (IllegalArgumentException e) {
             return com.skillora.shop.entities.Role.ETUDIANT;
         }

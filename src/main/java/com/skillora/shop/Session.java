@@ -33,7 +33,7 @@ public final class Session {
     }
 
     public static void addOrMergeToCart(Produit p, int quantite) {
-        if (currentUser != null && currentUser.getRole() == Role.ADMIN) {
+        if (isShopManager()) {
             return;
         }
         if (quantite <= 0) {
@@ -58,5 +58,13 @@ public final class Session {
 
     public static boolean isAdmin() {
         return currentUser != null && currentUser.getRole() == Role.ADMIN;
+    }
+
+    public static boolean isInstructor() {
+        return currentUser != null && currentUser.getRole() == Role.INSTRUCTEUR;
+    }
+
+    public static boolean isShopManager() {
+        return isAdmin() || isInstructor();
     }
 }

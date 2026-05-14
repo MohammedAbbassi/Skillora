@@ -90,8 +90,8 @@ public class ShopController {
 
     @FXML
     private void initialize() {
-        if (Session.isAdmin()) {
-            shopMessage.setText("Compte administrateur : l’achat en ligne n’est pas disponible. Gérez les articles dans l’onglet « Produits ».");
+        if (Session.isShopManager()) {
+            shopMessage.setText("Compte gestionnaire : l'achat en ligne n'est pas disponible. Gerez les articles dans l'onglet Produits.");
         }
 
         filterTypeCombo.setOnAction(e -> rebuildProductCards());
@@ -121,7 +121,7 @@ public class ShopController {
 
                 removeBtn.setOnAction(e -> {
                     CartLine line = getItem();
-                    if (!Session.isAdmin() && line != null) {
+                    if (!Session.isShopManager() && line != null) {
                         Session.removeLine(line);
                         updateTotal();
                     }
@@ -129,7 +129,7 @@ public class ShopController {
 
                 qSpinner.valueProperty().addListener((obs, oldV, newV) -> {
                     CartLine line = getItem();
-                    if (Session.isAdmin() || line == null || newV == null) {
+                    if (Session.isShopManager() || line == null || newV == null) {
                         return;
                     }
                     line.setQuantite(newV);
@@ -149,8 +149,8 @@ public class ShopController {
                 name.setText(item.getNom());
                 subtotal.setText(MoneyFormat.amount(item.getSousTotal()));
                 qSpinner.getValueFactory().setValue(Math.max(1, item.getQuantite()));
-                qSpinner.setDisable(Session.isAdmin());
-                removeBtn.setDisable(Session.isAdmin());
+                qSpinner.setDisable(Session.isShopManager());
+                removeBtn.setDisable(Session.isShopManager());
                 setGraphic(root);
             }
         });
@@ -280,8 +280,8 @@ public class ShopController {
         quickAdd.setTooltip(new Tooltip("Ajouter au panier"));
         quickAdd.setOnAction(e -> {
             shopMessage.setText("");
-            if (Session.isAdmin()) {
-                shopMessage.setText("Les administrateurs ne peuvent pas acheter. Utilisez l’onglet « Produits ».");
+            if (Session.isShopManager()) {
+                shopMessage.setText("Les gestionnaires ne peuvent pas acheter. Utilisez l'onglet Produits.");
                 return;
             }
             Session.addOrMergeToCart(p, 1);
@@ -337,7 +337,7 @@ public class ShopController {
             star.setStyle("-fx-font-size: 16px; -fx-text-fill: #f59e0b;");
             
             final int note = i;
-            if (!Session.isAdmin() && Session.isLoggedIn()) {
+            if (!Session.isShopManager() && Session.isLoggedIn()) {
                 star.setCursor(javafx.scene.Cursor.HAND);
                 star.setOnMouseClicked(e -> rateProduct(p, note));
                 star.setOnMouseEntered(e -> star.setStyle("-fx-font-size: 18px; -fx-text-fill: #fbbf24; -fx-cursor: hand;"));
@@ -355,7 +355,7 @@ public class ShopController {
     }
 
     private void rateProduct(Produit p, int note) {
-        if (Session.isAdmin() || !Session.isLoggedIn()) {
+        if (Session.isShopManager() || !Session.isLoggedIn()) {
             shopMessage.setText("Vous devez être connecté en tant qu'étudiant pour noter un produit.");
             return;
         }
@@ -439,7 +439,7 @@ public class ShopController {
 
     @FXML
     private void onRemoveLine() {
-        if (Session.isAdmin()) {
+        if (Session.isShopManager()) {
             return;
         }
         CartLine line = cartList.getSelectionModel().getSelectedItem();
@@ -452,8 +452,8 @@ public class ShopController {
     @FXML
     private void onCheckout() {
         shopMessage.setText("");
-        if (Session.isAdmin()) {
-            shopMessage.setText("Les administrateurs ne peuvent pas passer commande depuis la boutique.");
+        if (Session.isShopManager()) {
+            shopMessage.setText("Les gestionnaires ne peuvent pas passer commande depuis la boutique.");
             return;
         }
         if (!Session.isLoggedIn()) {

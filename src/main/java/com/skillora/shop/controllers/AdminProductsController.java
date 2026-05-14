@@ -43,8 +43,8 @@ public class AdminProductsController {
 
     @FXML
     private void initialize() {
-        if (!Session.isAdmin()) {
-            adminMsg.setText("Accès réservé à l’administrateur.");
+        if (!Session.isShopManager()) {
+            adminMsg.setText("Acces reserve aux gestionnaires du shop.");
             return;
         }
 
@@ -148,7 +148,7 @@ public class AdminProductsController {
 
     public void reload() {
         adminMsg.setText("");
-        if (!Session.isAdmin()) {
+        if (!Session.isShopManager()) {
             return;
         }
         try {

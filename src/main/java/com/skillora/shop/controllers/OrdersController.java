@@ -70,7 +70,7 @@ public class OrdersController {
 
     @FXML
     private void initialize() {
-        if (Session.isAdmin()) {
+        if (Session.isShopManager()) {
             subtitleLabel.setText("Toutes les commandes (administration)");
             adminCommandsBox.setVisible(true);
             adminCommandsBox.setManaged(true);
@@ -115,7 +115,7 @@ public class OrdersController {
                     Label dateLbl = new Label("Commande du " + dt);
                     dateLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
                     
-                    String user = Session.isAdmin() ? "Utilisateur ID: " + c.getIdUtilisateur() : "";
+                    String user = Session.isShopManager() ? "Utilisateur ID: " + c.getIdUtilisateur() : "";
                     Label userLbl = new Label(user);
                     userLbl.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
                     
@@ -150,7 +150,7 @@ public class OrdersController {
         orderMessage.setText("");
         try {
             List<CommandeRecord> list;
-            if (Session.isAdmin()) {
+            if (Session.isShopManager()) {
                 list = orderService.listAll();
             } else {
                 long uid = Session.getUser().getIdUtilisateur();
@@ -158,7 +158,7 @@ public class OrdersController {
             }
             orderList.setItems(FXCollections.observableArrayList(list));
 
-            OrderStatsSummary stats = Session.isAdmin()
+            OrderStatsSummary stats = Session.isShopManager()
                     ? orderService.statsAll()
                     : orderService.statsForUser(Session.getUser().getIdUtilisateur());
             applyStats(stats);
@@ -169,7 +169,7 @@ public class OrdersController {
 
     @FXML
     private void onSaveOrderEdits() {
-        if (!Session.isAdmin()) {
+        if (!Session.isShopManager()) {
             return;
         }
         CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
@@ -193,7 +193,7 @@ public class OrdersController {
 
     @FXML
     private void onDeleteOrder() {
-        if (!Session.isAdmin()) {
+        if (!Session.isShopManager()) {
             return;
         }
         CommandeRecord sel = orderList.getSelectionModel().getSelectedItem();
@@ -218,7 +218,7 @@ public class OrdersController {
 
     @FXML
     private void onNewOrder() {
-        if (!Session.isAdmin()) {
+        if (!Session.isShopManager()) {
             return;
         }
         try {
@@ -250,7 +250,7 @@ public class OrdersController {
             
             // Récupérer l'utilisateur (si admin, il faut peut-être le charger depuis la base)
             com.skillora.shop.entities.User orderUser;
-            if (Session.isAdmin()) {
+            if (Session.isShopManager()) {
                 // Pour l'admin, on charge l'utilisateur propriétaire de la commande
                 orderUser = userService.getAll().stream()
                         .filter(u -> u.getIdUtilisateur() == sel.getIdUtilisateur())

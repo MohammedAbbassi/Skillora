@@ -23,7 +23,7 @@ public class ShopShellController {
 
     @FXML
     private void initialize() {
-        if (Session.isAdmin()) {
+        if (Session.isShopManager()) {
             mainTabs.getTabs().remove(tabShop);
             mainTabs.getTabs().remove(tabAdminProducts);
             mainTabs.getTabs().add(0, tabAdminProducts);
@@ -41,7 +41,7 @@ public class ShopShellController {
             }
         });
 
-        if (Session.isAdmin() && adminProductsController != null) {
+        if (Session.isShopManager() && adminProductsController != null) {
             adminProductsController.reload();
         }
     }
