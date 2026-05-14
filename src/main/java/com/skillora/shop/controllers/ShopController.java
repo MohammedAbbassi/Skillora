@@ -32,10 +32,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -234,35 +237,24 @@ public class ShopController {
         // Conteneur de l'image
         StackPane imgContainer = new StackPane();
         imgContainer.setPrefHeight(160);
-        imgContainer.setStyle("-fx-background-color: #f1f5f9; -fx-background-radius: 14 14 0 0; -fx-overflow: hidden;");
+        imgContainer.setMinHeight(160);
+        imgContainer.setStyle("-fx-background-color: #eef4ff; -fx-background-radius: 14 14 0 0; -fx-overflow: hidden;");
+        Rectangle imageClip = new Rectangle(260, 160);
+        imageClip.setArcWidth(14);
+        imageClip.setArcHeight(14);
+        imgContainer.setClip(imageClip);
         
         ImageView iv = new ImageView();
         iv.setFitWidth(260);
         iv.setFitHeight(160);
-        iv.setPreserveRatio(true);
+        iv.setPreserveRatio(false);
+        iv.setSmooth(true);
         
-        Label placeholder = new Label("📷");
-        placeholder.setStyle("-fx-font-size: 40px; -fx-opacity: 0.2;");
-        
-        if (p.getImage() != null && !p.getImage().isEmpty()) {
-            try {
-                String path = p.getImage();
-                if (path.contains("pollinations.ai/p/")) {
-                    path = path.replace("pollinations.ai/p/", "image.pollinations.ai/prompt/");
-                }
-                
-                Image img;
-                if (path.startsWith("http")) {
-                    img = new Image(path, true);
-                } else {
-                    img = new Image(new File(path).toURI().toString());
-                }
-                iv.setImage(img);
-                placeholder.setVisible(false);
-            } catch (Exception e) {
-                // Image par défaut
-            }
-        }
+        Label placeholder = new Label(initialsForProduct(p));
+        placeholder.setTextFill(Color.web("#4f46e5"));
+        placeholder.setStyle("-fx-font-size: 34px; -fx-font-weight: 800; -fx-opacity: 0.55;");
+        loadProductImage(p, iv, placeholder);
+
         imgContainer.getChildren().addAll(placeholder, iv);
 
         // Contenu texte (avec padding)
@@ -325,6 +317,71 @@ public class ShopController {
         content.getChildren().addAll(titleRow, typePrice, ratingRow, excerpt, spacer, selectBtn);
         card.getChildren().addAll(imgContainer, content);
         return card;
+    }
+
+    private void loadProductImage(Produit p, ImageView imageView, Label placeholder) {
+        imageView.setVisible(false);
+        String source = p.getImage();
+        if (source == null || source.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            Image img = new Image(resolveImageSource(source), 260, 160, false, true, true);
+            img.errorProperty().addListener((obs, wasError, isError) -> {
+                if (isError) {
+                    imageView.setVisible(false);
+                    placeholder.setVisible(true);
+                }
+            });
+            img.progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                if (newProgress.doubleValue() >= 1.0 && !img.isError()) {
+                    imageView.setImage(img);
+                    imageView.setVisible(true);
+                    placeholder.setVisible(false);
+                }
+            });
+            if (img.getProgress() >= 1.0 && !img.isError()) {
+                imageView.setImage(img);
+                imageView.setVisible(true);
+                placeholder.setVisible(false);
+            }
+        } catch (Exception e) {
+            imageView.setVisible(false);
+            placeholder.setVisible(true);
+        }
+    }
+
+    private String resolveImageSource(String source) throws Exception {
+        String path = source.trim();
+        if (path.contains("pollinations.ai/p/")) {
+            path = path.replace("pollinations.ai/p/", "image.pollinations.ai/prompt/");
+        }
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return URI.create(path.replace(" ", "%20")).toASCIIString();
+        }
+        if (path.startsWith("file:")) {
+            return path;
+        }
+        return new File(path).toURI().toString();
+    }
+
+    private String initialsForProduct(Produit p) {
+        String name = p.getNom();
+        if (name == null || name.isBlank()) {
+            return "IMG";
+        }
+        String[] words = name.trim().split("\\s+");
+        StringBuilder initials = new StringBuilder();
+        for (String word : words) {
+            if (!word.isBlank()) {
+                initials.append(Character.toUpperCase(word.charAt(0)));
+            }
+            if (initials.length() == 3) {
+                break;
+            }
+        }
+        return initials.length() == 0 ? "IMG" : initials.toString();
     }
 
     private HBox buildStarRating(Produit p) {
