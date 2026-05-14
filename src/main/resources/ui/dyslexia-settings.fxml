@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" prefWidth="350" style="-fx-background-color: white; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 0); -fx-background-radius: 20;" 
+      stylesheets="@../dyslexia.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DyslexiaSettingsController">
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Mode Dyslexie" styleClass="panel-title" />
+        <Region HBox.hgrow="ALWAYS" />
+        <ToggleButton fx:id="btnToggleMode" text="Activé" onAction="#onToggleMode" styleClass="toggle-button-modern"/>
+    </HBox>
+
+    <Separator />
+
+    <!-- Text Size -->
+    <VBox spacing="10">
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Taille du texte" styleClass="field-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblTextSize" text="18px" styleClass="value-label" />
+        </HBox>
+        <Slider fx:id="sliderTextSize" min="12" max="32" value="18" blockIncrement="1" styleClass="modern-slider" />
+    </VBox>
+
+    <!-- Spacing -->
+    <VBox spacing="15">
+        <Label text="Espacements" styleClass="field-label" />
+        
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Lettres" styleClass="sub-label" prefWidth="60"/>
+            <Slider fx:id="sliderLetterSpacing" min="0" max="1" value="0.1" blockIncrement="0.05" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Mots" styleClass="sub-label" prefWidth="60"/>
+            <Slider fx:id="sliderWordSpacing" min="1" max="5" value="1.0" blockIncrement="0.5" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Lignes" styleClass="sub-label" prefWidth="60"/>
+            <Slider fx:id="sliderLineSpacing" min="1.0" max="3.0" value="1.5" blockIncrement="0.1" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </VBox>
+
+    <Separator />
+
+    <!-- Syllables -->
+    <VBox spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Découpage syllabique" styleClass="field-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <CheckBox fx:id="checkSyllables" onAction="#onSettingsChanged" />
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Coloration syllabique" styleClass="field-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <CheckBox fx:id="checkColorSyllables" onAction="#onSettingsChanged" />
+        </HBox>
+    </VBox>
+
+    <!-- Fonts -->
+    <VBox spacing="10">
+        <Label text="Police de caractères" styleClass="field-label" />
+        <ComboBox fx:id="comboFont" maxWidth="Infinity" styleClass="combo-box-modern" onAction="#onSettingsChanged"/>
+    </VBox>
+
+    <!-- Themes -->
+    <VBox spacing="10">
+        <Label text="Thème de lecture" styleClass="field-label" />
+        <HBox spacing="10">
+            <Button onAction="#setTheme" userData="#FFFFFF" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+            <Button onAction="#setTheme" userData="#FFFDE7" style="-fx-background-color: #FFFDE7; -fx-border-color: #ddd; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+            <Button onAction="#setTheme" userData="#F1F5F9" style="-fx-background-color: #F1F5F9; -fx-border-color: #ddd; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+            <Button onAction="#setTheme" userData="#334155" style="-fx-background-color: #334155; -fx-border-color: #ddd; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+            <Button onAction="#setTheme" userData="#0F172A" style="-fx-background-color: #0F172A; -fx-border-color: #ddd; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+        </HBox>
+    </VBox>
+
+    <Separator />
+
+    <!-- Focus Mode -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Mode Focus (Ligne)" styleClass="field-label" />
+        <Region HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="checkFocus" onAction="#onSettingsChanged" />
+    </HBox>
+
+    <!-- TTS Settings -->
+    <VBox spacing="10">
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Vitesse audio" styleClass="field-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblAudioSpeed" text="1.0x" styleClass="value-label" />
+        </HBox>
+        <Slider fx:id="sliderAudioSpeed" min="0.5" max="2.0" value="1.0" blockIncrement="0.1" styleClass="modern-slider" />
+    </VBox>
+
+</VBox>
