@@ -159,8 +159,8 @@ public class ReservationController implements Initializable {
         boolean student = role == Role.ETUDIANT;
         boolean admin = role == Role.ADMIN;
         boolean instructor = role == Role.INSTRUCTEUR;
-        boolean canDecideSelected = selectedReservation != null && admin;
-        boolean hasActionsForRole = student || admin;
+        boolean canDecideSelected = peutDeciderReservation(selectedReservation);
+        boolean hasActionsForRole = student || admin || instructor;
         boolean hasSelection = selectedReservation != null;
 
         if (student && !afficherMesReservations) {
@@ -191,8 +191,8 @@ public class ReservationController implements Initializable {
         rendreElementVisible(btnOpenReservationForm, false);
         rendreElementVisible(btnOpenSelectedReservationForm, admin);
         rendreElementVisible(btnListSupprimer, admin);
-        rendreElementVisible(btnListAccepter, admin);
-        rendreElementVisible(btnListRefuser, admin);
+        rendreElementVisible(btnListAccepter, admin || instructor);
+        rendreElementVisible(btnListRefuser, admin || instructor);
         rendreElementVisible(btnToggleMyReservations, student);
         btnToggleMyReservations.setText(afficherMesReservations ? "Voir les evenements" : "Consulter mes reservations");
         btnOpenReservationForm.setDisable(!canCreate);
@@ -1164,13 +1164,15 @@ public class ReservationController implements Initializable {
             return new ArrayList<>();
         }
 
-        if (role == Role.ADMIN || role == Role.INSTRUCTEUR) {
+        if (role == Role.ADMIN) {
             return reservations;
         }
 
         List<Reservation> filteredReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (role == Role.ETUDIANT && reservation.getId_utilisateur() == currentUserId) {
+                filteredReservations.add(reservation);
+            } else if (role == Role.INSTRUCTEUR && reservation.getId_organisateur_evenement() == currentUserId) {
                 filteredReservations.add(reservation);
             }
         }
@@ -1308,8 +1310,8 @@ public class ReservationController implements Initializable {
             return;
         }
 
-        if (SessionManager.getCurrentUserRole() != Role.ADMIN) {
-            afficherAlerte("Acces refuse", "Seul l'admin peut accepter ou refuser une reservation.", Alert.AlertType.WARNING);
+        if (!peutDeciderReservation(selected)) {
+            afficherAlerte("Acces refuse", "Vous ne pouvez accepter ou refuser que les reservations autorisees pour votre role.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -1334,6 +1336,18 @@ public class ReservationController implements Initializable {
         alert.setContentText(message);
         appliquerStyleAlerte(alert, "alert-confirmation");
         return alert.showAndWait().filter(button -> button == ButtonType.OK).isPresent();
+    }
+
+    private boolean peutDeciderReservation(Reservation reservation) {
+        if (reservation == null) {
+            return false;
+        }
+
+        Role role = SessionManager.getCurrentUserRole();
+        long currentUserId = SessionManager.getCurrentUserId();
+        return role == Role.ADMIN
+                || (role == Role.INSTRUCTEUR
+                && reservation.getId_organisateur_evenement() == currentUserId);
     }
 
     @FXML
