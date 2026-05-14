@@ -42,6 +42,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class MainController implements Initializable {
 
@@ -183,6 +184,9 @@ public class MainController implements Initializable {
     @FXML private ComboBox<String> roleFilter;
     @FXML private ComboBox<String> statusFilter;
     @FXML private VBox   userTableBody;
+
+    private boolean eventModuleLoaded;
+    private boolean reservationModuleLoaded;
     @FXML private CheckBox darkModeToggle;
 
     private boolean sidebarCollapsed = false;
@@ -647,8 +651,15 @@ public class MainController implements Initializable {
     }
     @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
     @FXML private void onNavShop()      { navigateTo(pageShop,      navShop);      }
-    @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent);     }
-    @FXML private void onNavReservation() { navigateTo(pageReservation, navReservation); }
+    @FXML private void onNavEvent() {
+        loadEventModuleIfNeeded();
+        navigateTo(pageEvent, navEvent);
+    }
+
+    @FXML private void onNavReservation() {
+        loadReservationModuleIfNeeded();
+        navigateTo(pageReservation, navReservation);
+    }
     @FXML private void onNavCommunity() { navigateTo(pageCommunity, navCommunity); }
     @FXML private void onGoProfile()   { 
         navigateTo(pageProfile,  navProfile); 
@@ -659,9 +670,44 @@ public class MainController implements Initializable {
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
     @FXML private void onNavAdminCourses() { navigateTo(pageCourses, navAdminCourses); }
     @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop);    }
-    @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents);  }
-    @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); }
+    @FXML private void onNavAdminEvents() {
+        loadEventModuleIfNeeded();
+        navigateTo(pageEvent, navAdminEvents);
+    }
+
+    @FXML private void onNavAdminReservations() {
+        loadReservationModuleIfNeeded();
+        navigateTo(pageReservation, navAdminReservations);
+    }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
+
+    private void loadEventModuleIfNeeded() {
+        if (eventModuleLoaded || pageEvent == null) {
+            return;
+        }
+        loadModuleIntoPage(pageEvent, "/com/skillora/views/EvenementInterface.fxml");
+        eventModuleLoaded = true;
+    }
+
+    private void loadReservationModuleIfNeeded() {
+        if (reservationModuleLoaded || pageReservation == null) {
+            return;
+        }
+        loadModuleIntoPage(pageReservation, "/com/skillora/views/ReservationInterface.fxml");
+        reservationModuleLoaded = true;
+    }
+
+    private void loadModuleIntoPage(VBox page, String fxmlPath) {
+        try {
+            Parent moduleRoot = FXMLLoader.load(getClass().getResource(fxmlPath));
+            page.getChildren().setAll(moduleRoot);
+            page.setSpacing(0);
+            page.getStyleClass().remove("placeholder-page");
+        } catch (IOException | RuntimeException e) {
+            page.getChildren().setAll(new Label("Impossible de charger le module: " + fxmlPath));
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void onSaveProfile() {
