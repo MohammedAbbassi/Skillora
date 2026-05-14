@@ -194,7 +194,7 @@ public class ReservationController implements Initializable {
                 ? "Rechercher evenement, chaise, statut..."
                 : "Rechercher evenement, lieu, date, duree...")
                 : "Rechercher evenement, etudiant, chaise...");
-        rendreElementVisible(comboFiltreStatut, !student);
+        rendreElementVisible(comboFiltreStatut, !student || afficherMesReservations);
         rendreElementVisible(eventPreviewCard, false);
         lblNbPlaces.setDisable(!canCreate && !canModifySelected);
         datePicker.setDisable(!canCreate && !canModifySelected);

@@ -61,7 +61,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
             throw new SQLException("Vous avez deja une reservation active pour un evenement a cette meme date.");
         }
 
-        String sql = "INSERT INTO reservation (nb_places, date_reservation, id_evenement, id_utilisateur, chaises) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reservation (nb_places, date_reservation, id_evenement, id_utilisateur, chaises, statut) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
 
         ps.setInt(1, reservation.getNb_places());
@@ -69,6 +69,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         ps.setInt(3, reservation.getId_evenement());
         ps.setLong(4, reservation.getId_utilisateur());
         ps.setString(5, reservation.getChaises());
+        ps.setString(6, normaliserStatut(reservation.getStatut()));
 
         ps.executeUpdate();
     }
@@ -137,7 +138,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         verifierConnexionBase();
         String sql = "UPDATE reservation SET statut=? WHERE id_reservation=?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, statut);
+        ps.setString(1, normaliserStatut(statut));
         ps.setInt(2, idReservation);
 
         int affectedRows = ps.executeUpdate();
@@ -250,5 +251,12 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         r.setStatut(rs.getString("statut"));
         r.setChaises(rs.getString("chaises"));
         return r;
+    }
+
+    private String normaliserStatut(String statut) {
+        if ("ACCEPTEE".equals(statut) || "REFUSEE".equals(statut)) {
+            return statut;
+        }
+        return "EN_ATTENTE";
     }
 }

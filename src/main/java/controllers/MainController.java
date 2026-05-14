@@ -698,7 +698,11 @@ public class MainController implements Initializable {
     @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
     @FXML private void onNavShop()      { navigateTo(pageShop,      navShop); ensureShopPageLoaded();      }
     @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent); ensureEventsPageLoaded();     }
-    @FXML private void onNavReservation() { navigateTo(pageReservation, navReservation); ensureReservationsPageLoaded(); }
+    @FXML private void onNavReservation() {
+        reservationsPageLoaded = false;
+        navigateTo(pageReservation, navReservation);
+        ensureReservationsPageLoaded();
+    }
     @FXML private void onNavCommunity() { navigateTo(pageCommunity, navCommunity); }
     @FXML private void onGoProfile()   { 
         navigateTo(pageProfile,  navProfile); 
