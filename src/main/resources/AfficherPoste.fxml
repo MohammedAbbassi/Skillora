@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherPosteController">
+   <children>
+      <TableView fx:id="tv_postes" layoutX="22.0" layoutY="38.0" prefHeight="291.0" prefWidth="522.0">
+        <columns>
+          <TableColumn fx:id="col_titre" prefWidth="179.0" text="Titre" />
+          <TableColumn fx:id="col_contenu" prefWidth="170.0" text="Contenu" />
+            <TableColumn fx:id="col_date" prefWidth="172.0" text="Date" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
