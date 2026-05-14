@@ -24,11 +24,13 @@ public class MyDatabase {
     private void connect() {
         cnx = getDashboardConnection();
         if (cnx != null) {
+            ShopDatabaseMigrator.migrate(cnx);
             return;
         }
 
         try {
             cnx = DriverManager.getConnection(url, user, password);
+            ShopDatabaseMigrator.migrate(cnx);
             System.out.println("Connected to database");
         } catch (SQLException e) {
             System.err.println("[ShopDB] Cannot connect to " + url + ": " + e.getMessage());
