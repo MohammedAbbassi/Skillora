@@ -26,7 +26,7 @@ public class MyDatabase {
             cnx = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to database");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("[ShopDB] Cannot connect to " + url + ": " + e.getMessage());
             cnx = null;
         }
     }

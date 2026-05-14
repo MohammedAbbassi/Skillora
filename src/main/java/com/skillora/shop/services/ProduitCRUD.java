@@ -5,46 +5,58 @@ import com.skillora.shop.entities.Produit;
 import com.skillora.shop.interfaces.InterfaceCRUD;
 import com.skillora.shop.utils.MyDatabase;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProduitCRUD implements InterfaceCRUD<Produit> {
 
-    private final Connection conn = MyDatabase.getInstance().getCnx();
+    private Connection connection() throws SQLException {
+        Connection conn = MyDatabase.getInstance().getCnx();
+        if (conn == null) {
+            throw new SQLException("Connexion base de donnees indisponible. Verifiez que MySQL est lance et que la base skillora_shop est importee.");
+        }
+        return conn;
+    }
 
     @Override
     public void ajouter(Produit p) throws SQLException {
         String sql = "INSERT INTO produit (nom, prix, langue, categorie, description, niveau, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, p.getNom());
-        ps.setDouble(2, p.getPrix());
-        ps.setString(3, p.getLangue());
-        ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
-        ps.setString(5, p.getDescription());
-        ps.setString(6, p.getNiveau());
-        ps.setString(7, p.getImage());
-        ps.executeUpdate();
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, p.getNom());
+            ps.setDouble(2, p.getPrix());
+            ps.setString(3, p.getLangue());
+            ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
+            ps.setString(5, p.getDescription());
+            ps.setString(6, p.getNiveau());
+            ps.setString(7, p.getImage());
+            ps.executeUpdate();
+        }
     }
 
     @Override
     public void modifier(Produit p) throws SQLException {
         String sql = "UPDATE produit SET nom=?, prix=?, langue=?, categorie=?, description=?, niveau=?, image=? WHERE id_produit=?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, p.getNom());
-        ps.setDouble(2, p.getPrix());
-        ps.setString(3, p.getLangue());
-        ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
-        ps.setString(5, p.getDescription());
-        ps.setString(6, p.getNiveau());
-        ps.setString(7, p.getImage());
-        ps.setLong(8, p.getId());
-        ps.executeUpdate();
+        try (PreparedStatement ps = connection().prepareStatement(sql)) {
+            ps.setString(1, p.getNom());
+            ps.setDouble(2, p.getPrix());
+            ps.setString(3, p.getLangue());
+            ps.setString(4, p.getCategorie() == null ? null : p.getCategorie().name());
+            ps.setString(5, p.getDescription());
+            ps.setString(6, p.getNiveau());
+            ps.setString(7, p.getImage());
+            ps.setLong(8, p.getId());
+            ps.executeUpdate();
+        }
     }
 
     @Override
     public void supprimer(int id) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM produit WHERE id_produit=?")) {
+        try (PreparedStatement ps = connection().prepareStatement("DELETE FROM produit WHERE id_produit=?")) {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
@@ -58,7 +70,7 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
                      "LEFT JOIN evaluation e ON p.id_produit = e.id_produit " +
                      "GROUP BY p.id_produit " +
                      "ORDER BY p.nom";
-        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        try (Statement st = connection().createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Produit p = new Produit();
                 p.setId(rs.getLong("id_produit"));

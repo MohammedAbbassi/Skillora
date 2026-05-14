@@ -184,6 +184,9 @@ public class AdminProductsController {
             stage.setTitle(p == null ? "Ajouter un produit" : "Modifier le produit");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.sizeToScene();
+            stage.centerOnScreen();
             stage.showAndWait();
         } catch (Exception e) {
             adminMsg.setText("Erreur lors de l'ouverture du formulaire: " + e.getMessage());
