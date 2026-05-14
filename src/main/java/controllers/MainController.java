@@ -28,6 +28,7 @@ import services.ServiceUser;
 import services.ServiceUserPreferences;
 import services.ServiceMessage;
 import utils.BadgeUtils;
+import com.skillora.events.controllers.ReservationController;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -37,6 +38,7 @@ import java.time.LocalTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -762,17 +764,43 @@ public class MainController implements Initializable {
 
     private void ensureEventsPageLoaded() {
         if (!eventsPageLoaded) {
-            eventsPageLoaded = loadEmbeddedPage(pageEvent, "/com/skillora/views/EvenementInterface.fxml", "events");
+            if (usesStudentEventFlow()) {
+                eventsPageLoaded = loadEmbeddedPage(pageEvent, "/com/skillora/views/ReservationInterface.fxml", "events",
+                        controller -> {
+                            if (controller instanceof ReservationController) {
+                                ((ReservationController) controller).showAvailableEventsOnly();
+                            }
+                        });
+            } else {
+                eventsPageLoaded = loadEmbeddedPage(pageEvent, "/com/skillora/views/EvenementInterface.fxml", "events");
+            }
         }
     }
 
     private void ensureReservationsPageLoaded() {
         if (!reservationsPageLoaded) {
-            reservationsPageLoaded = loadEmbeddedPage(pageReservation, "/com/skillora/views/ReservationInterface.fxml", "reservations");
+            reservationsPageLoaded = loadEmbeddedPage(pageReservation, "/com/skillora/views/ReservationInterface.fxml", "reservations",
+                    controller -> {
+                        if (controller instanceof ReservationController && usesStudentEventFlow()) {
+                            ((ReservationController) controller).showMyReservationsOnly();
+                        }
+                    });
         }
     }
 
+    private boolean usesStudentEventFlow() {
+        String role = currentUser != null ? currentUser.getRole() : null;
+        if ((role == null || role.isBlank()) && prefs != null) {
+            role = prefs.getUserRole();
+        }
+        return !"ADMIN".equalsIgnoreCase(role);
+    }
+
     private boolean loadEmbeddedPage(Pane container, String resourcePath, String label) {
+        return loadEmbeddedPage(container, resourcePath, label, null);
+    }
+
+    private boolean loadEmbeddedPage(Pane container, String resourcePath, String label, Consumer<Object> controllerConfigurer) {
         if (container == null) {
             return false;
         }
@@ -783,7 +811,11 @@ public class MainController implements Initializable {
                 throw new IllegalStateException("missing resource " + resourcePath);
             }
 
-            Parent view = FXMLLoader.load(resource);
+            FXMLLoader loader = new FXMLLoader(resource);
+            Parent view = loader.load();
+            if (controllerConfigurer != null) {
+                controllerConfigurer.accept(loader.getController());
+            }
             container.getChildren().setAll(view);
 
             if (view instanceof Region) {

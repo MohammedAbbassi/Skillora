@@ -95,6 +95,7 @@ public class ReservationController implements Initializable {
     private Set<String> occupiedSeats = new LinkedHashSet<>();
     private boolean populatingReservation;
     private boolean afficherMesReservations;
+    private boolean fixedEmbeddedMode;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -106,6 +107,25 @@ public class ReservationController implements Initializable {
         afficherUtilisateurConnecte();
         chargerChoixEvenementsDepuisBase();
         chargerReservationsDepuisBase();
+        afficherListeReservations();
+    }
+
+    public void showAvailableEventsOnly() {
+        setEmbeddedMode(false);
+    }
+
+    public void showMyReservationsOnly() {
+        setEmbeddedMode(true);
+    }
+
+    private void setEmbeddedMode(boolean showMyReservations) {
+        fixedEmbeddedMode = true;
+        afficherMesReservations = showMyReservations;
+        listReservations.getSelectionModel().clearSelection();
+        txtRechercheReservation.clear();
+        comboFiltreStatut.setValue("Tous");
+        appliquerFiltresEcranPrincipal();
+        appliquerPermissionsSelonRole(null);
         afficherListeReservations();
     }
 
@@ -164,6 +184,8 @@ public class ReservationController implements Initializable {
 
         if (student && !afficherMesReservations) {
             lblReservationPageTitle.setText("Liste des Evenements Disponibles");
+        } else if (student) {
+            lblReservationPageTitle.setText("Mes Reservations");
         } else {
             lblReservationPageTitle.setText("Liste des Reservations");
         }
@@ -190,7 +212,7 @@ public class ReservationController implements Initializable {
         rendreElementVisible(btnListSupprimer, admin);
         rendreElementVisible(btnListAccepter, admin);
         rendreElementVisible(btnListRefuser, admin);
-        rendreElementVisible(btnToggleMyReservations, student);
+        rendreElementVisible(btnToggleMyReservations, student && !fixedEmbeddedMode);
         btnToggleMyReservations.setText(afficherMesReservations ? "Voir les evenements" : "Consulter mes reservations");
         btnOpenReservationForm.setDisable(!canCreate);
         btnOpenSelectedReservationForm.setDisable(!canModifySelected);
