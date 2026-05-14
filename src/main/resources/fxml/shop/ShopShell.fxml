@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 
 <TabPane fx:id="mainTabs"
+         styleClass="shop-tabs"
          tabClosingPolicy="UNAVAILABLE"
          xmlns="http://javafx.com/javafx/17"
          xmlns:fx="http://javafx.com/fxml/1"

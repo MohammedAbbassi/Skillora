@@ -6,6 +6,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.skillora.shop.controllers.AdminProductsController" spacing="12"
+      styleClass="shop-page"
       stylesheets="@../../css/theme.css">
     <padding>
         <Insets bottom="8" left="8" right="8" top="8"/>
@@ -48,8 +49,4 @@
             <Label fx:id="adminMsg" text="Sélectionnez un produit pour le modifier ou le supprimer." styleClass="muted" wrapText="true" HBox.hgrow="ALWAYS"/>
         </HBox>
     </VBox>
-
-
-
-    <Label fx:id="adminMsg" styleClass="muted" wrapText="true"/>
 </VBox>

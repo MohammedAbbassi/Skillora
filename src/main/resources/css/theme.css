@@ -125,6 +125,90 @@
     -fx-border-color: rgba(255, 255, 255, 0.25);
 }
 
+/* -------- Embedded shop in main dashboard -------- */
+.shop-page {
+    -fx-background-color: transparent;
+    -fx-padding: 18px;
+}
+
+.shop-tabs {
+    -fx-background-color: transparent;
+    -fx-tab-min-height: 40px;
+    -fx-tab-max-height: 40px;
+}
+
+.shop-tabs > .tab-header-area {
+    -fx-padding: 0 0 0 0;
+}
+
+.shop-tabs > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.shop-tabs .tab {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10px 10px 0 0;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px 1px 0 1px;
+    -fx-border-radius: 10px 10px 0 0;
+    -fx-padding: 8px 18px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.shop-tabs .tab:hover {
+    -fx-background-color: #eef2ff;
+}
+
+.shop-tabs .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #c7d2fe;
+}
+
+.shop-tabs .tab .tab-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.shop-tabs .tab:selected .tab-label {
+    -fx-text-fill: #312e81;
+}
+
+.shop-tabs > .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 14px 14px 14px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0 14px 14px 14px;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 18, 0, 0, 2);
+}
+
+.shop-tabs:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.shop-page .card {
+    -fx-effect: none;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+}
+
+.shop-page .list-view {
+    -fx-background-color: #ffffff;
+    -fx-control-inner-background: #ffffff;
+}
+
+.shop-page .list-view:focused {
+    -fx-border-color: #c7d2fe;
+}
+
+.shop-page .split-pane *.split-pane-divider {
+    -fx-background-color: transparent;
+}
+
 /* -------- Sidebar -------- */
 .sidebar-scroll {
     -fx-background-color: transparent;
