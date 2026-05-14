@@ -34,9 +34,10 @@ public class ChapitreDetailController {
     private CertificateService certificateService = new CertificateService();
     private ChapitreService chapitreService = new ChapitreService();
     private CoursService coursService = new CoursService();
-    private TTSService ttsService = new TTSService();
-    private DyslexiaService dyslexiaService = new DyslexiaService();
-    private DictionaryService dictionaryService = new DictionaryService();
+    private final DyslexiaService dyslexiaService = new DyslexiaService();
+    private final DictionaryService dictionaryService = new DictionaryService();
+    private final SummarizerService summarizerService = SummarizerService.getInstance();
+    private final TTSService ttsService = new TTSService();
 
 
     @FXML private Label chapterTitleLabel;
@@ -83,6 +84,7 @@ public class ChapitreDetailController {
     @FXML private Label spellCheckStatus;
     @FXML private TextField calcDisplay;
     @FXML private Button btnAutoCorrect;
+    @FXML private Label summaryLabel;
     
     private Map<String, String> commonCorrections = new HashMap<>();
     
@@ -195,6 +197,26 @@ public class ChapitreDetailController {
         spellCheckStatus.setStyle("-fx-text-fill: #3b82f6; -fx-font-size: 12px;");
         btnAutoCorrect.setVisible(false);
         btnAutoCorrect.setManaged(false);
+    }
+
+    @FXML
+    void onGenerateSummary(ActionEvent event) {
+        if (currentChapter == null) return;
+        
+        summaryLabel.setText("🤖 Analyse en cours...");
+        summaryLabel.setStyle("-fx-text-fill: #6366f1; -fx-padding: 10; -fx-background-color: #f5f3ff; -fx-background-radius: 8;");
+        
+        summarizerService.summarize(currentChapter.getContenu()).thenAccept(summary -> {
+            javafx.application.Platform.runLater(() -> {
+                summaryLabel.setText(summary);
+                summaryLabel.setStyle("-fx-text-fill: #334155; -fx-padding: 10; -fx-background-color: #f0f9ff; -fx-background-radius: 8; -fx-border-color: #bae6fd; -fx-border-radius: 8;");
+            });
+        }).exceptionally(ex -> {
+            javafx.application.Platform.runLater(() -> {
+                summaryLabel.setText("❌ Erreur lors du résumé.");
+            });
+            return null;
+        });
     }
 
     // --- Writing Assistant: Calculator ---
@@ -450,14 +472,18 @@ public class ChapitreDetailController {
 
     @FXML
     void onPrev(ActionEvent event) {
-        int index = contextChapters.indexOf(currentChapter);
-        if (index > 0) setChapter(contextChapters.get(index - 1), contextChapters);
+        if (contextChapters != null && currentChapter != null) {
+            int index = contextChapters.indexOf(currentChapter);
+            if (index > 0) setChapter(contextChapters.get(index - 1), contextChapters);
+        }
     }
 
     @FXML
     void onNext(ActionEvent event) {
-        int index = contextChapters.indexOf(currentChapter);
-        if (index < contextChapters.size() - 1) setChapter(contextChapters.get(index + 1), contextChapters);
+        if (contextChapters != null && currentChapter != null) {
+            int index = contextChapters.indexOf(currentChapter);
+            if (index < contextChapters.size() - 1) setChapter(contextChapters.get(index + 1), contextChapters);
+        }
     }
 
     @FXML

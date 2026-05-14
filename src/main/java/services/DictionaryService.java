@@ -42,6 +42,7 @@ public class DictionaryService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
+                .header("User-Agent", "Skillora-EduApp/1.0 (contact: support@skillora.com)")
                 .GET()
                 .build();
 
