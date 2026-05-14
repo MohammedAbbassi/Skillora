@@ -397,7 +397,7 @@ public class EvenementController implements Initializable {
         if (role == null) {
             return new ArrayList<>();
         }
-        if (role == Role.ADMIN || role == Role.ETUDIANT) {
+        if (role == Role.ADMIN || role == Role.ETUDIANT || role == Role.INSTRUCTEUR) {
             return evenements;
         }
 

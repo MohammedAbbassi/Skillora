@@ -456,11 +456,11 @@ public class MainController implements Initializable {
         if (topbarLogoText != null) {
             topbarLogoText.setText(isAdmin
                     ? "Admin Dashboard"
-                    : isInstructor ? "Instructor Dashboard" : "Player Dashboard");
+                    : "Player Dashboard");
         }
 
         if (lblShop != null) {
-            lblShop.setText(isInstructor ? "Manage Shop" : "Shop");
+            lblShop.setText("Shop");
         }
 
         setVisibleManaged(navShop, !isAdmin);

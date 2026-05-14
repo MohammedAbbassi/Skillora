@@ -65,6 +65,6 @@ public final class Session {
     }
 
     public static boolean isShopManager() {
-        return isAdmin() || isInstructor();
+        return isAdmin();
     }
 }

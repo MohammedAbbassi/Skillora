@@ -144,7 +144,7 @@ public class ReservationController implements Initializable {
     }
 
     private void appliquerFiltresEcranPrincipal() {
-        if (SessionManager.getCurrentUserRole() == Role.ETUDIANT && !afficherMesReservations) {
+        if (utiliseInterfaceEtudiant(SessionManager.getCurrentUserRole()) && !afficherMesReservations) {
             appliquerFiltresEvenementsDisponibles();
         } else {
             appliquerFiltresReservations();
@@ -156,17 +156,14 @@ public class ReservationController implements Initializable {
         boolean canCreate = peutCreerReservation();
         boolean canModifySelected = peutModifierReservation(selectedReservation);
         boolean canDeleteSelected = peutSupprimerReservation(selectedReservation);
-        boolean student = role == Role.ETUDIANT;
+        boolean student = utiliseInterfaceEtudiant(role);
         boolean admin = role == Role.ADMIN;
-        boolean instructor = role == Role.INSTRUCTEUR;
         boolean canDecideSelected = peutDeciderReservation(selectedReservation);
-        boolean hasActionsForRole = student || admin || instructor;
+        boolean hasActionsForRole = student || admin;
         boolean hasSelection = selectedReservation != null;
 
         if (student && !afficherMesReservations) {
             lblReservationPageTitle.setText("Liste des Evenements Disponibles");
-        } else if (instructor) {
-            lblReservationPageTitle.setText("Reservations recues");
         } else {
             lblReservationPageTitle.setText("Liste des Reservations");
         }
@@ -191,8 +188,8 @@ public class ReservationController implements Initializable {
         rendreElementVisible(btnOpenReservationForm, false);
         rendreElementVisible(btnOpenSelectedReservationForm, admin);
         rendreElementVisible(btnListSupprimer, admin);
-        rendreElementVisible(btnListAccepter, admin || instructor);
-        rendreElementVisible(btnListRefuser, admin || instructor);
+        rendreElementVisible(btnListAccepter, admin);
+        rendreElementVisible(btnListRefuser, admin);
         rendreElementVisible(btnToggleMyReservations, student);
         btnToggleMyReservations.setText(afficherMesReservations ? "Voir les evenements" : "Consulter mes reservations");
         btnOpenReservationForm.setDisable(!canCreate);
@@ -627,7 +624,7 @@ public class ReservationController implements Initializable {
 
     private boolean peutCreerReservation() {
         Role role = SessionManager.getCurrentUserRole();
-        return role == Role.ETUDIANT;
+        return utiliseInterfaceEtudiant(role);
     }
 
     private boolean peutModifierReservation(Reservation reservation) {
@@ -639,7 +636,7 @@ public class ReservationController implements Initializable {
         long currentUserId = SessionManager.getCurrentUserId();
 
         return role == Role.ADMIN
-                || (role == Role.ETUDIANT
+                || (utiliseInterfaceEtudiant(role)
                 && reservation.getId_utilisateur() == currentUserId
                 && !"ACCEPTEE".equals(reservation.getStatut()));
     }
@@ -653,7 +650,11 @@ public class ReservationController implements Initializable {
         long currentUserId = SessionManager.getCurrentUserId();
 
         return role == Role.ADMIN
-                || (role == Role.ETUDIANT && reservation.getId_utilisateur() == currentUserId);
+                || (utiliseInterfaceEtudiant(role) && reservation.getId_utilisateur() == currentUserId);
+    }
+
+    private boolean utiliseInterfaceEtudiant(Role role) {
+        return role == Role.ETUDIANT || role == Role.INSTRUCTEUR;
     }
 
     private ListCell<Reservation> creerLigneListeReservation() {
@@ -1170,9 +1171,7 @@ public class ReservationController implements Initializable {
 
         List<Reservation> filteredReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            if (role == Role.ETUDIANT && reservation.getId_utilisateur() == currentUserId) {
-                filteredReservations.add(reservation);
-            } else if (role == Role.INSTRUCTEUR && reservation.getId_organisateur_evenement() == currentUserId) {
+            if (utiliseInterfaceEtudiant(role) && reservation.getId_utilisateur() == currentUserId) {
                 filteredReservations.add(reservation);
             }
         }
@@ -1345,9 +1344,7 @@ public class ReservationController implements Initializable {
 
         Role role = SessionManager.getCurrentUserRole();
         long currentUserId = SessionManager.getCurrentUserId();
-        return role == Role.ADMIN
-                || (role == Role.INSTRUCTEUR
-                && reservation.getId_organisateur_evenement() == currentUserId);
+        return role == Role.ADMIN;
     }
 
     @FXML

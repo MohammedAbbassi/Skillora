@@ -63,7 +63,7 @@ public class MainController implements Initializable {
 
     private void adapterNavigationSelonRole() {
         Role role = SessionManager.getCurrentUserRole();
-        boolean student = role == Role.ETUDIANT;
+        boolean student = utiliseInterfaceEtudiant(role);
 
         if (student) {
             btnNavEvenements.setVisible(false);
@@ -75,17 +75,12 @@ public class MainController implements Initializable {
         btnNavEvenements.setVisible(true);
         btnNavEvenements.setManaged(true);
 
-        if (role == Role.INSTRUCTEUR) {
-            btnNavEvenements.setText("Voir les evenements");
-            btnNavReservations.setText("Reservations recues");
-        } else {
-            btnNavEvenements.setText("Gerer les evenements");
-            btnNavReservations.setText("Gerer les reservations");
-        }
+        btnNavEvenements.setText("Gerer les evenements");
+        btnNavReservations.setText("Gerer les reservations");
     }
 
     private void afficherPageParDefautSelonRole() {
-        if (SessionManager.getCurrentUserRole() == Role.ETUDIANT) {
+        if (utiliseInterfaceEtudiant(SessionManager.getCurrentUserRole())) {
             afficherPageReservations();
         } else {
             afficherPageEvenements();
@@ -93,7 +88,11 @@ public class MainController implements Initializable {
     }
 
     private boolean peutOuvrirPageEvenements() {
-        return SessionManager.getCurrentUserRole() != Role.ETUDIANT;
+        return !utiliseInterfaceEtudiant(SessionManager.getCurrentUserRole());
+    }
+
+    private boolean utiliseInterfaceEtudiant(Role role) {
+        return role == Role.ETUDIANT || role == Role.INSTRUCTEUR;
     }
 
     private void marquerBoutonActif(Button activeBtn) {
