@@ -23,16 +23,17 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="8.0">
                <children>
-                  <Label styleClass="section-title" text="Liste des Reservations" HBox.hgrow="ALWAYS">
+                  <Label fx:id="lblReservationPageTitle" styleClass="section-title" text="Liste des Reservations" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnOpenReservationForm" mnemonicParsing="false" onAction="#handleOpenAddForm" prefHeight="38.0" prefWidth="150.0" styleClass="btn-primary" text="Nouvelle reservation" />
-                  <Button fx:id="btnOpenSelectedReservationForm" mnemonicParsing="false" onAction="#handleOpenSelectedForm" prefHeight="38.0" prefWidth="100.0" styleClass="btn-secondary" text="Modifier" />
-                  <Button fx:id="btnListSupprimer" mnemonicParsing="false" onAction="#handleSupprimer" prefHeight="38.0" prefWidth="100.0" styleClass="btn-danger" text="Supprimer" />
-                  <Button fx:id="btnListAccepter" mnemonicParsing="false" onAction="#handleAccepter" prefHeight="38.0" prefWidth="95.0" styleClass="btn-primary" text="Accepter" />
-                  <Button fx:id="btnListRefuser" mnemonicParsing="false" onAction="#handleRefuser" prefHeight="38.0" prefWidth="95.0" styleClass="btn-danger" text="Refuser" />
+                  <Button fx:id="btnOpenReservationForm" mnemonicParsing="false" onAction="#ouvrirFormulaireAjout" prefHeight="38.0" prefWidth="150.0" styleClass="btn-primary" text="Nouvelle reservation" />
+                  <Button fx:id="btnToggleMyReservations" mnemonicParsing="false" onAction="#basculerMesReservations" prefHeight="38.0" prefWidth="190.0" styleClass="btn-secondary" text="Consulter mes reservations" />
+                  <Button fx:id="btnOpenSelectedReservationForm" mnemonicParsing="false" onAction="#ouvrirFormulaireModification" prefHeight="38.0" prefWidth="100.0" styleClass="btn-secondary" text="Modifier" />
+                  <Button fx:id="btnListSupprimer" mnemonicParsing="false" onAction="#supprimerElementSelectionne" prefHeight="38.0" prefWidth="100.0" styleClass="btn-danger" text="Supprimer" />
+                  <Button fx:id="btnListAccepter" mnemonicParsing="false" onAction="#accepterReservationSelectionnee" prefHeight="38.0" prefWidth="95.0" styleClass="btn-primary" text="Accepter" />
+                  <Button fx:id="btnListRefuser" mnemonicParsing="false" onAction="#refuserReservationSelectionnee" prefHeight="38.0" prefWidth="95.0" styleClass="btn-danger" text="Refuser" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="filter-bar">
@@ -44,7 +45,12 @@
             <ListView fx:id="listReservations" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-list-view" VBox.vgrow="ALWAYS" />
             <ScrollPane fx:id="reservationGridScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-grid-scroll" visible="false" managed="false" VBox.vgrow="ALWAYS">
                <content>
-                  <TilePane fx:id="reservationGridView" hgap="12.0" prefColumns="3" prefTileHeight="210.0" prefTileWidth="245.0" vgap="12.0" />
+                  <TilePane fx:id="reservationGridView" hgap="12.0" prefColumns="3" prefTileHeight="230.0" prefTileWidth="245.0" vgap="14.0" />
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="availableEventScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-grid-scroll" visible="false" managed="false" VBox.vgrow="ALWAYS">
+               <content>
+                  <TilePane fx:id="availableEventGrid" hgap="12.0" prefColumns="3" prefTileHeight="220.0" prefTileWidth="245.0" vgap="12.0" />
                </content>
             </ScrollPane>
          </children>
@@ -57,7 +63,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleBackToReservationList" prefHeight="34.0" prefWidth="90.0" styleClass="btn-secondary" text="Retour" />
+                  <Button mnemonicParsing="false" onAction="#retournerALaListeReservations" prefHeight="34.0" prefWidth="90.0" styleClass="btn-secondary" text="Retour" />
                   <Label styleClass="section-title" text="Formulaire reservation">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -68,14 +74,14 @@
 
             <HBox alignment="TOP_CENTER" spacing="18.0">
                <children>
-                  <VBox prefWidth="420.0" spacing="10.0">
+                  <VBox prefWidth="520.0" spacing="10.0">
                      <children>
                         <GridPane vgap="8.0">
                            <children>
                               <Label styleClass="field-label" text="Plan de salle" GridPane.rowIndex="0" />
-                              <StackPane prefHeight="240.0" prefWidth="400.0" styleClass="seat-map-panel" GridPane.rowIndex="1">
+                              <StackPane prefHeight="240.0" prefWidth="500.0" styleClass="seat-map-panel" GridPane.rowIndex="1">
                                  <children>
-                                    <ImageView fitHeight="240.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="false" styleClass="seat-map-bg">
+                                    <ImageView fitHeight="240.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="false" styleClass="seat-map-bg">
                                        <image>
                                           <Image url="@../images/seat-map-room.png" />
                                        </image>
@@ -107,20 +113,20 @@
                                  </children>
                               </HBox>
 
-                              <Label fx:id="lblSelectedSeats" prefWidth="400.0" styleClass="selected-seats-label" text="Aucune chaise choisie" wrapText="true" GridPane.rowIndex="3" />
+                              <Label fx:id="lblSelectedSeats" prefWidth="500.0" styleClass="selected-seats-label" text="Aucune chaise choisie" wrapText="true" GridPane.rowIndex="3" />
 
                               <Label styleClass="field-label" text="Nombre de places" GridPane.rowIndex="4" />
                               <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.rowIndex="5">
                                  <children>
-                                    <Label fx:id="lblNbPlaces" alignment="CENTER" prefHeight="38.0" prefWidth="400.0" styleClass="counter-value" text="0" />
+                                    <Label fx:id="lblNbPlaces" alignment="CENTER" prefHeight="38.0" prefWidth="500.0" styleClass="counter-value" text="0" />
                                  </children>
                               </HBox>
 
                               <Label styleClass="field-label" text="Date Reservation" GridPane.rowIndex="6" />
-                              <DatePicker fx:id="datePicker" prefWidth="400.0" GridPane.rowIndex="7" />
+                              <DatePicker fx:id="datePicker" prefWidth="500.0" GridPane.rowIndex="7" />
 
                               <Label styleClass="field-label" text="Evenement selectionne" GridPane.rowIndex="8" />
-                              <TextField fx:id="txtEvenementSelectionne" editable="false" prefWidth="400.0" promptText="Selectionner dans la liste" GridPane.rowIndex="9" />
+                              <TextField fx:id="txtEvenementSelectionne" editable="false" prefWidth="500.0" promptText="Selectionner dans la liste" GridPane.rowIndex="9" />
 
                               <Label styleClass="field-label" text="Utilisateur connecte" GridPane.rowIndex="10" />
                               <Label fx:id="lblCurrentUser" styleClass="session-label" text="Utilisateur connecte" GridPane.rowIndex="11" />
@@ -148,11 +154,11 @@
 
                         <VBox fx:id="actionBox" spacing="10.0">
                            <children>
-                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#handleAjouter" prefHeight="40.0" prefWidth="400.0" styleClass="btn-primary" text="Reserver" />
+                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterDepuisFormulaire" prefHeight="40.0" prefWidth="500.0" styleClass="btn-primary" text="Reserver" />
                               <HBox fx:id="rowEditActions" spacing="10.0">
                                  <children>
-                                    <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#handleModifier" prefHeight="40.0" prefWidth="260.0" styleClass="btn-primary" text="Enregistrer modification" />
-                                    <Button fx:id="btnAnnulerModification" mnemonicParsing="false" onAction="#handleAnnulerModification" prefHeight="40.0" prefWidth="130.0" styleClass="btn-secondary" text="Annuler" />
+                                    <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierDepuisFormulaire" prefHeight="40.0" prefWidth="260.0" styleClass="btn-primary" text="Enregistrer modification" />
+                                    <Button fx:id="btnAnnulerModification" mnemonicParsing="false" onAction="#annulerModificationFormulaire" prefHeight="40.0" prefWidth="130.0" styleClass="btn-secondary" text="Annuler" />
                                  </children>
                               </HBox>
                            </children>
@@ -160,17 +166,17 @@
                      </children>
                   </VBox>
 
-                  <VBox prefWidth="360.0" spacing="12.0" styleClass="event-picker-card">
+                  <VBox prefWidth="0.0" spacing="12.0" styleClass="event-picker-card" visible="false" managed="false">
                      <children>
-                        <Label styleClass="field-label" text="Choisir un evenement" />
-                        <ListView fx:id="listChoixEvenements" prefHeight="260.0" prefWidth="330.0" styleClass="event-choice-list-view" />
-                        <ScrollPane fx:id="eventGridScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="260.0" prefWidth="330.0" styleClass="event-grid-scroll" visible="false" managed="false">
+                        <Label styleClass="field-label" text="Evenements disponibles" />
+                        <ListView fx:id="listChoixEvenements" prefHeight="260.0" prefWidth="330.0" styleClass="event-choice-list-view" visible="false" managed="false" />
+                        <ScrollPane fx:id="eventGridScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="505.0" prefWidth="330.0" styleClass="event-grid-scroll">
                            <content>
-                              <TilePane fx:id="eventGridView" hgap="8.0" prefColumns="1" prefTileHeight="152.0" prefTileWidth="230.0" vgap="8.0" />
+                              <TilePane fx:id="eventGridView" hgap="8.0" prefColumns="1" prefTileHeight="245.0" prefTileWidth="300.0" vgap="8.0" />
                            </content>
                         </ScrollPane>
 
-                        <VBox fx:id="eventPreviewCard" alignment="TOP_CENTER" prefWidth="330.0" spacing="10.0" styleClass="event-preview-card">
+                        <VBox fx:id="eventPreviewCard" alignment="TOP_CENTER" prefWidth="330.0" spacing="10.0" styleClass="event-preview-card" visible="false" managed="false">
                            <children>
                               <StackPane prefHeight="155.0" prefWidth="300.0" styleClass="event-preview-image-box">
                                  <children>
@@ -198,3 +204,4 @@
       </VBox>
    </children>
 </StackPane>
+

@@ -18,18 +18,18 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         conn = DBConnection.getConnection();
     }
 
-    private void checkConnection() throws SQLException {
+    private void verifierConnexionBase() throws SQLException {
         if (conn == null || conn.isClosed()) {
             conn = DBConnection.getConnection();
         }
         if (conn == null) {
             throw new SQLException("La connexion a la base de donnees a echoue. Verifiez votre serveur MySQL.");
         }
-        ensureStatutColumn();
-        ensureChaisesColumn();
+        verifierColonneStatut();
+        verifierColonneChaises();
     }
 
-    private void ensureStatutColumn() throws SQLException {
+    private void verifierColonneStatut() throws SQLException {
         DatabaseMetaData metaData = conn.getMetaData();
         try (ResultSet columns = metaData.getColumns(null, null, "reservation", "statut")) {
             if (!columns.next()) {
@@ -40,7 +40,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         }
     }
 
-    private void ensureChaisesColumn() throws SQLException {
+    private void verifierColonneChaises() throws SQLException {
         DatabaseMetaData metaData = conn.getMetaData();
         try (ResultSet columns = metaData.getColumns(null, null, "reservation", "chaises")) {
             if (!columns.next()) {
@@ -53,7 +53,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
 
     @Override
     public void ajouter(Reservation reservation) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         if (existeDeja(reservation.getId_evenement(), reservation.getId_utilisateur())) {
             throw new SQLException("Vous avez deja reserve cet evenement.");
         }
@@ -75,10 +75,10 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
 
     @Override
     public List<Reservation> afficher() throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         List<Reservation> list = new ArrayList<>();
 
-        String sql = "SELECT r.*, e.nom AS nom_evenement, e.image AS image_evenement, "
+        String sql = "SELECT r.*, e.nom AS nom_evenement, e.image AS image_evenement, e.lieu AS lieu_evenement, "
                 + "e.id_utilisateur AS id_organisateur_evenement, "
                 + "COALESCE(NULLIF(TRIM(CONCAT(COALESCE(u.prenom, ''), ' ', COALESCE(u.nom, ''))), ''), u.nom_utilisateur) AS nom_utilisateur "
                 + "FROM reservation r "
@@ -88,7 +88,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         ResultSet rs = st.executeQuery(sql);
 
         while (rs.next()) {
-            list.add(mapReservation(rs));
+            list.add(transformerResultatEnReservation(rs));
         }
 
         return list;
@@ -96,7 +96,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
 
     @Override
     public void modifier(Reservation reservation) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         if (existeDejaPourAutreReservation(reservation.getId_evenement(), reservation.getId_utilisateur(), reservation.getId_reservation())) {
             throw new SQLException("Vous avez deja reserve cet evenement.");
         }
@@ -122,7 +122,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
 
     @Override
     public void supprimer(int id) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "DELETE FROM reservation WHERE id_reservation=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
@@ -134,7 +134,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
     }
 
     public void changerStatut(int idReservation, String statut) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "UPDATE reservation SET statut=? WHERE id_reservation=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, statut);
@@ -147,7 +147,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
     }
 
     public boolean existeDeja(int idEvenement, long idUtilisateur) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "SELECT COUNT(*) FROM reservation WHERE id_evenement=? AND id_utilisateur=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, idEvenement);
@@ -157,8 +157,8 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         return rs.next() && rs.getInt(1) > 0;
     }
 
-    public Set<String> getChaisesReservees(int idEvenement, int idReservationAExclure) throws SQLException {
-        checkConnection();
+    public Set<String> recupererChaisesReservees(int idEvenement, int idReservationAExclure) throws SQLException {
+        verifierConnexionBase();
         Set<String> chaisesReservees = new LinkedHashSet<>();
         String sql = "SELECT chaises FROM reservation "
                 + "WHERE id_evenement=? "
@@ -215,8 +215,8 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
 
     @Override
     public Reservation rechercherParId(int id) throws SQLException {
-        checkConnection();
-        String sql = "SELECT r.*, e.nom AS nom_evenement, e.image AS image_evenement, "
+        verifierConnexionBase();
+        String sql = "SELECT r.*, e.nom AS nom_evenement, e.image AS image_evenement, e.lieu AS lieu_evenement, "
                 + "e.id_utilisateur AS id_organisateur_evenement, "
                 + "COALESCE(NULLIF(TRIM(CONCAT(COALESCE(u.prenom, ''), ' ', COALESCE(u.nom, ''))), ''), u.nom_utilisateur) AS nom_utilisateur "
                 + "FROM reservation r "
@@ -229,13 +229,13 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            return mapReservation(rs);
+            return transformerResultatEnReservation(rs);
         }
 
         return null;
     }
 
-    private Reservation mapReservation(ResultSet rs) throws SQLException {
+    private Reservation transformerResultatEnReservation(ResultSet rs) throws SQLException {
         Reservation r = new Reservation();
         r.setId_reservation(rs.getInt("id_reservation"));
         r.setNb_places(rs.getInt("nb_places"));
@@ -244,6 +244,7 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         r.setId_utilisateur(rs.getLong("id_utilisateur"));
         r.setNom_evenement(rs.getString("nom_evenement"));
         r.setImage_evenement(rs.getString("image_evenement"));
+        r.setLieu_evenement(rs.getString("lieu_evenement"));
         r.setId_organisateur_evenement(rs.getLong("id_organisateur_evenement"));
         r.setNom_utilisateur(rs.getString("nom_utilisateur"));
         r.setStatut(rs.getString("statut"));
@@ -251,3 +252,4 @@ public class ReservationCRUD implements InterfaceCRUD<Reservation> {
         return r;
     }
 }
+

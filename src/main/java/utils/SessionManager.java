@@ -3,12 +3,11 @@ package utils;
 import entities.Role;
 import entities.User;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public final class SessionManager {
     private static User currentUser;
-
-    static {
-        setDevUser(Role.ETUDIANT);
-    }
 
     private SessionManager() {
     }
@@ -19,58 +18,71 @@ public final class SessionManager {
 
     public static void setDevUser(Role role) {
         User devUser = new User();
-        devUser.setRole(role);
+        setValue(devUser, role.name(), "setRole");
 
         if (role == Role.ADMIN) {
-            devUser.setIdUtilisateur(1001);
-            devUser.setPrenom("Admin");
-            devUser.setNom("Test");
-            devUser.setNomUtilisateur("admin_evenements");
+            setValue(devUser, 1001L, "setIdUtilisateur", "setId");
+            setValue(devUser, "Admin", "setPrenom");
+            setValue(devUser, "Test", "setNom");
+            setValue(devUser, "admin_evenements", "setNomUtilisateur");
         } else if (role == Role.INSTRUCTEUR) {
-            devUser.setIdUtilisateur(1002);
-            devUser.setPrenom("Enseignant");
-            devUser.setNom("Test");
-            devUser.setNomUtilisateur("enseignant_evenements");
+            setValue(devUser, 1002L, "setIdUtilisateur", "setId");
+            setValue(devUser, "Enseignant", "setPrenom");
+            setValue(devUser, "Test", "setNom");
+            setValue(devUser, "enseignant_evenements", "setNomUtilisateur");
         } else {
-            devUser.setIdUtilisateur(1003);
-            devUser.setPrenom("Etudiant");
-            devUser.setNom("Test");
-            devUser.setNomUtilisateur("etudiant_evenements");
+            setValue(devUser, 1003L, "setIdUtilisateur", "setId");
+            setValue(devUser, "Etudiant", "setPrenom");
+            setValue(devUser, "Test", "setNom");
+            setValue(devUser, "etudiant_evenements", "setNomUtilisateur");
         }
 
         currentUser = devUser;
     }
 
     public static User getCurrentUser() {
-        return currentUser;
+        User sessionUser = getExternalSessionUser();
+        return sessionUser != null ? sessionUser : currentUser;
     }
 
     public static long getCurrentUserId() {
-        return currentUser != null ? currentUser.getIdUtilisateur() : 0;
+        User user = getCurrentUser();
+        Object id = getValue(user, "getIdUtilisateur", "getId");
+        if (id instanceof Number) {
+            return ((Number) id).longValue();
+        }
+        return 0;
     }
 
     public static String getCurrentUserName() {
-        if (currentUser == null) {
+        User user = getCurrentUser();
+        if (user == null) {
             return "Utilisateur non connecte";
         }
 
-        String prenom = currentUser.getPrenom() != null ? currentUser.getPrenom().trim() : "";
-        String nom = currentUser.getNom() != null ? currentUser.getNom().trim() : "";
+        String prenom = toText(getValue(user, "getPrenom"));
+        String nom = toText(getValue(user, "getNom"));
         String fullName = (prenom + " " + nom).trim();
 
         if (!fullName.isEmpty()) {
             return fullName;
         }
 
-        if (currentUser.getNomUtilisateur() != null && !currentUser.getNomUtilisateur().trim().isEmpty()) {
-            return currentUser.getNomUtilisateur().trim();
+        String username = toText(getValue(user, "getNomUtilisateur"));
+        if (!username.isEmpty()) {
+            return username;
         }
 
-        return "Utilisateur #" + currentUser.getIdUtilisateur();
+        return "Utilisateur #" + getCurrentUserId();
     }
 
     public static Role getCurrentUserRole() {
-        return currentUser != null ? currentUser.getRole() : null;
+        User user = getCurrentUser();
+        Object role = getValue(user, "getRole");
+        if (role instanceof Role) {
+            return (Role) role;
+        }
+        return Role.fromString(toText(role));
     }
 
     public static String getCurrentUserRoleLabel() {
@@ -85,5 +97,76 @@ public final class SessionManager {
             return "Etudiant";
         }
         return "Role inconnu";
+    }
+
+    private static User getExternalSessionUser() {
+        try {
+            Class<?> sessionClass = Class.forName("utils.Session");
+            Method getUser = sessionClass.getMethod("getUser");
+            Object user = getUser.invoke(null);
+            return user instanceof User ? (User) user : null;
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+    }
+
+    private static Object getValue(Object target, String... methodNames) {
+        if (target == null) {
+            return null;
+        }
+
+        for (String methodName : methodNames) {
+            try {
+                Method method = target.getClass().getMethod(methodName);
+                return method.invoke(target);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                // Try the next compatible getter.
+            }
+        }
+        return null;
+    }
+
+    private static void setValue(Object target, Object value, String... methodNames) {
+        if (target == null) {
+            return;
+        }
+
+        for (String methodName : methodNames) {
+            for (Method method : target.getClass().getMethods()) {
+                if (!method.getName().equals(methodName) || method.getParameterCount() != 1) {
+                    continue;
+                }
+                try {
+                    Object compatibleValue = convertValue(value, method.getParameterTypes()[0]);
+                    method.invoke(target, compatibleValue);
+                    return;
+                } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+                    // Try the next compatible setter.
+                }
+            }
+        }
+    }
+
+    private static Object convertValue(Object value, Class<?> targetType) {
+        if (value == null || targetType.isInstance(value)) {
+            return value;
+        }
+        if ((targetType == int.class || targetType == Integer.class) && value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        if ((targetType == long.class || targetType == Long.class) && value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        if (targetType == String.class) {
+            return String.valueOf(value);
+        }
+        if (targetType == Role.class) {
+            return Role.fromString(String.valueOf(value));
+        }
+        return value;
+    }
+
+    private static String toText(Object value) {
+        return value == null ? "" : String.valueOf(value).trim();
     }
 }

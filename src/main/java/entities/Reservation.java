@@ -10,6 +10,7 @@ public class Reservation {
     private long id_utilisateur;
     private String nom_evenement;
     private String image_evenement;
+    private String lieu_evenement;
     private long id_organisateur_evenement;
     private String nom_utilisateur;
     private String statut = "EN_ATTENTE";
@@ -79,6 +80,14 @@ public class Reservation {
 
     public void setImage_evenement(String image_evenement) {
         this.image_evenement = image_evenement;
+    }
+
+    public String getLieu_evenement() {
+        return lieu_evenement;
+    }
+
+    public void setLieu_evenement(String lieu_evenement) {
+        this.lieu_evenement = lieu_evenement;
     }
 
     public long getId_organisateur_evenement() {

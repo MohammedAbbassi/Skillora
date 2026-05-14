@@ -86,39 +86,6 @@
     -fx-font-weight: 800;
 }
 
-.accessibility-panel {
-    -fx-background-color: rgba(219, 234, 254, 0.22);
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(255, 255, 255, 0.26);
-    -fx-border-radius: 8;
-    -fx-padding: 14;
-}
-
-.accessibility-title {
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
-    -fx-font-weight: 900;
-}
-
-.accessibility-hint {
-    -fx-text-fill: #dbeafe;
-    -fx-font-size: 11px;
-    -fx-font-weight: 700;
-}
-
-.dyslexia-toggle {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #0f5fc4;
-    -fx-border-color: #bfdbfe;
-    -fx-font-weight: 900;
-}
-
-.dyslexia-toggle:selected {
-    -fx-background-color: #dbeafe;
-    -fx-text-fill: #0b2f5f;
-    -fx-border-color: #ffffff;
-}
-
 .nav-btn {
     -fx-background-color: transparent;
     -fx-text-fill: #eaf3ff;
@@ -162,6 +129,32 @@
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #1d4ed8 0%, #0b4fa6 100%);
 }
 
+.btn-reserve {
+    -fx-background-color: #e0efff;
+    -fx-text-fill: #0f5fc4;
+    -fx-border-color: #93c5fd;
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.12), 10, 0, 0, 3);
+}
+
+.btn-reserve:hover {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #1d4ed8;
+}
+
+.btn-location {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #315f9b;
+    -fx-border-color: #bfdbfe;
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 8, 0, 0, 2);
+}
+
+.btn-location:hover {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #0f5fc4;
+    -fx-border-color: #60a5fa;
+}
+
 .btn-secondary,
 .btn-danger {
     -fx-background-color: #ffffff;
@@ -173,6 +166,60 @@
 .btn-danger:hover {
     -fx-background-color: #eff6ff;
     -fx-border-color: #60a5fa;
+}
+
+.alert-dialog {
+    -fx-background-color: #f8fbff;
+    -fx-background-radius: 8;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.alert-dialog > .content.label {
+    -fx-text-fill: #0b2f5f;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-padding: 12 10 16 10;
+}
+
+.alert-dialog > .button-bar > .container {
+    -fx-padding: 10 12 12 12;
+}
+
+.alert-dialog .button {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-weight: 900;
+    -fx-padding: 8 18;
+}
+
+.alert-dialog .button:default {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #2563eb;
+}
+
+.alert-dialog .button:cancel {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1d4ed8;
+    -fx-border-color: #bfdbfe;
+}
+
+.alert-dialog.alert-confirmation {
+    -fx-border-color: #60a5fa;
+}
+
+.alert-dialog.alert-success {
+    -fx-border-color: #86efac;
+}
+
+.alert-dialog.alert-warning {
+    -fx-border-color: #fdba74;
+}
+
+.alert-dialog.alert-error {
+    -fx-border-color: #fda4af;
 }
 
 .text-field,
@@ -419,6 +466,10 @@
     -fx-background-color: #eef6ff;
 }
 
+.event-grid-scroll .tile-pane {
+    -fx-padding: 10;
+}
+
 .event-grid-card {
     -fx-alignment: TOP_CENTER;
     -fx-background-color: #f8fbff;
@@ -446,13 +497,13 @@
 
 .event-grid-title {
     -fx-text-fill: #0b2f5f;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-font-weight: 900;
 }
 
 .event-grid-meta {
     -fx-text-fill: #315f9b;
-    -fx-font-size: 11px;
+    -fx-font-size: 12px;
     -fx-font-weight: 800;
 }
 
@@ -484,8 +535,86 @@
     -fx-border-color: #60a5fa;
 }
 
+.available-event-card {
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: #f8fbff;
+    -fx-background-radius: 8;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 8;
+    -fx-padding: 10 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 10, 0, 0, 4);
+}
+
+.available-event-card:hover {
+    -fx-background-color: #f3f8ff;
+    -fx-border-color: #60a5fa;
+}
+
+.available-event-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.10), 7, 0, 0, 3);
+}
+
+.available-event-title {
+    -fx-text-fill: #0b2f5f;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+}
+
+.available-event-meta {
+    -fx-text-fill: #315f9b;
+    -fx-font-size: 12px;
+    -fx-font-weight: 800;
+}
+
 .reservation-grid-image {
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.12), 8, 0, 0, 3);
+}
+
+.reservation-qr-code {
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.10), 8, 0, 0, 3);
+}
+
+.ticket-dialog {
+    -fx-background-color: #f8fbff;
+    -fx-background-radius: 8;
+    -fx-border-color: #93c5fd;
+    -fx-border-radius: 8;
+}
+
+.ticket-dialog > .button-bar > .container {
+    -fx-padding: 8 18 16 18;
+}
+
+.ticket-dialog-content {
+    -fx-background-color: #f8fbff;
+    -fx-background-radius: 8;
+    -fx-padding: 18 24 12 24;
+}
+
+.ticket-title {
+    -fx-text-fill: #0b2f5f;
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+}
+
+.ticket-event-name {
+    -fx-text-fill: #0f5fc4;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+.ticket-meta {
+    -fx-text-fill: #315f9b;
+    -fx-font-size: 12px;
+    -fx-font-weight: 800;
+}
+
+.ticket-qr-image {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(15, 95, 196, 0.16), 14, 0, 0, 5);
 }
 
 .reservation-grid-title {
@@ -752,97 +881,4 @@
 
 .scroll-bar .thumb:hover {
     -fx-background-color: #60a5fa;
-}
-
-.dyslexia-mode {
-    -fx-font-family: "Verdana", "Segoe UI", "Arial", sans-serif;
-    -fx-font-size: 15px;
-}
-
-.dyslexia-mode .content-area {
-    -fx-background-color: #f8fbff;
-}
-
-.dyslexia-mode .card {
-    -fx-background-color: #f8fbff;
-    -fx-border-color: #93c5fd;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 12, 0, 0, 4);
-}
-
-.dyslexia-mode .section-title {
-    -fx-font-size: 22px;
-    -fx-text-fill: #062f69;
-}
-
-.dyslexia-mode .field-label,
-.dyslexia-mode .session-label,
-.dyslexia-mode .image-status,
-.dyslexia-mode .event-preview-meta,
-.dyslexia-mode .event-preview-action {
-    -fx-font-size: 15px;
-}
-
-.dyslexia-mode .event-preview-card {
-    -fx-border-width: 2;
-    -fx-padding: 14;
-}
-
-.dyslexia-mode .event-preview-title {
-    -fx-font-size: 19px;
-}
-
-.dyslexia-mode .text-field,
-.dyslexia-mode .date-picker,
-.dyslexia-mode .combo-box {
-    -fx-font-size: 15px;
-    -fx-padding: 12;
-    -fx-border-width: 2;
-}
-
-.dyslexia-mode .button {
-    -fx-font-size: 15px;
-    -fx-padding: 12 16;
-}
-
-.dyslexia-mode .nav-btn {
-    -fx-font-size: 16px;
-    -fx-padding: 14 18;
-}
-
-.dyslexia-mode .table-view {
-    -fx-cell-size: 72;
-    -fx-border-width: 2;
-}
-
-.dyslexia-mode .table-view .column-header .label {
-    -fx-font-size: 14px;
-}
-
-.dyslexia-mode .table-cell,
-.dyslexia-mode .table-wrap-label {
-    -fx-font-size: 15px;
-    -fx-line-spacing: 4;
-}
-
-.dyslexia-mode .table-row-cell {
-    -fx-border-color: transparent transparent #dbeafe transparent;
-}
-
-.dyslexia-mode .table-row-cell:odd {
-    -fx-background-color: #f1f7ff;
-}
-
-.dyslexia-mode .table-row-cell:hover,
-.dyslexia-mode .table-row-cell:selected {
-    -fx-background-color: #dbeafe;
-}
-
-.dyslexia-mode .status-badge {
-    -fx-font-size: 14px;
-    -fx-padding: 7 13;
-}
-
-.dyslexia-mode .counter-value {
-    -fx-font-size: 20px;
 }

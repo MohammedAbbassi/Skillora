@@ -25,9 +25,9 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnOpenEventForm" mnemonicParsing="false" onAction="#handleOpenAddForm" prefHeight="38.0" prefWidth="150.0" styleClass="btn-primary" text="Nouvel evenement" />
-                  <Button fx:id="btnOpenSelectedEventForm" mnemonicParsing="false" onAction="#handleOpenSelectedForm" prefHeight="38.0" prefWidth="110.0" styleClass="btn-secondary" text="Modifier" />
-                  <Button fx:id="btnListSupprimer" mnemonicParsing="false" onAction="#handleSupprimer" prefHeight="38.0" prefWidth="110.0" styleClass="btn-danger" text="Supprimer" />
+                  <Button fx:id="btnOpenEventForm" mnemonicParsing="false" onAction="#ouvrirFormulaireAjout" prefHeight="38.0" prefWidth="150.0" styleClass="btn-primary" text="Nouvel evenement" />
+                  <Button fx:id="btnOpenSelectedEventForm" mnemonicParsing="false" onAction="#ouvrirFormulaireModification" prefHeight="38.0" prefWidth="110.0" styleClass="btn-secondary" text="Modifier" />
+                  <Button fx:id="btnListSupprimer" mnemonicParsing="false" onAction="#supprimerElementSelectionne" prefHeight="38.0" prefWidth="110.0" styleClass="btn-danger" text="Supprimer" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="filter-bar">
@@ -47,7 +47,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleBackToEventList" prefHeight="34.0" prefWidth="90.0" styleClass="btn-secondary" text="Retour" />
+                  <Button mnemonicParsing="false" onAction="#retournerALaListeEvenements" prefHeight="34.0" prefWidth="90.0" styleClass="btn-secondary" text="Retour" />
                   <Label styleClass="section-title" text="Formulaire evenement">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -66,7 +66,12 @@
                         <DatePicker fx:id="datePicker" prefWidth="370.0" GridPane.rowIndex="3" />
 
                         <Label styleClass="field-label" text="Lieu" GridPane.rowIndex="4" />
-                        <TextField fx:id="txtLieu" promptText="Ex: Tunis" GridPane.rowIndex="5" />
+                        <HBox spacing="8.0" GridPane.rowIndex="5">
+                           <children>
+                              <TextField fx:id="txtLieu" prefWidth="270.0" promptText="Ex: Tunis" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnVerifierLocalisation" mnemonicParsing="false" onAction="#choisirLocalisationEvenement" prefWidth="92.0" styleClass="btn-location" text="Choisir" />
+                           </children>
+                        </HBox>
 
                         <Label styleClass="field-label" text="Duree" GridPane.rowIndex="6" />
                         <TextField fx:id="txtDuree" promptText="Ex: 90 minutes = 1 h 30" GridPane.rowIndex="7" />
@@ -75,7 +80,7 @@
                         <HBox spacing="8.0" GridPane.rowIndex="9">
                            <children>
                               <TextField fx:id="txtImage" prefWidth="270.0" promptText="Chemin ou URL" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btnChoisirImage" mnemonicParsing="false" onAction="#handleChoisirImage" prefWidth="92.0" styleClass="btn-secondary" text="Choisir" />
+                              <Button fx:id="btnChoisirImage" mnemonicParsing="false" onAction="#choisirImageEvenement" prefWidth="92.0" styleClass="btn-secondary" text="Choisir" />
                            </children>
                         </HBox>
 
@@ -110,11 +115,11 @@
                         </VBox>
                         <VBox fx:id="actionBox" spacing="8.0">
                            <children>
-                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#handleAjouter" prefHeight="42.0" prefWidth="300.0" styleClass="btn-primary" text="Ajouter l'evenement" />
+                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterDepuisFormulaire" prefHeight="42.0" prefWidth="300.0" styleClass="btn-primary" text="Ajouter l'evenement" />
                               <HBox fx:id="rowEditActions" spacing="10.0">
                                  <children>
-                                    <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#handleModifier" prefHeight="42.0" prefWidth="190.0" styleClass="btn-primary" text="Enregistrer modification" />
-                                    <Button fx:id="btnAnnulerModification" mnemonicParsing="false" onAction="#handleAnnulerModification" prefHeight="42.0" prefWidth="100.0" styleClass="btn-secondary" text="Annuler" />
+                                    <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierDepuisFormulaire" prefHeight="42.0" prefWidth="190.0" styleClass="btn-primary" text="Enregistrer modification" />
+                                    <Button fx:id="btnAnnulerModification" mnemonicParsing="false" onAction="#annulerModificationFormulaire" prefHeight="42.0" prefWidth="100.0" styleClass="btn-secondary" text="Annuler" />
                                  </children>
                               </HBox>
                            </children>
@@ -130,3 +135,4 @@
       </VBox>
    </children>
 </StackPane>
+

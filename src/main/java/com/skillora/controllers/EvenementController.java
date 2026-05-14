@@ -2,6 +2,7 @@ package com.skillora.controllers;
 
 import entities.Evenement;
 import entities.Role;
+import services.LocationService;
 import services.EvenementCRUD;
 import utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -17,8 +18,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -42,6 +47,7 @@ public class EvenementController implements Initializable {
     @FXML private Button btnModifier;
     @FXML private Button btnAnnulerModification;
     @FXML private Button btnChoisirImage;
+    @FXML private Button btnVerifierLocalisation;
     @FXML private Button btnOpenEventForm;
     @FXML private Button btnOpenSelectedEventForm;
     @FXML private Button btnListSupprimer;
@@ -53,21 +59,22 @@ public class EvenementController implements Initializable {
     @FXML private ListView<Evenement> listEvenements;
 
     private final EvenementCRUD evenementCRUD = new EvenementCRUD();
+    private final LocationService locationService = new LocationService();
     private ObservableList<Evenement> allEventList = FXCollections.observableArrayList();
     private ObservableList<Evenement> eventList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setupEventList();
-        setupEventFilters();
-        setupImagePreview();
-        setupDatePicker();
-        setupCurrentUser();
-        loadEvenements();
-        showEventListPage();
+        preparerListeEvenements();
+        preparerFiltresEvenements();
+        preparerApercuImage();
+        preparerCalendrier();
+        afficherUtilisateurConnecte();
+        chargerEvenementsDepuisBase();
+        afficherListeEvenements();
     }
 
-    private void setupDatePicker() {
+    private void preparerCalendrier() {
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -77,33 +84,33 @@ public class EvenementController implements Initializable {
         });
     }
 
-    private void setupCurrentUser() {
+    private void afficherUtilisateurConnecte() {
         lblCurrentUser.setText(SessionManager.getCurrentUserName()
                 + " | Role: " + SessionManager.getCurrentUserRoleLabel());
-        applyRolePermissions(null);
+        appliquerPermissionsSelonRole(null);
     }
 
-    private void setupEventList() {
-        listEvenements.setCellFactory(list -> createEventListCell());
+    private void preparerListeEvenements() {
+        listEvenements.setCellFactory(list -> creerLigneListeEvenement());
         listEvenements.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                populateFields(newSelection);
+                remplirFormulaire(newSelection);
             }
-            applyRolePermissions(newSelection);
+            appliquerPermissionsSelonRole(newSelection);
         });
     }
 
-    private void setupEventFilters() {
+    private void preparerFiltresEvenements() {
         comboFiltreDate.getItems().setAll("Tous", "A venir", "Passes");
         comboFiltreDate.setValue("Tous");
-        txtRechercheEvenement.textProperty().addListener((observable, oldValue, newValue) -> applyEventFilters());
-        comboFiltreDate.valueProperty().addListener((observable, oldValue, newValue) -> applyEventFilters());
+        txtRechercheEvenement.textProperty().addListener((observable, oldValue, newValue) -> appliquerFiltresEvenements());
+        comboFiltreDate.valueProperty().addListener((observable, oldValue, newValue) -> appliquerFiltresEvenements());
     }
 
-    private void applyRolePermissions(Evenement selectedEvent) {
+    private void appliquerPermissionsSelonRole(Evenement selectedEvent) {
         boolean admin = SessionManager.getCurrentUserRole() == Role.ADMIN;
-        boolean canCreate = canCreateEvent();
-        boolean canManageSelected = canManageEvent(selectedEvent);
+        boolean canCreate = peutCreerEvenement();
+        boolean canManageSelected = peutGererEvenement(selectedEvent);
         boolean hasSelection = selectedEvent != null;
 
         txtNom.setDisable(!admin);
@@ -112,33 +119,34 @@ public class EvenementController implements Initializable {
         txtDuree.setDisable(!admin);
         txtImage.setDisable(!admin);
         btnChoisirImage.setDisable(!admin);
+        btnVerifierLocalisation.setDisable(!admin);
 
-        setNodeVisible(btnOpenEventForm, admin);
-        setNodeVisible(btnOpenSelectedEventForm, admin);
-        setNodeVisible(btnListSupprimer, admin);
+        rendreElementVisible(btnOpenEventForm, admin);
+        rendreElementVisible(btnOpenSelectedEventForm, admin);
+        rendreElementVisible(btnListSupprimer, admin);
         btnOpenEventForm.setDisable(!canCreate);
         btnOpenSelectedEventForm.setDisable(!canManageSelected);
         btnListSupprimer.setDisable(!canManageSelected);
 
-        setNodeVisible(actionBox, admin);
-        setNodeVisible(btnAjouter, admin && !hasSelection);
-        setNodeVisible(rowEditActions, admin && hasSelection);
+        rendreElementVisible(actionBox, admin);
+        rendreElementVisible(btnAjouter, admin && !hasSelection);
+        rendreElementVisible(rowEditActions, admin && hasSelection);
         btnAjouter.setDisable(!canCreate);
         btnModifier.setDisable(!canManageSelected);
         btnAnnulerModification.setDisable(!hasSelection);
     }
 
-    private void setNodeVisible(Node node, boolean visible) {
+    private void rendreElementVisible(Node node, boolean visible) {
         node.setVisible(visible);
         node.setManaged(visible);
     }
 
-    private boolean canCreateEvent() {
+    private boolean peutCreerEvenement() {
         Role role = SessionManager.getCurrentUserRole();
         return role == Role.ADMIN;
     }
 
-    private boolean canManageEvent(Evenement evenement) {
+    private boolean peutGererEvenement(Evenement evenement) {
         if (evenement == null) {
             return false;
         }
@@ -147,7 +155,7 @@ public class EvenementController implements Initializable {
         return role == Role.ADMIN;
     }
 
-    private ListCell<Evenement> createEventListCell() {
+    private ListCell<Evenement> creerLigneListeEvenement() {
         return new ListCell<Evenement>() {
             @Override
             protected void updateItem(Evenement evenement, boolean empty) {
@@ -169,7 +177,7 @@ public class EvenementController implements Initializable {
                 eventImage.getStyleClass().add("event-list-image");
                 if (evenement.getImage() != null && !evenement.getImage().trim().isEmpty()) {
                     try {
-                        Image image = new Image(resolveImageSource(evenement.getImage()), 92, 58, true, true, true);
+                        Image image = new Image(resoudreSourceImage(evenement.getImage()), 92, 58, true, true, true);
                         eventImage.setImage(image.isError() ? null : image);
                     } catch (Exception e) {
                         eventImage.setImage(null);
@@ -185,7 +193,7 @@ public class EvenementController implements Initializable {
 
                 Label meta = new Label("Date: " + evenement.getDate_evenement()
                         + " | Lieu: " + evenement.getLieu()
-                        + " | Duree: " + formatDuration(evenement.getDuree_minutes()));
+                        + " | Duree: " + formaterDuree(evenement.getDuree_minutes()));
                 meta.setWrapText(true);
                 meta.getStyleClass().add("event-list-meta");
 
@@ -198,7 +206,7 @@ public class EvenementController implements Initializable {
         };
     }
 
-    private String formatDuration(int minutes) {
+    private String formaterDuree(int minutes) {
         if (minutes < 60) {
             return minutes + " min";
         }
@@ -211,33 +219,33 @@ public class EvenementController implements Initializable {
         return hours + " h " + remainingMinutes + " min";
     }
 
-    private void populateFields(Evenement e) {
+    private void remplirFormulaire(Evenement e) {
         txtNom.setText(e.getNom());
         datePicker.setValue(e.getDate_evenement().toLocalDate());
         txtLieu.setText(e.getLieu());
         txtDuree.setText(String.valueOf(e.getDuree_minutes()));
         txtImage.setText(e.getImage());
-        updateImage(e.getImage());
-        resetValidationStyles();
+        mettreAJourImage(e.getImage());
+        retirerErreursVisuelles();
     }
 
-    private Evenement getSelectedEvent() {
+    private Evenement recupererEvenementSelectionne() {
         return listEvenements.getSelectionModel().getSelectedItem();
     }
 
-    private void setupImagePreview() {
+    private void preparerApercuImage() {
         imageView.setPreserveRatio(true);
-        showEmptyImagePreview();
-        txtImage.setOnAction(event -> updateImage(txtImage.getText()));
+        afficherApercuImageVide();
+        txtImage.setOnAction(event -> mettreAJourImage(txtImage.getText()));
         txtImage.focusedProperty().addListener((observable, wasFocused, isFocused) -> {
             if (!isFocused) {
-                updateImage(txtImage.getText());
+                mettreAJourImage(txtImage.getText());
             }
         });
     }
 
     @FXML
-    private void handleChoisirImage(ActionEvent event) {
+    private void choisirImageEvenement(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         fileChooser.getExtensionFilters().add(
@@ -247,31 +255,102 @@ public class EvenementController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(txtImage.getScene().getWindow());
         if (selectedFile != null) {
             txtImage.setText(selectedFile.getAbsolutePath());
-            updateImage(selectedFile.getAbsolutePath());
+            mettreAJourImage(selectedFile.getAbsolutePath());
         }
     }
 
-    private void updateImage(String source) {
+    @FXML
+    private void verifierLocalisationEvenement(ActionEvent event) {
+        choisirLocalisationEvenement(event);
+    }
+
+    @FXML
+    private void choisirLocalisationEvenement(ActionEvent event) {
+        TextInputDialog dialog = new TextInputDialog(txtLieu.getText());
+        dialog.setTitle("Choisir une localisation");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Ville ou adresse :");
+        appliquerStyleAlerte(dialog, "alert-confirmation");
+
+        dialog.showAndWait().ifPresent(query -> {
+            String search = query == null ? "" : query.trim();
+            if (search.isEmpty()) {
+                afficherAlerte("Localisation requise", "Veuillez saisir une ville ou une adresse.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            try {
+                LocationService.LocationResult result = locationService.rechercher(search);
+                txtLieu.setText(result.getLabel());
+
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Localisation trouvee");
+                confirm.setHeaderText(null);
+                confirm.setContentText("Localisation selectionnee :\n"
+                        + result.getLabel()
+                        + "\n\nVoulez-vous l'ouvrir dans Google Maps ?");
+                appliquerStyleAlerte(confirm, "alert-confirmation");
+
+                if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    ouvrirLienExterne("https://www.google.com/maps/search/?api=1&query="
+                            + URLEncoder.encode(result.getLabel(), StandardCharsets.UTF_8));
+                }
+            } catch (Exception e) {
+                afficherAlerte("Localisation introuvable",
+                        "Impossible de trouver cette localisation. Essayez une ville ou une adresse plus precise.",
+                        Alert.AlertType.WARNING);
+            }
+        });
+    }
+
+    @FXML
+    private void ouvrirLocalisationEvenement(ActionEvent event) {
+        String lieu = txtLieu.getText() == null ? "" : txtLieu.getText().trim();
+        String nom = txtNom.getText() == null ? "" : txtNom.getText().trim();
+
+        if (lieu.isEmpty()) {
+            afficherAlerte("Lieu requis", "Veuillez saisir le lieu de l'evenement avant de verifier la localisation.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        String query = nom.isEmpty() ? lieu : lieu + " " + nom;
+        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+        ouvrirLienExterne("https://www.google.com/maps/search/?api=1&query=" + encodedQuery);
+    }
+
+    private void ouvrirLienExterne(String url) {
+        try {
+            if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                afficherAlerte("Navigation indisponible", "Votre systeme ne permet pas d'ouvrir le navigateur automatiquement.", Alert.AlertType.WARNING);
+                return;
+            }
+            Desktop.getDesktop().browse(URI.create(url));
+        } catch (Exception e) {
+            afficherAlerte("Erreur", "Impossible d'ouvrir la localisation de cet evenement.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void mettreAJourImage(String source) {
         if (source == null || source.trim().isEmpty()) {
-            showEmptyImagePreview();
+            afficherApercuImageVide();
             return;
         }
 
         try {
-            Image img = new Image(resolveImageSource(source), 260, 125, true, true, false);
+            Image img = new Image(resoudreSourceImage(source), 260, 125, true, true, false);
             if (img.isError()) {
-                showInvalidImagePreview();
+                afficherApercuImageInvalide();
                 return;
             }
 
             imageView.setImage(img);
             lblImageStatus.setText("Image selectionnee");
         } catch (Exception e) {
-            showInvalidImagePreview();
+            afficherApercuImageInvalide();
         }
     }
 
-    private String resolveImageSource(String source) {
+    private String resoudreSourceImage(String source) {
         String trimmedSource = source.trim();
         if (trimmedSource.startsWith("http://")
                 || trimmedSource.startsWith("https://")
@@ -291,27 +370,27 @@ public class EvenementController implements Initializable {
         return new File(trimmedSource).toURI().toString();
     }
 
-    private void showEmptyImagePreview() {
+    private void afficherApercuImageVide() {
         imageView.setImage(null);
         lblImageStatus.setText("Aucune image choisie");
     }
 
-    private void showInvalidImagePreview() {
+    private void afficherApercuImageInvalide() {
         imageView.setImage(null);
         lblImageStatus.setText("Image introuvable ou format invalide");
     }
 
-    private void loadEvenements() {
+    private void chargerEvenementsDepuisBase() {
         try {
             java.util.List<Evenement> data = evenementCRUD.afficher();
             allEventList.setAll(data);
-            applyEventFilters();
+            appliquerFiltresEvenements();
         } catch (Exception e) {
-            showAlert("Erreur de connexion", "Impossible de contacter la base de donnees. Assurez-vous que MySQL est lance sur le port 3306.", Alert.AlertType.ERROR);
+            afficherAlerte("Erreur de connexion", "Impossible de contacter la base de donnees. Assurez-vous que MySQL est lance sur le port 3306.", Alert.AlertType.ERROR);
         }
     }
 
-    private void applyEventFilters() {
+    private void appliquerFiltresEvenements() {
         String search = txtRechercheEvenement.getText() != null
                 ? txtRechercheEvenement.getText().trim().toLowerCase()
                 : "";
@@ -319,10 +398,10 @@ public class EvenementController implements Initializable {
 
         List<Evenement> filteredEvents = new ArrayList<>();
         for (Evenement evenement : allEventList) {
-            if (!matchesDateFilter(evenement, dateFilter)) {
+            if (!correspondAuFiltreDate(evenement, dateFilter)) {
                 continue;
             }
-            if (!matchesEventSearch(evenement, search)) {
+            if (!correspondARechercheEvenement(evenement, search)) {
                 continue;
             }
             filteredEvents.add(evenement);
@@ -330,10 +409,10 @@ public class EvenementController implements Initializable {
 
         eventList.setAll(filteredEvents);
         listEvenements.setItems(eventList);
-        applyRolePermissions(getSelectedEvent());
+        appliquerPermissionsSelonRole(recupererEvenementSelectionne());
     }
 
-    private boolean matchesDateFilter(Evenement evenement, String dateFilter) {
+    private boolean correspondAuFiltreDate(Evenement evenement, String dateFilter) {
         if ("Tous".equals(dateFilter)) {
             return true;
         }
@@ -345,7 +424,7 @@ public class EvenementController implements Initializable {
         return eventDate.isBefore(LocalDate.now());
     }
 
-    private boolean matchesEventSearch(Evenement evenement, String search) {
+    private boolean correspondARechercheEvenement(Evenement evenement, String search) {
         if (search.isEmpty()) {
             return true;
         }
@@ -353,71 +432,71 @@ public class EvenementController implements Initializable {
         String content = (evenement.getNom() + " "
                 + evenement.getLieu() + " "
                 + evenement.getDate_evenement() + " "
-                + formatDuration(evenement.getDuree_minutes())).toLowerCase();
+                + formaterDuree(evenement.getDuree_minutes())).toLowerCase();
         return content.contains(search);
     }
 
     @FXML
-    private void handleOpenAddForm(ActionEvent event) {
+    private void ouvrirFormulaireAjout(ActionEvent event) {
         listEvenements.getSelectionModel().clearSelection();
-        clearFormFields();
-        applyRolePermissions(null);
-        showEventFormPage();
+        viderChampsFormulaire();
+        appliquerPermissionsSelonRole(null);
+        afficherFormulaireEvenement();
     }
 
     @FXML
-    private void handleOpenSelectedForm(ActionEvent event) {
-        Evenement selected = getSelectedEvent();
+    private void ouvrirFormulaireModification(ActionEvent event) {
+        Evenement selected = recupererEvenementSelectionne();
         if (selected == null) {
-            showAlert("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
+            afficherAlerte("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
             return;
         }
-        populateFields(selected);
-        applyRolePermissions(selected);
-        showEventFormPage();
+        remplirFormulaire(selected);
+        appliquerPermissionsSelonRole(selected);
+        afficherFormulaireEvenement();
     }
 
     @FXML
-    private void handleBackToEventList(ActionEvent event) {
-        showEventListPage();
+    private void retournerALaListeEvenements(ActionEvent event) {
+        afficherListeEvenements();
     }
 
-    private void showEventListPage() {
-        setNodeVisible(eventListPage, true);
-        setNodeVisible(eventFormPage, false);
+    private void afficherListeEvenements() {
+        rendreElementVisible(eventListPage, true);
+        rendreElementVisible(eventFormPage, false);
     }
 
-    private void showEventFormPage() {
-        setNodeVisible(eventListPage, false);
-        setNodeVisible(eventFormPage, true);
+    private void afficherFormulaireEvenement() {
+        rendreElementVisible(eventListPage, false);
+        rendreElementVisible(eventFormPage, true);
     }
 
     @FXML
-    private void handleAjouter(ActionEvent event) {
-        if (!canCreateEvent()) {
-            showAlert("Acces refuse", "Seul l'admin peut ajouter un evenement.", Alert.AlertType.WARNING);
+    private void ajouterDepuisFormulaire(ActionEvent event) {
+        if (!peutCreerEvenement()) {
+            afficherAlerte("Acces refuse", "Seul l'admin peut ajouter un evenement.", Alert.AlertType.WARNING);
             return;
         }
-        Evenement selected = getSelectedEvent();
-        if (selected != null && isSelectedEventUnchanged(selected)) {
-            showAlert("Mode modification", "Cet evenement est deja selectionne. Utilisez Modifier pour le changer.", Alert.AlertType.WARNING);
+        Evenement selected = recupererEvenementSelectionne();
+        if (selected != null && evenementSelectionneSansChangement(selected)) {
+            afficherAlerte("Mode modification", "Cet evenement est deja selectionne. Utilisez Modifier pour le changer.", Alert.AlertType.WARNING);
             return;
         }
 
-        if (validateInput()) {
-            Evenement e = createEventFromFields();
+        if (validerSaisieFormulaire()) {
+            Evenement e = creerEvenementDepuisFormulaire();
             try {
                 evenementCRUD.ajouter(e);
-                loadEvenements();
-                clearForm();
-                showAlert("Ajout reussi", "L'evenement a ete ajoute avec succes.", Alert.AlertType.INFORMATION);
+                chargerEvenementsDepuisBase();
+                viderFormulaire();
+                afficherAlerte("Ajout reussi", "L'evenement a ete ajoute avec succes.", Alert.AlertType.INFORMATION);
             } catch (SQLException ex) {
-                showAlert("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
+                afficherAlerte("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
 
-    private boolean isSelectedEventUnchanged(Evenement selected) {
+    private boolean evenementSelectionneSansChangement(Evenement selected) {
         if (datePicker.getValue() == null) {
             return false;
         }
@@ -433,46 +512,46 @@ public class EvenementController implements Initializable {
     }
 
     @FXML
-    private void handleModifier(ActionEvent event) {
-        Evenement selected = getSelectedEvent();
-        if (!canManageEvent(selected)) {
-            showAlert("Acces refuse", "Seul l'admin peut modifier un evenement.", Alert.AlertType.WARNING);
+    private void modifierDepuisFormulaire(ActionEvent event) {
+        Evenement selected = recupererEvenementSelectionne();
+        if (!peutGererEvenement(selected)) {
+            afficherAlerte("Acces refuse", "Seul l'admin peut modifier un evenement.", Alert.AlertType.WARNING);
             return;
         }
 
-        if (validateInput()) {
-            if (isSelectedEventUnchanged(selected)) {
-                showAlert("Aucune modification", "Aucune modification detectee.", Alert.AlertType.INFORMATION);
+        if (validerSaisieFormulaire()) {
+            if (evenementSelectionneSansChangement(selected)) {
+                afficherAlerte("Aucune modification", "Aucune modification detectee.", Alert.AlertType.INFORMATION);
                 return;
             }
 
-            Evenement e = createEventFromFields(selected.getId_utilisateur());
+            Evenement e = creerEvenementDepuisFormulaire(selected.getId_utilisateur());
             e.setId_evenement(selected.getId_evenement());
             try {
                 evenementCRUD.modifier(e);
-                loadEvenements();
-                clearForm();
-                showAlert("Modification reussie", "L'evenement a ete modifie avec succes.", Alert.AlertType.INFORMATION);
+                chargerEvenementsDepuisBase();
+                viderFormulaire();
+                afficherAlerte("Modification reussie", "L'evenement a ete modifie avec succes.", Alert.AlertType.INFORMATION);
             } catch (SQLException ex) {
-                showAlert("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
+                afficherAlerte("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
 
     @FXML
-    private void handleAnnulerModification(ActionEvent event) {
-        clearForm();
+    private void annulerModificationFormulaire(ActionEvent event) {
+        viderFormulaire();
     }
 
     @FXML
-    private void handleSupprimer(ActionEvent event) {
-        Evenement selected = getSelectedEvent();
+    private void supprimerElementSelectionne(ActionEvent event) {
+        Evenement selected = recupererEvenementSelectionne();
         if (selected == null) {
-            showAlert("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
+            afficherAlerte("Selection requise", "Veuillez selectionner un evenement dans la liste.", Alert.AlertType.WARNING);
             return;
         }
-        if (!canManageEvent(selected)) {
-            showAlert("Acces refuse", "Seul l'admin peut supprimer un evenement.", Alert.AlertType.WARNING);
+        if (!peutGererEvenement(selected)) {
+            afficherAlerte("Acces refuse", "Seul l'admin peut supprimer un evenement.", Alert.AlertType.WARNING);
             return;
         }
 
@@ -487,19 +566,19 @@ public class EvenementController implements Initializable {
 
         try {
             evenementCRUD.supprimer(selected.getId_evenement());
-            loadEvenements();
-            clearForm();
-            showAlert("Suppression reussie", "L'evenement a ete supprime.", Alert.AlertType.INFORMATION);
+            chargerEvenementsDepuisBase();
+            viderFormulaire();
+            afficherAlerte("Suppression reussie", "L'evenement a ete supprime.", Alert.AlertType.INFORMATION);
         } catch (SQLException ex) {
-            showAlert("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
+            afficherAlerte("Erreur", ex.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private Evenement createEventFromFields() {
-        return createEventFromFields(SessionManager.getCurrentUserId());
+    private Evenement creerEvenementDepuisFormulaire() {
+        return creerEvenementDepuisFormulaire(SessionManager.getCurrentUserId());
     }
 
-    private Evenement createEventFromFields(long ownerId) {
+    private Evenement creerEvenementDepuisFormulaire(long ownerId) {
         Evenement e = new Evenement();
         e.setNom(txtNom.getText().trim());
         e.setDate_evenement(Date.valueOf(datePicker.getValue()));
@@ -510,25 +589,25 @@ public class EvenementController implements Initializable {
         return e;
     }
 
-    private void clearForm() {
-        clearFormFields();
+    private void viderFormulaire() {
+        viderChampsFormulaire();
         listEvenements.getSelectionModel().clearSelection();
-        applyRolePermissions(null);
-        showEventListPage();
+        appliquerPermissionsSelonRole(null);
+        afficherListeEvenements();
     }
 
-    private void clearFormFields() {
+    private void viderChampsFormulaire() {
         txtNom.clear();
         datePicker.setValue(null);
         txtLieu.clear();
         txtDuree.clear();
         txtImage.clear();
-        showEmptyImagePreview();
-        resetValidationStyles();
+        afficherApercuImageVide();
+        retirerErreursVisuelles();
     }
 
-    private boolean validateInput() {
-        resetValidationStyles();
+    private boolean validerSaisieFormulaire() {
+        retirerErreursVisuelles();
         boolean valid = true;
         StringBuilder errors = new StringBuilder();
 
@@ -538,56 +617,56 @@ public class EvenementController implements Initializable {
         String image = txtImage.getText() == null ? "" : txtImage.getText().trim();
 
         if (nom.isEmpty()) {
-            setInvalid(txtNom);
+            marquerChampInvalide(txtNom);
             errors.append("- Le nom de l'evenement est obligatoire.\n");
             valid = false;
         } else if (nom.length() < 3 || nom.length() > 50) {
-            setInvalid(txtNom);
+            marquerChampInvalide(txtNom);
             errors.append("- Le nom doit contenir entre 3 et 50 caracteres.\n");
             valid = false;
         }
 
         if (datePicker.getValue() == null) {
-            setInvalid(datePicker);
+            marquerChampInvalide(datePicker);
             errors.append("- La date de l'evenement est obligatoire.\n");
             valid = false;
         } else if (datePicker.getValue().isBefore(LocalDate.now())) {
-            setInvalid(datePicker);
+            marquerChampInvalide(datePicker);
             errors.append("- La date de l'evenement ne doit pas etre avant aujourd'hui.\n");
             valid = false;
         }
 
         if (lieu.isEmpty()) {
-            setInvalid(txtLieu);
+            marquerChampInvalide(txtLieu);
             errors.append("- Le lieu est obligatoire.\n");
             valid = false;
         } else if (lieu.length() < 3 || lieu.length() > 50) {
-            setInvalid(txtLieu);
+            marquerChampInvalide(txtLieu);
             errors.append("- Le lieu doit contenir entre 3 et 50 caracteres.\n");
             valid = false;
         }
 
         if (dureeText.isEmpty()) {
-            setInvalid(txtDuree);
+            marquerChampInvalide(txtDuree);
             errors.append("- La duree est obligatoire.\n");
             valid = false;
         } else {
             try {
                 int duree = Integer.parseInt(dureeText);
                 if (duree < 15 || duree > 480) {
-                    setInvalid(txtDuree);
+                    marquerChampInvalide(txtDuree);
                     errors.append("- La duree doit etre entre 15 et 480 minutes.\n");
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                setInvalid(txtDuree);
+                marquerChampInvalide(txtDuree);
                 errors.append("- La duree doit etre un nombre entier en minutes.\n");
                 valid = false;
             }
         }
 
-        if (!image.isEmpty() && !isImageSourceValid(image)) {
-            setInvalid(txtImage);
+        if (!image.isEmpty() && !sourceImageEstValide(image)) {
+            marquerChampInvalide(txtImage);
             errors.append("- L'image doit etre une URL valide, un fichier existant ou une ressource classpath.\n");
             valid = false;
         }
@@ -598,13 +677,13 @@ public class EvenementController implements Initializable {
         }
 
         if (!valid) {
-            showAlert("Controle de saisie", errors.toString(), Alert.AlertType.WARNING);
+            afficherAlerte("Controle de saisie", errors.toString(), Alert.AlertType.WARNING);
         }
 
         return valid;
     }
 
-    private boolean isImageSourceValid(String source) {
+    private boolean sourceImageEstValide(String source) {
         if (source.startsWith("http://") || source.startsWith("https://")) {
             try {
                 new URL(source).toURI();
@@ -633,11 +712,11 @@ public class EvenementController implements Initializable {
         return new File(source).exists();
     }
 
-    private void setInvalid(Control c) {
+    private void marquerChampInvalide(Control c) {
         c.getStyleClass().add("field-error");
     }
 
-    private void resetValidationStyles() {
+    private void retirerErreursVisuelles() {
         txtNom.getStyleClass().remove("field-error");
         datePicker.getStyleClass().remove("field-error");
         txtLieu.getStyleClass().remove("field-error");
@@ -645,12 +724,34 @@ public class EvenementController implements Initializable {
         txtImage.getStyleClass().remove("field-error");
     }
 
-    private void showAlert(String title, String content, Alert.AlertType type) {
+    private void afficherAlerte(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
+        appliquerStyleAlerte(alert, classeStyleSelonTypeAlerte(type));
         alert.showAndWait();
     }
+
+    private void appliquerStyleAlerte(Dialog<?> dialog, String styleClass) {
+        String stylesheet = getClass().getResource("/com/skillora/style.css").toExternalForm();
+        dialog.getDialogPane().getStylesheets().add(stylesheet);
+        dialog.getDialogPane().getStyleClass().add("alert-dialog");
+        dialog.getDialogPane().getStyleClass().add(styleClass);
+    }
+
+    private String classeStyleSelonTypeAlerte(Alert.AlertType type) {
+        if (type == Alert.AlertType.ERROR) {
+            return "alert-error";
+        }
+        if (type == Alert.AlertType.WARNING) {
+            return "alert-warning";
+        }
+        if (type == Alert.AlertType.INFORMATION) {
+            return "alert-success";
+        }
+        return "alert-confirmation";
+    }
 }
+
 

@@ -16,7 +16,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
         conn = DBConnection.getConnection();
     }
 
-    private void checkConnection() throws SQLException {
+    private void verifierConnexionBase() throws SQLException {
         if (conn == null || conn.isClosed()) {
             conn = DBConnection.getConnection();
         }
@@ -26,7 +26,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     public void ajouter(Evenement evenement) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         if (existeEvenementIdentique(evenement, 0)) {
             throw new SQLException("Cet evenement existe deja avec le meme nom, la meme date et le meme lieu.");
         }
@@ -48,7 +48,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     public List<Evenement> afficher() throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         List<Evenement> list = new ArrayList<>();
 
         String sql = "SELECT * FROM evenement";
@@ -72,7 +72,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     public void modifier(Evenement evenement) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         if (existeEvenementIdentique(evenement, evenement.getId_evenement())) {
             throw new SQLException("Un autre evenement existe deja avec le meme nom, la meme date et le meme lieu.");
         }
@@ -95,7 +95,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     public void supprimer(int id) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "DELETE FROM evenement WHERE id_evenement=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
@@ -107,7 +107,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     public Evenement rechercherParId(int id) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "SELECT * FROM evenement WHERE id_evenement=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
@@ -130,7 +130,7 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
     }
 
     private boolean existeEvenementIdentique(Evenement evenement, int idAExclure) throws SQLException {
-        checkConnection();
+        verifierConnexionBase();
         String sql = "SELECT COUNT(*) FROM evenement "
                 + "WHERE LOWER(TRIM(nom)) = LOWER(TRIM(?)) "
                 + "AND date_evenement = ? "
@@ -146,3 +146,4 @@ public class EvenementCRUD implements InterfaceCRUD<Evenement> {
         return rs.next() && rs.getInt(1) > 0;
     }
 }
+
