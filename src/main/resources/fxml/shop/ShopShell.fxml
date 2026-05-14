@@ -1,49 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.skillora.shop.ShopShellController"
-            stylesheets="@../../css/theme.css">
-    <left>
-        <VBox styleClass="shop-shell-sidebar" spacing="12" prefWidth="228" minWidth="200" maxWidth="280">
-            <padding>
-                <Insets bottom="28" left="22" right="18" top="28"/>
-            </padding>
-            <Label text="Skillora" styleClass="shop-sidebar-brand"/>
-            <Label text="Espace boutique" styleClass="shop-sidebar-tagline" wrapText="true"/>
-            <Separator styleClass="shop-sidebar-sep"/>
-            <Label text="Navigation dans les onglets pour parcourir la boutique, les commandes ou gérer les produits."
-                   styleClass="shop-sidebar-hint" wrapText="true"/>
-            <Region VBox.vgrow="ALWAYS"/>
-            <Label text="© Skillora" styleClass="shop-sidebar-footer"/>
-        </VBox>
-    </left>
-    <center>
-        <BorderPane>
-            <top>
-                <HBox spacing="16" alignment="CENTER_LEFT" style="-fx-padding: 12 16;">
-                    <Label text="Boutique &amp; commandes" styleClass="title-h2"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="userBadge" styleClass="muted"/>
-                    <Button text="Déconnexion" onAction="#onLogout" styleClass="secondary-button"/>
-                </HBox>
-            </top>
-            <center>
-                <TabPane fx:id="mainTabs" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-                    <Tab fx:id="tabShop" text="Boutique">
-                        <fx:include source="ShopView.fxml"/>
-                    </Tab>
-                    <Tab fx:id="tabOrders" text="Commandes">
-                        <fx:include fx:id="ordersView" source="OrdersView.fxml"/>
-                    </Tab>
-                    <Tab fx:id="tabAdminProducts" text="Produits">
-                        <fx:include fx:id="adminProducts" source="AdminProductsView.fxml"/>
-                    </Tab>
-                </TabPane>
-            </center>
-        </BorderPane>
-    </center>
-</BorderPane>
+<TabPane fx:id="mainTabs"
+         tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/17"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.skillora.shop.ShopShellController"
+         stylesheets="@../../css/theme.css">
+    <Tab fx:id="tabShop" text="Boutique">
+        <fx:include source="ShopView.fxml"/>
+    </Tab>
+    <Tab fx:id="tabOrders" text="Commandes">
+        <fx:include fx:id="ordersView" source="OrdersView.fxml"/>
+    </Tab>
+    <Tab fx:id="tabAdminProducts" text="Produits">
+        <fx:include fx:id="adminProducts" source="AdminProductsView.fxml"/>
+    </Tab>
+</TabPane>

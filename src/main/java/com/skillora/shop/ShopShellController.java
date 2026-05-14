@@ -1,17 +1,13 @@
 package com.skillora.shop;
 
-import com.skillora.shop.Session;
 import com.skillora.shop.controllers.AdminProductsController;
 import com.skillora.shop.controllers.OrdersController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 public class ShopShellController {
 
-    @FXML
-    private Label userBadge;
     @FXML
     private TabPane mainTabs;
     @FXML
@@ -27,15 +23,11 @@ public class ShopShellController {
 
     @FXML
     private void initialize() {
-        var u = Session.getUser();
-        if (u != null) {
-            userBadge.setText(u.getPrenom() + " " + u.getNom() + " · " + u.getRole());
-        }
-
         if (Session.isAdmin()) {
             mainTabs.getTabs().remove(tabShop);
             mainTabs.getTabs().remove(tabAdminProducts);
             mainTabs.getTabs().add(0, tabAdminProducts);
+            mainTabs.getSelectionModel().select(tabAdminProducts);
         } else {
             mainTabs.getTabs().remove(tabAdminProducts);
         }
@@ -44,25 +36,13 @@ public class ShopShellController {
             if (newTab == tabOrders && ordersViewController != null) {
                 ordersViewController.refresh();
             }
-            if (Session.isAdmin() && newTab == tabAdminProducts && adminProductsController != null) {
+            if (newTab == tabAdminProducts && adminProductsController != null) {
                 adminProductsController.reload();
             }
         });
 
         if (Session.isAdmin() && adminProductsController != null) {
             adminProductsController.reload();
-        }
-    }
-
-    @FXML
-    private void onLogout() {
-        try {
-            Session.logout();
-            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(
-                    ShopOrdersApp.class.getResource("/fxml/shop/Login.fxml"));
-            ShopOrdersApp.getPrimaryStage().getScene().setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

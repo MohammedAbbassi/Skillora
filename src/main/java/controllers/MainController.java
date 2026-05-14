@@ -402,6 +402,7 @@ public class MainController implements Initializable {
 
         boolean isAdmin = "ADMIN".equalsIgnoreCase(p.getUserRole());
         boolean isInstructor = "INSTRUCTEUR".equalsIgnoreCase(p.getUserRole());
+        updateRoleAwareNavigation(isAdmin, isInstructor);
 
         SessionManager.setRole(isAdmin
                 ? SessionManager.Role.ADMIN
@@ -448,6 +449,26 @@ public class MainController implements Initializable {
         }
 
         if (p.isReduceAnimations()) {
+        }
+    }
+
+    private void updateRoleAwareNavigation(boolean isAdmin, boolean isInstructor) {
+        if (topbarLogoText != null) {
+            topbarLogoText.setText(isAdmin
+                    ? "Admin Dashboard"
+                    : isInstructor ? "Instructor Dashboard" : "Player Dashboard");
+        }
+
+        setVisibleManaged(navShop, !isAdmin);
+        setVisibleManaged(navAdminShop, isAdmin);
+        setVisibleManaged(navAdminEvents, isAdmin);
+        setVisibleManaged(navAdminReservations, isAdmin);
+    }
+
+    private void setVisibleManaged(Node node, boolean visible) {
+        if (node != null) {
+            node.setVisible(visible);
+            node.setManaged(visible);
         }
     }
 
