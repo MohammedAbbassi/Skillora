@@ -1,9 +1,9 @@
 package com.skillora.controllers;
 
-import Entities.CommandeRecord;
-import Services.OrderService;
-import Services.InvoiceService;
-import Services.UserService;
+import com.skillora.entities.CommandeRecord;
+import com.skillora.services.OrderService;
+import com.skillora.services.InvoiceService;
+import com.skillora.services.UserService;
 import com.skillora.MoneyFormat;
 import com.skillora.Session;
 import com.skillora.model.OrderLine;
@@ -249,7 +249,7 @@ public class OrdersController {
             List<OrderLine> lines = orderService.listLines(sel.getIdCommande());
             
             // Récupérer l'utilisateur (si admin, il faut peut-être le charger depuis la base)
-            Entities.User orderUser;
+            com.skillora.entities.User orderUser;
             if (Session.isAdmin()) {
                 // Pour l'admin, on charge l'utilisateur propriétaire de la commande
                 orderUser = userService.getAll().stream()

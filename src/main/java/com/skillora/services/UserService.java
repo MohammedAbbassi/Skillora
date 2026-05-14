@@ -1,9 +1,9 @@
-package Services;
+package com.skillora.services;
 
-import Entities.Role;
-import Entities.User;
+import com.skillora.entities.Role;
+import com.skillora.entities.User;
 import org.mindrot.jbcrypt.BCrypt;
-import utils.MyDatabase;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;

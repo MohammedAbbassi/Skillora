@@ -1,7 +1,7 @@
-package Services;
+package com.skillora.services;
 
-import Entities.Coupon;
-import Entities.CouponUsage;
+import com.skillora.entities.Coupon;
+import com.skillora.entities.CouponUsage;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

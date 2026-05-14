@@ -1,4 +1,4 @@
-package Entities;
+package com.skillora.entities;
 
 import java.sql.Timestamp;
 

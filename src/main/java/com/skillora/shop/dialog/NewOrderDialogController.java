@@ -1,10 +1,10 @@
 package com.skillora.shop.dialog;
 
-import Entities.Produit;
-import Entities.User;
-import Services.OrderService;
-import Services.ProduitCRUD;
-import Services.UserService;
+import com.skillora.entities.Produit;
+import com.skillora.entities.User;
+import com.skillora.services.OrderService;
+import com.skillora.services.ProduitCRUD;
+import com.skillora.services.UserService;
 import com.skillora.MoneyFormat;
 import com.skillora.model.CartLine;
 import javafx.collections.FXCollections;

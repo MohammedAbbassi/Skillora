@@ -1,12 +1,10 @@
-package Services;
+package com.skillora.services;
 
-import Entities.Coupon;
-import Entities.CouponUsage;
-import utils.MyDatabase;
+import com.skillora.entities.Coupon;
+import com.skillora.entities.CouponUsage;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CouponDAO {
     private final Connection conn = MyDatabase.getInstance().getCnx();

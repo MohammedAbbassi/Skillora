@@ -1,6 +1,6 @@
 package com.skillora.model;
 
-import Entities.Produit;
+import com.skillora.entities.Produit;
 import com.skillora.MoneyFormat;
 
 public class CartLine {

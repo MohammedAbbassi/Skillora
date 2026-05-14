@@ -1,4 +1,4 @@
-package utils;
+package com.skillora.utils;
 
 import com.skillora.config.AppConfig;
 

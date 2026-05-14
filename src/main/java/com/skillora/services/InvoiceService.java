@@ -1,9 +1,9 @@
-package Services;
+package com.skillora.services;
 
-import Entities.User;
-import Entities.Coupon;
+import com.skillora.entities.User;
+import com.skillora.entities.Coupon;
 import com.skillora.model.OrderLine;
-import utils.PdfGenerator;
+import com.skillora.utils.PdfGenerator;
 
 import java.io.File;
 import java.util.List;

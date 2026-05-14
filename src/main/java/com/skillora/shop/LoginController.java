@@ -1,7 +1,7 @@
 package com.skillora.shop;
 
-import Entities.User;
-import Services.UserService;
+import com.skillora.entities.User;
+import com.skillora.services.UserService;
 import com.skillora.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

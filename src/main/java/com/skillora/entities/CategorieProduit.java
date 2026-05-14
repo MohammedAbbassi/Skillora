@@ -1,4 +1,4 @@
-package Entities;
+package com.skillora.entities;
 
 public enum CategorieProduit {
     LIVRE,
@@ -6,4 +6,3 @@ public enum CategorieProduit {
     FORMATION,
     KIT
 }
-

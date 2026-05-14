@@ -1,6 +1,6 @@
 package com.skillora.payment;
 
-import utils.MyDatabase;
+import com.skillora.utils.MyDatabase;
 import java.sql.*;
 
 /**

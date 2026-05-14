@@ -1,14 +1,14 @@
 package com.skillora.controllers;
 
-import Entities.Produit;
-import Entities.Evaluation;
-import Entities.Coupon;
-import Services.OrderService;
-import Services.ProduitCRUD;
-import Services.EvaluationCRUD;
-import Services.InvoiceService;
-import Services.CouponService;
-import Services.ProductCatalogStatsService;
+import com.skillora.entities.Produit;
+import com.skillora.entities.Evaluation;
+import com.skillora.entities.Coupon;
+import com.skillora.services.OrderService;
+import com.skillora.services.ProduitCRUD;
+import com.skillora.services.EvaluationCRUD;
+import com.skillora.services.InvoiceService;
+import com.skillora.services.CouponService;
+import com.skillora.services.ProductCatalogStatsService;
 import com.skillora.MoneyFormat;
 import com.skillora.Session;
 import com.skillora.model.CartLine;

@@ -1,4 +1,4 @@
-package Entities;
+package com.skillora.entities;
 
 public class Produit {
     private Long id;

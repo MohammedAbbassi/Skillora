@@ -1,7 +1,7 @@
-package Services;
+package com.skillora.services;
 
 import com.skillora.model.CatalogStats;
-import utils.MyDatabase;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
 

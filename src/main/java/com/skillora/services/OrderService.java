@@ -1,10 +1,10 @@
-package Services;
+package com.skillora.services;
 
-import Entities.CommandeRecord;
+import com.skillora.entities.CommandeRecord;
 import com.skillora.model.CartLine;
 import com.skillora.model.OrderLine;
 import com.skillora.model.OrderStatsSummary;
-import utils.MyDatabase;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
 import java.time.LocalDateTime;

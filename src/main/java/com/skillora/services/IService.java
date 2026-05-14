@@ -1,4 +1,4 @@
-package Services;
+package com.skillora.services;
 
 import java.sql.SQLException;
 import java.util.List;

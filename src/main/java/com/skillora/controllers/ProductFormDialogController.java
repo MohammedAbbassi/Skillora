@@ -1,8 +1,8 @@
 package com.skillora.controllers;
 
-import Entities.CategorieProduit;
-import Entities.Produit;
-import Services.ProduitCRUD;
+import com.skillora.entities.CategorieProduit;
+import com.skillora.entities.Produit;
+import com.skillora.services.ProduitCRUD;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

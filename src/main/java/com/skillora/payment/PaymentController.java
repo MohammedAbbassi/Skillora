@@ -1,8 +1,9 @@
 package com.skillora.payment;
 
-import Entities.User;
-import Services.OrderService;
-import Services.InvoiceService;
+import com.skillora.entities.User;
+import com.skillora.services.OrderService;
+import com.skillora.services.InvoiceService;
+import com.skillora.utils.MyDatabase;
 import com.skillora.MoneyFormat;
 import com.skillora.Session;
 import com.skillora.model.OrderLine;

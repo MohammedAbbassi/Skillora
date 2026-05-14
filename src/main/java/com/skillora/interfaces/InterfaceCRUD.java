@@ -1,4 +1,4 @@
-package Interfaces;
+package com.skillora.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;

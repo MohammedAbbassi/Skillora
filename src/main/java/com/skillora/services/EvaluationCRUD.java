@@ -1,8 +1,8 @@
-package Services;
+package com.skillora.services;
 
-import Entities.Evaluation;
-import Interfaces.InterfaceCRUD;
-import utils.MyDatabase;
+import com.skillora.entities.Evaluation;
+import com.skillora.interfaces.InterfaceCRUD;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;

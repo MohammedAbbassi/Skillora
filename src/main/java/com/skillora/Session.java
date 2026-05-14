@@ -1,8 +1,8 @@
 package com.skillora;
 
-import Entities.Produit;
-import Entities.Role;
-import Entities.User;
+import com.skillora.entities.Produit;
+import com.skillora.entities.Role;
+import com.skillora.entities.User;
 import com.skillora.model.CartLine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

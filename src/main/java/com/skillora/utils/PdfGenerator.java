@@ -1,19 +1,19 @@
-package utils;
+package com.skillora.utils;
 
-import Entities.User;
-import Entities.Coupon;
+import com.skillora.entities.User;
+import com.skillora.entities.Coupon;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.skillora.MoneyFormat;
+import com.skillora.model.OrderLine;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
-import com.skillora.MoneyFormat;
-import com.skillora.model.OrderLine;
 
 import java.awt.Desktop;
 import java.io.File;

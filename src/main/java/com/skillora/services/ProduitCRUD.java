@@ -1,9 +1,9 @@
-package Services;
+package com.skillora.services;
 
-import Entities.CategorieProduit;
-import Entities.Produit;
-import Interfaces.InterfaceCRUD;
-import utils.MyDatabase;
+import com.skillora.entities.CategorieProduit;
+import com.skillora.entities.Produit;
+import com.skillora.interfaces.InterfaceCRUD;
+import com.skillora.utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
