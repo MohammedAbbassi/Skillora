@@ -19,8 +19,6 @@ public class CountryService {
 
     private volatile List<String> cachedCountryNames;
 
-    private List<String> cachedCountryNames;
-
 
     private CountryService() {
         this.httpClient = HttpClient.newBuilder()

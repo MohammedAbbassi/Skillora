@@ -1,4 +1,4 @@
-﻿package com.skillora.controllers;
+package com.skillora.controllers;
 
 import entities.Evenement;
 import entities.Role;

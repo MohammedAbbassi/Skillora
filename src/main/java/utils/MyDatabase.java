@@ -5,11 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MyDatabase {
-<<<<<<< HEAD
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/skillora?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-=======
-    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3307/skillora_combined?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
->>>>>>> mouayed
     private final String URL = readConfig("SKILLORA_DB_URL", DEFAULT_URL);
     private final String USER = readConfig("SKILLORA_DB_USER", "root");
     private final String PASSWORD = readConfig("SKILLORA_DB_PASSWORD", "");

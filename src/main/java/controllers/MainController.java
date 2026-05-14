@@ -93,10 +93,6 @@ public class MainController implements Initializable {
     @FXML private Button navQuizQuestions;
     @FXML private Button navQuizAnswers;
     @FXML private Button navQuizHistory;
-    @FXML private Button navLeaderboard;
-    @FXML private Button navProgress;
-    @FXML private Button navProfile;
-    @FXML private Button navAdmin;
 
     @FXML private Button navSettings;
     @FXML private Button navLogout;
@@ -122,10 +118,6 @@ public class MainController implements Initializable {
     @FXML private Label  lblQuizQuestions;
     @FXML private Label  lblQuizAnswers;
     @FXML private Label  lblQuizHistory;
-    @FXML private Label  lblLeaderboard;
-    @FXML private Label  lblProgress;
-    @FXML private Label  lblProfile;
-    @FXML private Label  lblAdmin;
 
     @FXML private Label  lblSettings;
     @FXML private Label  lblLogout;
@@ -638,8 +630,6 @@ public class MainController implements Initializable {
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
     @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
 
-    @FXML private void onNavQuizzes()  { navigateTo(pageQuizzes,  navQuizzes);  }
-
     @FXML private void onNavQuizzes()  {
         navigateTo(pageQuizzes,  navQuizzes);
         if (SessionManager.isAdmin()) {
@@ -751,14 +741,6 @@ public class MainController implements Initializable {
             });
         });
     }
-
-    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); loadProfileFriends(); }
-    @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
-    @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
-
-
-    
-
 
     @FXML
     private void onOpenPreferences() {
@@ -1439,12 +1421,8 @@ public class MainController implements Initializable {
             List<User> users = serviceUser.getAll();
 
           
-            // Filter by country
-            String selectedCountry = countryFilterCombo.getValue();
-            if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
                 // Since selectedCountry now has a flag (e.g. "Morocco 🇲🇦"), 
                 // we check if the user's country is the prefix
-                users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
 
             
             // Populate country filter if empty (except "All Countries")

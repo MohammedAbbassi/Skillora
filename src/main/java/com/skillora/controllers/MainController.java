@@ -1,4 +1,4 @@
-﻿package com.skillora.controllers;
+package com.skillora.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
