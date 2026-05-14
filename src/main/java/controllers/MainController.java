@@ -141,6 +141,7 @@ public class MainController implements Initializable {
     @FXML private VBox   pageEvent;
     @FXML private VBox   pageReservation;
     @FXML private VBox   pageCommunity;
+    private boolean shopPageLoaded;
     private boolean eventsPageLoaded;
     private boolean reservationsPageLoaded;
 
@@ -657,7 +658,7 @@ public class MainController implements Initializable {
         loadLeaderboard();
     }
     @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
-    @FXML private void onNavShop()      { navigateTo(pageShop,      navShop);      }
+    @FXML private void onNavShop()      { navigateTo(pageShop,      navShop); ensureShopPageLoaded();      }
     @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent); ensureEventsPageLoaded();     }
     @FXML private void onNavReservation() { navigateTo(pageReservation, navReservation); ensureReservationsPageLoaded(); }
     @FXML private void onNavCommunity() { navigateTo(pageCommunity, navCommunity); }
@@ -669,10 +670,55 @@ public class MainController implements Initializable {
     }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
     @FXML private void onNavAdminCourses() { navigateTo(pageCourses, navAdminCourses); }
-    @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop);    }
+    @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop); ensureShopPageLoaded();    }
     @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents); ensureEventsPageLoaded();  }
     @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); ensureReservationsPageLoaded(); }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
+
+    private void ensureShopPageLoaded() {
+        syncShopSession();
+        if (!shopPageLoaded) {
+            shopPageLoaded = loadEmbeddedPage(pageShop, "/fxml/shop/ShopShell.fxml", "shop");
+        }
+    }
+
+    private void syncShopSession() {
+        com.skillora.entities.User shopUser = new com.skillora.entities.User();
+        String firstName = currentUser != null ? currentUser.getPrenom() : null;
+        String lastName = currentUser != null ? currentUser.getNom() : null;
+        String username = currentUser != null ? currentUser.getNomUtilisateur() : null;
+        String email = currentUser != null ? currentUser.getEmail() : null;
+        String role = currentUser != null ? currentUser.getRole() : null;
+
+        if ((firstName == null || firstName.isBlank()) && prefs != null && prefs.getUserName() != null) {
+            firstName = prefs.getUserName();
+        }
+        if ((email == null || email.isBlank()) && prefs != null) {
+            email = prefs.getUserEmail();
+        }
+        if ((role == null || role.isBlank()) && prefs != null) {
+            role = prefs.getUserRole();
+        }
+
+        shopUser.setIdUtilisateur(currentUser != null ? currentUser.getIdUtilisateur() : 0);
+        shopUser.setPrenom(firstName != null && !firstName.isBlank() ? firstName : "Skillora");
+        shopUser.setNom(lastName != null ? lastName : "");
+        shopUser.setNomUtilisateur(username != null ? username : shopUser.getPrenom());
+        shopUser.setEmail(email);
+        shopUser.setRole(toShopRole(role));
+        com.skillora.Session.setUser(shopUser);
+    }
+
+    private com.skillora.entities.Role toShopRole(String role) {
+        if (role == null) {
+            return com.skillora.entities.Role.ETUDIANT;
+        }
+        try {
+            return com.skillora.entities.Role.valueOf(role.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return com.skillora.entities.Role.ETUDIANT;
+        }
+    }
 
     private void ensureEventsPageLoaded() {
         if (!eventsPageLoaded) {
