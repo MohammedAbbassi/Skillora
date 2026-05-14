@@ -22,6 +22,11 @@ public class MyDatabase {
     }
 
     private void connect() {
+        cnx = getDashboardConnection();
+        if (cnx != null) {
+            return;
+        }
+
         try {
             cnx = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to database");
@@ -47,5 +52,16 @@ public class MyDatabase {
             connect();
         }
         return cnx;
+    }
+
+    private Connection getDashboardConnection() {
+        try {
+            Connection shared = utils.MyDatabase.getInstance().getCnx();
+            if (shared != null && !shared.isClosed()) {
+                return shared;
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 }

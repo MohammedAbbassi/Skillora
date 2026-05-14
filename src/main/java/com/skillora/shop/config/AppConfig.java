@@ -8,7 +8,7 @@ public class AppConfig {
     private static final Properties props = new Properties();
 
     static {
-        props.setProperty("db.url", "jdbc:mysql://localhost:3306/skillora_shop?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        props.setProperty("db.url", "jdbc:mysql://localhost:3306/skillora?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
         props.setProperty("db.user", "root");
         props.setProperty("db.password", "");
 

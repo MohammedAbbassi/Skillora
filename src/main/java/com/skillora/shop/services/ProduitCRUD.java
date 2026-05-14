@@ -18,7 +18,7 @@ public class ProduitCRUD implements InterfaceCRUD<Produit> {
     private Connection connection() throws SQLException {
         Connection conn = MyDatabase.getInstance().getCnx();
         if (conn == null) {
-            throw new SQLException("Connexion base de donnees indisponible. Verifiez que MySQL est lance et que la base skillora_shop est importee.");
+            throw new SQLException("Connexion base de donnees indisponible. Verifiez que MySQL est lance et que la base skillora est importee.");
         }
         return conn;
     }
