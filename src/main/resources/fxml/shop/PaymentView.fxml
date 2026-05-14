@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.skillora.payment.PaymentController" spacing="25"
+      fx:controller="com.skillora.shop.payment.PaymentController" spacing="25"
       stylesheets="@../../css/theme.css" prefWidth="450" style="-fx-background-color: white;">
     <padding>
         <Insets bottom="30" left="30" right="30" top="30"/>

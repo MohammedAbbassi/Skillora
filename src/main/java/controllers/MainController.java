@@ -683,7 +683,7 @@ public class MainController implements Initializable {
     }
 
     private void syncShopSession() {
-        com.skillora.entities.User shopUser = new com.skillora.entities.User();
+        com.skillora.shop.entities.User shopUser = new com.skillora.shop.entities.User();
         String firstName = currentUser != null ? currentUser.getPrenom() : null;
         String lastName = currentUser != null ? currentUser.getNom() : null;
         String username = currentUser != null ? currentUser.getNomUtilisateur() : null;
@@ -706,17 +706,17 @@ public class MainController implements Initializable {
         shopUser.setNomUtilisateur(username != null ? username : shopUser.getPrenom());
         shopUser.setEmail(email);
         shopUser.setRole(toShopRole(role));
-        com.skillora.Session.setUser(shopUser);
+        com.skillora.shop.Session.setUser(shopUser);
     }
 
-    private com.skillora.entities.Role toShopRole(String role) {
+    private com.skillora.shop.entities.Role toShopRole(String role) {
         if (role == null) {
-            return com.skillora.entities.Role.ETUDIANT;
+            return com.skillora.shop.entities.Role.ETUDIANT;
         }
         try {
-            return com.skillora.entities.Role.valueOf(role.trim().toUpperCase());
+            return com.skillora.shop.entities.Role.valueOf(role.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            return com.skillora.entities.Role.ETUDIANT;
+            return com.skillora.shop.entities.Role.ETUDIANT;
         }
     }
 

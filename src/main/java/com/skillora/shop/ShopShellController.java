@@ -1,8 +1,8 @@
 package com.skillora.shop;
 
-import com.skillora.Session;
-import com.skillora.controllers.AdminProductsController;
-import com.skillora.controllers.OrdersController;
+import com.skillora.shop.Session;
+import com.skillora.shop.controllers.AdminProductsController;
+import com.skillora.shop.controllers.OrdersController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;

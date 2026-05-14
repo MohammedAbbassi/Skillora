@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.controllers.EvenementController">
+<StackPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.events.controllers.EvenementController">
    <children>
       <VBox fx:id="eventListPage" maxWidth="820.0" spacing="12.0" styleClass="card">
          <children>

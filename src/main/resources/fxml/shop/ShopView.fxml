@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.skillora.controllers.ShopController" stylesheets="@../../css/theme.css">
+            fx:controller="com.skillora.shop.controllers.ShopController" stylesheets="@../../css/theme.css">
     <padding>
         <Insets bottom="8" left="8" right="8" top="8"/>
     </padding>

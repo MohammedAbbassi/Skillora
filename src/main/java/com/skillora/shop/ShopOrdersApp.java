@@ -1,6 +1,6 @@
 package com.skillora.shop;
 
-import com.skillora.config.AppConfig;
+import com.skillora.shop.config.AppConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

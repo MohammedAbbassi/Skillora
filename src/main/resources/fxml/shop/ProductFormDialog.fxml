@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.skillora.controllers.ProductFormDialogController" spacing="0"
+      fx:controller="com.skillora.shop.controllers.ProductFormDialogController" spacing="0"
       stylesheets="@../../css/theme.css" prefWidth="550" style="-fx-background-color: transparent;">
     
     <VBox spacing="20" styleClass="card" VBox.vgrow="ALWAYS">

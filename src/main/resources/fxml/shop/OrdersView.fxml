@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.skillora.controllers.OrdersController" spacing="12"
+      fx:controller="com.skillora.shop.controllers.OrdersController" spacing="12"
       stylesheets="@../../css/theme.css">
     <padding>
         <Insets bottom="8" left="8" right="8" top="8"/>
