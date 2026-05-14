@@ -1,7 +1,11 @@
 /* Futuristic Neon & Glassmorphism Design System */
 .root {
     -neon-blue: #0ea5e9;
+
     -neon-purple: #60a5fa;
+
+    -neon-purple: #a855f7;
+
     -neon-cyan: #22d3ee;
     -glass-bg: rgba(255, 255, 255, 0.05);
     -glass-border: rgba(255, 255, 255, 0.1);
@@ -16,7 +20,11 @@
 }
 
 .neon-text-blue { -fx-text-fill: -neon-blue; -fx-effect: dropshadow(gaussian, #0ea5e9, 10, 0, 0, 0); }
+
 .neon-text-purple { -fx-text-fill: -neon-purple; -fx-effect: dropshadow(gaussian, #60a5fa, 10, 0, 0, 0); }
+
+.neon-text-purple { -fx-text-fill: -neon-purple; -fx-effect: dropshadow(gaussian, #a855f7, 10, 0, 0, 0); }
+
 .neon-text-cyan { -fx-text-fill: -neon-cyan; -fx-effect: dropshadow(gaussian, #22d3ee, 10, 0, 0, 0); }
 
 .neon-progress-bar .bar {
@@ -40,12 +48,24 @@
 .root {
     -fx-font-family: "Segoe UI", "Segoe UI Variable Text", "Arial", sans-serif;
     -fx-font-size: 14px;
+<<<<<<< HEAD
+    -fx-background-color: #F8FAFC;
+
+=======
     -fx-background-color: linear-gradient(to bottom, #eef4ff, #f8fbff 28%, #edf4ff 100%);
+>>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-accent: #2563eb;
     
     /* Global Brand Variables */
     -fx-primary: #2563eb;
     -fx-secondary: #3b82f6;
+
+    -fx-accent: #4A90E2;
+    
+    /* Global Brand Variables */
+    -fx-primary: #4F46E5;
+    -fx-secondary: #7C3AED;
+
     -fx-accent-gold: #F59E0B;
     -fx-streak-orange: #EF4444;
 }
@@ -59,8 +79,13 @@
 .text-slate-500 { -fx-text-fill: #64748b; }
 .text-slate-700 { -fx-text-fill: #334155; }
 .text-slate-800 { -fx-text-fill: #1e293b; }
+
 .text-primary   { -fx-text-fill: #2563eb; }
 .text-secondary { -fx-text-fill: #3b82f6; }
+
+.text-primary   { -fx-text-fill: #4F46E5; }
+.text-secondary { -fx-text-fill: #7C3AED; }
+
 .text-gold      { -fx-text-fill: #F59E0B; }
 .text-white     { -fx-text-fill: #ffffff; }
 
@@ -130,6 +155,7 @@
 }
 
 .sidebar-icon-bg {
+
     -fx-background-color: #2563eb;
     -fx-background-radius: 12px;
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.3), 10, 0, 0, 4);
@@ -140,6 +166,18 @@
     -fx-background-radius: 16px;
     -fx-padding: 16px;
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.4), 15, 0, 0, 5);
+
+    -fx-background-color: #4F46E5;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.3), 10, 0, 0, 4);
+}
+
+.battle-pass-widget {
+    -fx-background-color: linear-gradient(to bottom right, #4F46E5, #3730a3);
+    -fx-background-radius: 16px;
+    -fx-padding: 16px;
+    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.4), 15, 0, 0, 5);
+
 }
 
 .battle-pass-widget .label {
@@ -147,8 +185,16 @@
 }
 
 .battle-pass-btn {
+<<<<<<< HEAD
+    -fx-background-color: white;
+
+=======
     -fx-background-color: #f8fbff;
+>>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-text-fill: #2563eb;
+
+    -fx-text-fill: #4F46E5;
+
     -fx-background-radius: 8px;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
@@ -167,12 +213,21 @@
 }
 
 .nav-btn:hover {
+
     -fx-background-color: rgba(37, 99, 235, 0.05);
 }
 
 .nav-btn.nav-active {
     -fx-background-color: rgba(37, 99, 235, 0.12);
     -fx-border-color: #2563eb;
+
+    -fx-background-color: rgba(79, 70, 229, 0.05);
+}
+
+.nav-btn.nav-active {
+    -fx-background-color: rgba(79, 70, 229, 0.12);
+    -fx-border-color: #4F46E5;
+
     -fx-border-width: 0 0 0 4px;
     -fx-border-radius: 0;
     -fx-background-radius: 0 12px 12px 0;
@@ -189,7 +244,11 @@
 }
 
 .nav-btn.nav-active .label {
+
     -fx-text-fill: #2563eb;
+
+    -fx-text-fill: #4F46E5;
+
     -fx-font-weight: 800;
 }
 
@@ -222,12 +281,25 @@
     -fx-padding: 40px;
     -fx-border-color: #d9e7fb;
     -fx-border-radius: 24px;
+<<<<<<< HEAD
+
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 20, 0, 0, 10);
+=======
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.12), 22, 0, 0, 10);
+>>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
 }
 
 .role-badge-premium {
     -fx-background-color: rgba(37, 99, 235, 0.1);
     -fx-text-fill: #2563eb;
+
+    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.08), 20, 0, 0, 10);
+}
+
+.role-badge-premium {
+    -fx-background-color: rgba(79, 70, 229, 0.1);
+    -fx-text-fill: #4F46E5;
+>>>>>>> mouayed
     -fx-padding: 6 16;
     -fx-background-radius: 999;
     -fx-font-weight: 900;
@@ -244,12 +316,20 @@
     -fx-effect: dropshadow(three-pass-box, rgba(15, 23, 42, 0.07), 14, 0, 0, 4);
 }
 .stat-card-premium:hover {
+
     -fx-border-color: #2563eb;
+
+    -fx-border-color: #4F46E5;
+
     -fx-translate-y: -4px;
 }
 
 .avatar-edit-btn {
+
     -fx-background-color: #2563eb;
+
+    -fx-background-color: #4F46E5;
+
     -fx-text-fill: white;
     -fx-background-radius: 999;
     -fx-padding: 8;
@@ -349,7 +429,11 @@
 
 /* ── XP BARS ────────────────────────────────────────────────── */
 .xp-bar {
+
     -fx-accent: #2563eb;
+
+    -fx-accent: #4F46E5;
+
     -fx-control-inner-background: #f1f5f9;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
@@ -400,7 +484,11 @@
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(15, 23, 42, 0.05), 10, 0, 0, 2);
 }
+
 .collectible-card:hover { -fx-border-color: rgba(37, 99, 235, 0.3); }
+
+.collectible-card:hover { -fx-border-color: rgba(79, 70, 229, 0.3); }
+
 
 /* ── CONTENT LAYOUT ─────────────────────────────────────────── */
 .content-scroll {
@@ -455,10 +543,17 @@
     -fx-border-radius: 12;
     -fx-padding: 12 16;
 }
+
 .auth-input-premium:focused { -fx-border-color: #2563eb; -fx-border-width: 2; }
 
 .auth-btn-premium {
     -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
+
+.auth-input-premium:focused { -fx-border-color: #4F46E5; -fx-border-width: 2; }
+
+.auth-btn-premium {
+    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+
     -fx-text-fill: white;
     -fx-font-weight: 900;
     -fx-background-radius: 12;
@@ -466,7 +561,11 @@
 }
 
 .primary-btn {
+
     -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
+
+    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: 800;
@@ -476,7 +575,11 @@
 }
 
 .primary-btn:hover {
+
     -fx-background-color: linear-gradient(to right, #1d4ed8, #2563eb);
+
+    -fx-background-color: linear-gradient(to right, #4338CA, #6D28D9);
+
 }
 
 .primary-btn:pressed {
@@ -521,7 +624,11 @@
 }
 
 .add-user-btn {
+
     -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
+
+    -fx-background-color: linear-gradient(to right, #4F46E5, #7C3AED);
+
     -fx-text-fill: white;
     -fx-font-weight: 800;
     -fx-background-radius: 10px;
@@ -555,7 +662,11 @@
 }
 
 .row-avatar-circle {
+
     -fx-fill: #2563eb;
+
+    -fx-fill: #4F46E5;
+
 }
 
 .row-avatar-init {
@@ -586,8 +697,13 @@
 }
 
 .badge-learner {
+
     -fx-background-color: rgba(37, 99, 235, 0.12);
     -fx-text-fill: #1d4ed8;
+
+    -fx-background-color: rgba(79, 70, 229, 0.12);
+    -fx-text-fill: #4338ca;
+
 }
 
 .row-rank {
@@ -613,15 +729,23 @@
 }
 
 .row-action-btn {
+
     -fx-background-color: #eff6ff;
     -fx-text-fill: #1d4ed8;
+
+    -fx-background-color: #eef2ff;
+    -fx-text-fill: #4338ca;
     -fx-background-radius: 8px;
     -fx-font-weight: 700;
     -fx-cursor: hand;
 }
 
 .row-action-btn:hover {
+
     -fx-background-color: #dbeafe;
+
+    -fx-background-color: #e0e7ff;
+
 }
 
 .row-delete-btn {
@@ -642,7 +766,11 @@
 }
 
 .dialog-ok-btn {
+
     -fx-background-color: #2563eb;
+
+    -fx-background-color: #4F46E5;
+
     -fx-text-fill: white;
     -fx-background-radius: 8px;
     -fx-font-weight: 800;
@@ -744,8 +872,15 @@
 }
 
 .action-btn-secondary {
+<<<<<<< HEAD
+    -fx-background-color: #ffffff;
+
+=======
     -fx-background-color: #f8fbff;
+>>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-text-fill: #2563eb;
+
+    -fx-text-fill: #4F46E5;
     -fx-font-weight: bold;
     -fx-padding: 10 20;
     -fx-background-radius: 10;
@@ -1344,3 +1479,19 @@
     -fx-text-fill: #0f172a;
 }
 
+<<<<<<< HEAD
+=======
+
+.quiz-submenu {
+    -fx-padding: 0 0 4 12;
+}
+
+.quiz-subnav-btn {
+    -fx-padding: 8px 12px 8px 18px;
+    -fx-background-radius: 10px;
+}
+
+.quiz-subnav-btn.nav-active {
+    -fx-border-width: 0 0 0 3px;
+}
+>>>>>>> mouayed

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.UserQuizSelectionController">
+    <padding>
+        <Insets top="34" right="40" bottom="34" left="40"/>
+    </padding>
+
+    <VBox spacing="6">
+        <Label text="Choisir un quiz" styleClass="page-title"/>
+        <Label text="Parcourez les quiz disponibles et commencez directement l'evaluation." styleClass="page-subtitle"/>
+    </VBox>
+
+    <VBox spacing="18" maxWidth="900" VBox.vgrow="ALWAYS" styleClass="form-card">
+        <VBox spacing="8">
+            <Label text="Recherche" styleClass="field-label"/>
+            <TextField fx:id="searchTitreField" maxWidth="Infinity" promptText="Titre du quiz" />
+            <HBox spacing="10">
+                <TextField fx:id="searchMatiereField" HBox.hgrow="ALWAYS" maxWidth="Infinity" promptText="Matiere" />
+                <TextField fx:id="searchNiveauField" HBox.hgrow="ALWAYS" maxWidth="Infinity" promptText="Niveau" />
+            </HBox>
+            <HBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="searchCountLabel" text="0 quiz" styleClass="page-subtitle" />
+            </HBox>
+        </VBox>
+
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="Quiz disponibles" styleClass="field-label"/>
+            <ListView fx:id="quizListView" minHeight="360" prefHeight="520" maxWidth="Infinity"
+                      VBox.vgrow="ALWAYS" styleClass="cards-list"/>
+        </VBox>
+    </VBox>
+</VBox>

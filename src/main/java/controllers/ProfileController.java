@@ -49,6 +49,7 @@ public class ProfileController {
             Platform.runLater(() -> {
                 countryComboBox.getItems().setAll(countries);
                 if (user != null && user.getPays() != null) {
+
                     // Try to find the matching entry with flag
                     String userCountry = user.getPays();
                     String match = countries.stream()
@@ -56,6 +57,9 @@ public class ProfileController {
                             .findFirst()
                             .orElse(userCountry);
                     countryComboBox.setValue(match);
+
+                    countryComboBox.setValue(user.getPays());
+
                 }
             });
         });
@@ -71,6 +75,7 @@ public class ProfileController {
         user.setPrenom(firstNameField.getText().trim());
         user.setNom(lastNameField.getText().trim());
         user.setNomUtilisateur(usernameField.getText().trim());
+
         
         // Save country without the flag emoji
         String fullCountry = countryComboBox.getValue();
@@ -79,6 +84,9 @@ public class ProfileController {
         } else {
             user.setPays(fullCountry);
         }
+
+        user.setPays(countryComboBox.getValue());
+
 
         try {
             serviceUser.update(user);

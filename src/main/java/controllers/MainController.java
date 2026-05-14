@@ -74,6 +74,7 @@ public class MainController implements Initializable {
     @FXML private Button navHome;
     @FXML private Button navCourses;
     @FXML private Button navQuizzes;
+
     @FXML private Button navLeaderboard;
     @FXML private Button navProgress;
     @FXML private Button navShop;
@@ -86,12 +87,24 @@ public class MainController implements Initializable {
     @FXML private Button navAdminShop;
     @FXML private Button navAdminEvents;
     @FXML private Button navAdminReservations;
+
+    @FXML private Button navQuizChoose;
+    @FXML private Button navQuizManage;
+    @FXML private Button navQuizQuestions;
+    @FXML private Button navQuizAnswers;
+    @FXML private Button navQuizHistory;
+    @FXML private Button navLeaderboard;
+    @FXML private Button navProgress;
+    @FXML private Button navProfile;
+    @FXML private Button navAdmin;
+
     @FXML private Button navSettings;
     @FXML private Button navLogout;
 
     @FXML private Label  lblHome;
     @FXML private Label  lblCourses;
     @FXML private Label  lblQuizzes;
+
     @FXML private Label  lblLeaderboard;
     @FXML private Label  lblProgress;
     @FXML private Label  lblShop;
@@ -104,6 +117,16 @@ public class MainController implements Initializable {
     @FXML private Label  lblAdminShop;
     @FXML private Label  lblAdminEvents;
     @FXML private Label  lblAdminReservations;
+  @FXML private Label  lblQuizChoose;
+    @FXML private Label  lblQuizManage;
+    @FXML private Label  lblQuizQuestions;
+    @FXML private Label  lblQuizAnswers;
+    @FXML private Label  lblQuizHistory;
+    @FXML private Label  lblLeaderboard;
+    @FXML private Label  lblProgress;
+    @FXML private Label  lblProfile;
+    @FXML private Label  lblAdmin;
+
     @FXML private Label  lblSettings;
     @FXML private Label  lblLogout;
 
@@ -111,15 +134,22 @@ public class MainController implements Initializable {
     @FXML private VBox   pageHome;
     @FXML private VBox pageCourses;
     @FXML private VBox pageQuizzes;
+
+
+    @FXML private VBox quizSubmenu;
+    @FXML private StackPane quizContentPane;
+
     @FXML private VBox pageLeaderboard;
     @FXML private VBox   leaderboardContainer;
     @FXML private ComboBox<String> sortMetricCombo;
     @FXML private ComboBox<String> countryFilterCombo;
     @FXML private VBox   pageProgress;
+
     @FXML private VBox   pageShop;
     @FXML private VBox   pageEvent;
     @FXML private VBox   pageReservation;
     @FXML private VBox   pageCommunity;
+
     @FXML private VBox   pageProfile;
     @FXML private VBox   pageAdmin;
     @FXML private VBox   pageSettings;
@@ -151,6 +181,7 @@ public class MainController implements Initializable {
     @FXML private Label  statStreak;
     @FXML private Label  statXP;
 
+
     @FXML private TextField profileFirstNameField;
     @FXML private TextField profileLastNameField;
     @FXML private TextField profileUsernameField;
@@ -166,6 +197,9 @@ public class MainController implements Initializable {
 
     private boolean sidebarCollapsed = false;
     private boolean dropdownOpen     = false;
+
+    private boolean quizMenuExpanded = false;
+
     private UserPreferences prefs;
     private User currentUser;
     private final services.ServiceRelation serviceRelation = new services.ServiceRelation();
@@ -208,6 +242,7 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navHome, "navHome");
         addIfNotNull(allNavBtns, navCourses, "navCourses");
         addIfNotNull(allNavBtns, navQuizzes, "navQuizzes");
+
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
         addIfNotNull(allNavBtns, navProgress, "navProgress");
         addIfNotNull(allNavBtns, navShop, "navShop");
@@ -219,6 +254,16 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navAdminShop, "navAdminShop");
         addIfNotNull(allNavBtns, navAdminEvents, "navAdminEvents");
         addIfNotNull(allNavBtns, navAdminReservations, "navAdminReservations");
+
+        addIfNotNull(allNavBtns, navQuizChoose, "navQuizChoose");
+        addIfNotNull(allNavBtns, navQuizManage, "navQuizManage");
+        addIfNotNull(allNavBtns, navQuizQuestions, "navQuizQuestions");
+        addIfNotNull(allNavBtns, navQuizAnswers, "navQuizAnswers");
+        addIfNotNull(allNavBtns, navQuizHistory, "navQuizHistory");
+        addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
+        addIfNotNull(allNavBtns, navProgress, "navProgress");
+        addIfNotNull(allNavBtns, navAdmin, "navAdmin");
+
         addIfNotNull(allNavBtns, navSettings, "navSettings");
         addIfNotNull(allNavBtns, navLogout, "navLogout");
 
@@ -226,6 +271,7 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblHome, "lblHome");
         addIfNotNull(allNavLabels, lblCourses, "lblCourses");
         addIfNotNull(allNavLabels, lblQuizzes, "lblQuizzes");
+
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
         addIfNotNull(allNavLabels, lblProgress, "lblProgress");
         addIfNotNull(allNavLabels, lblShop, "lblShop");
@@ -237,6 +283,16 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblAdminShop, "lblAdminShop");
         addIfNotNull(allNavLabels, lblAdminEvents, "lblAdminEvents");
         addIfNotNull(allNavLabels, lblAdminReservations, "lblAdminReservations");
+
+        addIfNotNull(allNavLabels, lblQuizChoose, "lblQuizChoose");
+        addIfNotNull(allNavLabels, lblQuizManage, "lblQuizManage");
+        addIfNotNull(allNavLabels, lblQuizQuestions, "lblQuizQuestions");
+        addIfNotNull(allNavLabels, lblQuizAnswers, "lblQuizAnswers");
+        addIfNotNull(allNavLabels, lblQuizHistory, "lblQuizHistory");
+        addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
+        addIfNotNull(allNavLabels, lblProgress, "lblProgress");
+        addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
+
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
         addIfNotNull(allNavLabels, lblLogout, "lblLogout");
         allPages = new java.util.ArrayList<>();
@@ -245,10 +301,12 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pageQuizzes, "pageQuizzes");
         addIfNotNull(allPages, pageLeaderboard, "pageLeaderboard");
         addIfNotNull(allPages, pageProgress, "pageProgress");
+
         addIfNotNull(allPages, pageShop, "pageShop");
         addIfNotNull(allPages, pageEvent, "pageEvent");
         addIfNotNull(allPages, pageReservation, "pageReservation");
         addIfNotNull(allPages, pageCommunity, "pageCommunity");
+
         addIfNotNull(allPages, pageProfile, "pageProfile");
         addIfNotNull(allPages, pageAdmin, "pageAdmin");
         addIfNotNull(allPages, pageSettings, "pageSettings");
@@ -259,7 +317,10 @@ public class MainController implements Initializable {
         populateFilters();
         loadUserTable();
         setupSearch();
+
         loadProfileCountries();
+
+
         try {
             initProgressCharts();
         } catch (Exception e) {
@@ -345,6 +406,10 @@ public class MainController implements Initializable {
         setGreeting();
 
         boolean isAdmin = "ADMIN".equalsIgnoreCase(p.getUserRole());
+
+        SessionManager.setRole(isAdmin ? SessionManager.Role.ADMIN : SessionManager.Role.USER);
+        updateQuizSubmenuForRole();
+
         if (adminSection != null) {
             adminSection.setVisible(isAdmin);
             adminSection.setManaged(isAdmin);
@@ -510,10 +575,16 @@ public class MainController implements Initializable {
                 sidebar.setPadding(new javafx.geometry.Insets(24, 0, 24, 0));
                 if (sidebarHeader != null) sidebarHeader.setAlignment(javafx.geometry.Pos.CENTER);
                 for (Button b : allNavBtns) b.setAlignment(javafx.geometry.Pos.CENTER);
+
+                updateQuizSubmenuVisibility();
+
             } else {
                 sidebar.setPadding(new javafx.geometry.Insets(24, 16, 24, 16));
                 if (sidebarHeader != null) sidebarHeader.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
                 for (Button b : allNavBtns) b.setAlignment(javafx.geometry.Pos.BASELINE_LEFT);
+
+                updateQuizSubmenuVisibility();
+
             }
         }
     }
@@ -566,7 +637,22 @@ public class MainController implements Initializable {
 
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
     @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
+
     @FXML private void onNavQuizzes()  { navigateTo(pageQuizzes,  navQuizzes);  }
+
+    @FXML private void onNavQuizzes()  {
+        navigateTo(pageQuizzes,  navQuizzes);
+        if (SessionManager.isAdmin()) {
+            quizMenuExpanded = !quizMenuExpanded;
+            updateQuizSubmenuVisibility();
+            loadDefaultQuizTaskForRole();
+        } else {
+            quizMenuExpanded = false;
+            updateQuizSubmenuVisibility();
+            openQuizTask("UserQuizSelection.fxml", navQuizzes, false);
+        }
+    }
+
     @FXML private void onNavLeaderboard()  { 
         navigateTo(pageLeaderboard,  navLeaderboard);
         loadLeaderboard();
@@ -666,6 +752,14 @@ public class MainController implements Initializable {
         });
     }
 
+    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); loadProfileFriends(); }
+    @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
+    @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
+
+
+    
+
+
     @FXML
     private void onOpenPreferences() {
         Stage stage = (Stage) topbar.getScene().getWindow();
@@ -683,6 +777,95 @@ public class MainController implements Initializable {
         }
     }
 
+
+    @FXML private void onQuizChoose()    { openQuizTask("UserQuizSelection.fxml", navQuizChoose, false); }
+    @FXML private void onQuizManage()    { openQuizTask("QuizManagement.fxml", navQuizManage, true); }
+    @FXML private void onQuizQuestions() { openQuizTask("QuestionsManagement.fxml", navQuizQuestions, true); }
+    @FXML private void onQuizAnswers()   { openQuizTask("AnswersManagement.fxml", navQuizAnswers, true); }
+    @FXML private void onQuizHistory()   { openQuizTask("QuizHistory.fxml", navQuizHistory, true); }
+
+    private void loadDefaultQuizTaskForRole() {
+        if (quizContentPane == null) return;
+        if (quizContentPane.getChildren().isEmpty()) {
+            if (SessionManager.isAdmin()) {
+                openQuizTask("Dashboard.fxml", navQuizzes, false);
+            } else {
+                openQuizTask("UserQuizSelection.fxml", navQuizChoose, false);
+            }
+        }
+    }
+
+    private void openQuizTask(String fxml, Button activeQuizButton, boolean requireAdmin) {
+        if (requireAdmin && !SessionManager.isAdmin()) {
+            openQuizTask("UserQuizSelection.fxml", navQuizChoose, false);
+            return;
+        }
+        if (quizContentPane == null) return;
+
+        if (AppNavigator.isQuizInProgress() && !"PasserQuiz.fxml".equals(fxml)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Quiz en cours");
+            alert.setHeaderText(null);
+            alert.setContentText("Vous ne pouvez pas quitter le quiz pendant une tentative. Terminez le quiz avant de changer d'ecran.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            AppNavigator.setContentPane(quizContentPane);
+            String quizStylesheet = getClass().getResource("/style.css").toExternalForm();
+            if (!quizContentPane.getStylesheets().contains(quizStylesheet)) {
+                quizContentPane.getStylesheets().add(quizStylesheet);
+            }
+            Parent quizRoot = FXMLLoader.load(getClass().getResource("/" + fxml));
+            quizContentPane.getChildren().setAll(quizRoot);
+            activateQuizSubButton(activeQuizButton);
+        } catch (Exception e) {
+            System.err.println("[Quiz] Cannot load MOUAYED view " + fxml + ": " + e.getMessage());
+            Label errorLabel = new Label("Impossible de charger Gestion des Quiz.");
+            errorLabel.getStyleClass().add("page-greeting");
+            quizContentPane.getChildren().setAll(errorLabel);
+        }
+    }
+
+    private void activateQuizSubButton(Button activeQuizButton) {
+        for (Button btn : java.util.Arrays.asList(navQuizChoose, navQuizManage, navQuizQuestions, navQuizAnswers, navQuizHistory)) {
+            if (btn != null) btn.getStyleClass().remove("nav-active");
+        }
+        if (activeQuizButton != null && activeQuizButton != navQuizzes && !activeQuizButton.getStyleClass().contains("nav-active")) {
+            activeQuizButton.getStyleClass().add("nav-active");
+        }
+    }
+
+    private void updateQuizSubmenuForRole() {
+        boolean isAdmin = SessionManager.isAdmin();
+        if (lblQuizzes != null) {
+            lblQuizzes.setText(isAdmin ? "Gestion de Quiz" : "Passer un quiz");
+        }
+        if (navQuizChoose != null) {
+            navQuizChoose.setVisible(false);
+            navQuizChoose.setManaged(false);
+        }
+        for (Button btn : java.util.Arrays.asList(navQuizManage, navQuizQuestions, navQuizAnswers, navQuizHistory)) {
+            if (btn != null) {
+                btn.setVisible(isAdmin);
+                btn.setManaged(isAdmin);
+            }
+        }
+        if (!isAdmin) {
+            quizMenuExpanded = false;
+        }
+        activateQuizSubButton(null);
+        updateQuizSubmenuVisibility();
+    }
+
+    private void updateQuizSubmenuVisibility() {
+        if (quizSubmenu == null) return;
+        boolean show = SessionManager.isAdmin() && quizMenuExpanded && !sidebarCollapsed;
+        quizSubmenu.setVisible(show);
+        quizSubmenu.setManaged(show);
+    }
+
     private void navigateTo(VBox targetPage, Button activeBtn) {
         for (VBox page : allPages) {
             if (page != null) {
@@ -696,6 +879,13 @@ public class MainController implements Initializable {
                 btn.getStyleClass().remove("nav-active");
             }
         }
+
+
+        if (targetPage != pageQuizzes) {
+            quizMenuExpanded = false;
+            updateQuizSubmenuVisibility();
+        }
+
 
         if (targetPage != null) {
             targetPage.setVisible(true);
@@ -727,7 +917,10 @@ public class MainController implements Initializable {
     private void onProfileClick() {
         navigateTo(pageProfile, null);
         loadProfileFriends();
+
         populateProfileFields();
+
+
     }
 
     private void closeDropdown() {
@@ -1228,18 +1421,23 @@ public class MainController implements Initializable {
         countryFilterCombo.setValue("All Countries");
         countryFilterCombo.setOnAction(e -> loadLeaderboard());
         
+
         // Populate countries with flags
         utils.CountryService.getInstance().getAllCountryNames().thenAccept(countries -> {
             javafx.application.Platform.runLater(() -> {
                 countryFilterCombo.getItems().addAll(countries);
             });
         });
+
+        // Populate countries from users later
+
     }
 
     private void loadLeaderboard() {
         if (leaderboardContainer == null) return;
         try {
             List<User> users = serviceUser.getAll();
+
           
             // Filter by country
             String selectedCountry = countryFilterCombo.getValue();
@@ -1247,6 +1445,23 @@ public class MainController implements Initializable {
                 // Since selectedCountry now has a flag (e.g. "Morocco 🇲🇦"), 
                 // we check if the user's country is the prefix
                 users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
+
+            
+            // Populate country filter if empty (except "All Countries")
+            if (countryFilterCombo.getItems().size() <= 1) {
+                users.stream()
+                     .map(User::getPays)
+                     .filter(p -> p != null && !p.isEmpty())
+                     .distinct()
+                     .sorted()
+                     .forEach(p -> countryFilterCombo.getItems().add(p));
+            }
+            
+            // Filter by country
+            String selectedCountry = countryFilterCombo.getValue();
+            if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
+                users.removeIf(u -> !selectedCountry.equals(u.getPays()));
+
             }
             
             // Sort by metric
@@ -1373,7 +1588,10 @@ public class MainController implements Initializable {
         // ── HERO ──────────────────────────────────────────────────────────
         StackPane hero = new StackPane();
         hero.setPrefHeight(180);
+
         hero.setStyle("-fx-background-color: linear-gradient(to bottom right, #2563eb, #3b82f6);");
+        hero.setStyle("-fx-background-color: linear-gradient(to bottom right, #4F46E5, #7C3AED);");
+
 
         HBox heroContent = new HBox(28);
         heroContent.setAlignment(javafx.geometry.Pos.BOTTOM_LEFT);
@@ -1385,7 +1603,11 @@ public class MainController implements Initializable {
         ring.setEffect(new DropShadow(16, javafx.scene.paint.Color.web(accent, 0.5)));
         Circle av = new Circle(46); av.setStyle("-fx-fill: #ffffff;");
         Label initL = new Label(formatUserName(user).substring(0,1).toUpperCase());
+
         initL.setStyle("-fx-font-size: 30px; -fx-font-weight: 900; -fx-text-fill: #2563eb;");
+
+        initL.setStyle("-fx-font-size: 30px; -fx-font-weight: 900; -fx-text-fill: #4F46E5;");
+
         if (user.getPhotoProfil() != null && !user.getPhotoProfil().isEmpty()) {
             try { byte[] b = Base64.getDecoder().decode(user.getPhotoProfil());
                 av.setFill(new ImagePattern(new Image(new ByteArrayInputStream(b))));
@@ -1408,7 +1630,11 @@ public class MainController implements Initializable {
         Region sp2 = new Region(); HBox.setHgrow(sp2, Priority.ALWAYS);
         Button addBtn = new Button(); addBtn.setPrefWidth(140);
         Button blockBtn = new Button(); blockBtn.setPrefWidth(110);
+
         styleSocialBtn(addBtn, "+  Add Friend", "#ffffff", "#2563eb");
+
+        styleSocialBtn(addBtn, "+  Add Friend", "#ffffff", "#4F46E5");
+
         styleSocialBtn(blockBtn, "Block", "transparent", "#ffffff");
         updateSocialButtons(user, addBtn, blockBtn);
         HBox socialRow = new HBox(10, sp2, addBtn, blockBtn);
@@ -1524,7 +1750,11 @@ public class MainController implements Initializable {
                 addBtn.setOnAction(e -> handleRelationAction(target, "REMOVE", addBtn, blockBtn));
             } else {
                 String ac = getRankAccent(target.getRankedPoints());
+
                 styleSocialBtn(addBtn, "+  Add Friend", "#2563eb", "#ffffff");
+
+                styleSocialBtn(addBtn, "+  Add Friend", "#4F46E5", "#ffffff");
+
                 addBtn.setOnAction(e -> handleRelationAction(target, "FRIEND", addBtn, blockBtn));
             }
             if ("BLOCKED".equals(status)) {

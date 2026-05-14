@@ -409,6 +409,7 @@ public class LoginController implements Initializable {
                     user.setPrenom(nameParts.length > 0 ? nameParts[0] : "");
                     user.setNom(nameParts.length > 1 ? nameParts[1] : "");
 
+
                     // Save country without the flag emoji
                     String fullCountry = countryComboBox.getValue();
                     if (fullCountry != null && fullCountry.contains(" ")) {
@@ -416,6 +417,9 @@ public class LoginController implements Initializable {
                     } else {
                         user.setPays(fullCountry);
                     }
+
+
+                    user.setPays(countryComboBox.getValue());
 
                     user.setRole("ETUDIANT");
                     serviceUser.add(user);

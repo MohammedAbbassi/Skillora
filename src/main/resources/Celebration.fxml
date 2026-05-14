@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootPane" prefHeight="760" prefWidth="910" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CelebrationController">
+    <Pane fx:id="confettiPane" mouseTransparent="true" />
+
+    <VBox fx:id="contentBox" alignment="CENTER" spacing="40">
+        <padding>
+            <Insets top="60" right="40" bottom="60" left="40"/>
+        </padding>
+
+        <Label text="FELICITATIONS!" style="-fx-font-family: 'Segoe UI', Arial, sans-serif; -fx-font-size: 80px; -fx-text-fill: #123b7a; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 3);"/>
+        
+        <Label text="Vous avez obtenu un score parfait !" style="-fx-font-size: 24px; -fx-text-fill: #555555;"/>
+
+        <Label fx:id="scoreLabel" text="Score : 0 / 0" style="-fx-font-size: 22px; -fx-text-fill: #123b7a; -fx-font-weight: bold;"/>
+
+        <HBox alignment="CENTER" spacing="20">
+            <Button minWidth="178" text="Exporter les resultats" onAction="#exportResultsPdf" styleClass="secondary-button" style="-fx-font-size: 16px; -fx-padding: 10 30;"/>
+            <Button minWidth="160" text="Rejouer" onAction="#rejouer" styleClass="secondary-button" style="-fx-font-size: 16px; -fx-padding: 10 30;"/>
+            <Button minWidth="160" text="Accueil" onAction="#accueil" styleClass="primary-button" style="-fx-font-size: 16px; -fx-padding: 10 30;"/>
+        </HBox>
+    </VBox>
+</StackPane>

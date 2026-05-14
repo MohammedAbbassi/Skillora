@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+
+<VBox fx:id="quizRoot" spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.PasserQuiz">
+    <padding>
+        <Insets top="34" right="40" bottom="34" left="40"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="14">
+        <VBox spacing="6">
+            <Label text="Passage du quiz" styleClass="page-title"/>
+            <Label fx:id="progressionLabel" text="Question" styleClass="page-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="timer-flow">
+            <StackPane minWidth="28" minHeight="28" prefWidth="28" prefHeight="28" styleClass="watch-icon">
+                <Circle radius="10" styleClass="watch-icon-face"/>
+                <Line startX="0" startY="0" endX="0" endY="-6" styleClass="watch-icon-hand"/>
+                <Line startX="0" startY="0" endX="6" endY="0" styleClass="watch-icon-hand"/>
+            </StackPane>
+            <VBox alignment="CENTER_RIGHT" spacing="5">
+                <ProgressBar fx:id="globalTimerProgress" progress="1.0" prefWidth="170" styleClass="timer-progress"/>
+                <ProgressBar fx:id="questionTimerProgress" progress="1.0" prefWidth="170" styleClass="timer-progress"/>
+            </VBox>
+            <Label fx:id="bonusLabel" text="Bonus : +0" styleClass="score-pill"/>
+        </HBox>
+        <Label fx:id="antiCheatLabel" text="Anti-triche : 0 incident" styleClass="score-pill"/>
+        <Label fx:id="scoreLabel" text="Score : 0" styleClass="score-pill"/>
+    </HBox>
+
+    <VBox spacing="18" maxWidth="820" styleClass="form-card">
+        <Label fx:id="questionLabel" text="Question" wrapText="true" styleClass="question-title"/>
+        <javafx.scene.image.ImageView fx:id="questionImageView" fitWidth="500" fitHeight="300" preserveRatio="true"/>
+        <VBox fx:id="optionsBox" spacing="12"/>
+        <HBox alignment="CENTER_RIGHT">
+            <Button fx:id="suivantButton" minWidth="118" text="Suivant" onAction="#suivant" styleClass="primary-button"/>
+        </HBox>
+    </VBox>
+</VBox>
