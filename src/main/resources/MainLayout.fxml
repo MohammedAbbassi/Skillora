@@ -235,15 +235,15 @@
                                     <Label styleClass="quest-card-copy" text="Conquer the final module of Layout Managers to unlock the 'UI Architect' badge and earn massive XP." wrapText="true"/>
                                     
                                     <HBox spacing="16.0">
-                                        <VBox style="-fx-background-color: #f8fafc; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
-                                            <Label text="REWARD UPON COMPLETION" styleClass="section-kicker" />
+                                        <VBox style="-fx-background-color: #0e6eceff; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
+                                            <Label text="REWARD UPON COMPLETION" styleClass="section-kicker" style="-fx-text-fill: white;" />
                                             <HBox alignment="CENTER_LEFT" spacing="8.0">
                                                 <Label text="&#x1f48e;" styleClass="text-gold text-xl" />
                                                 <Label text="+500 XP" styleClass="font-black text-slate-700 text-xl" />
                                             </HBox>
                                         </VBox>
-                                        <VBox style="-fx-background-color: #f8fafc; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
-                                            <Label text="UNLOCKABLES" styleClass="section-kicker" />
+                                        <VBox style="-fx-background-color: #1e7bd8ff; -fx-padding: 16; -fx-background-radius: 12px;" HBox.hgrow="ALWAYS" spacing="8.0">
+                                            <Label text="UNLOCKABLES" styleClass="section-kicker" style="-fx-text-fill: white;" />
                                             <HBox alignment="CENTER_LEFT" spacing="8.0">
                                                 <Label text="&#x1f396;" styleClass="text-secondary text-xl" />
                                                 <Label text="Expert Badge" styleClass="font-black text-slate-700 text-xl" />

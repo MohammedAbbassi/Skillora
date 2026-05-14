@@ -51,7 +51,7 @@
 }
 
 .app-root {
-    -fx-background-color: #F8FAFC;
+    -fx-background-color: #3b82f6;
 }
 
 /* ── UTILITIES (Tailwind-like) ────────────────────────────────── */
@@ -110,7 +110,7 @@
     -fx-font-family: "Segoe UI Semibold", "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 12px;
     -fx-font-weight: 900;
-    -fx-text-fill: #64748b;
+    -fx-text-fill: #ffffff;
 }
 
 /* ── SIDEBAR ─────────────────────────────────────────────────── */
@@ -962,7 +962,7 @@
 }
 
 .social-btn-premium:hover {
-    -fx-background-color: #f8fafc;
+    -fx-background-color: #3b82f6;
     -fx-border-color: #cbd5e1;
     -fx-translate-y: -1px;
 }
