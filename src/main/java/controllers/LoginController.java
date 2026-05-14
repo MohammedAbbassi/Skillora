@@ -229,6 +229,7 @@ public class LoginController implements Initializable {
                 prefs.setUserEmail(finalUser.getEmail());
                 prefs.setXpPoints(finalUser.getXpPoints());
                 prefs.setStreakDays(finalUser.getStreakDays());
+                utils.Session.setUser(finalUser);
 
                 Platform.runLater(() -> {
                     try {
@@ -432,6 +433,7 @@ public class LoginController implements Initializable {
                 prefs.setUserEmail(user.getEmail());
                 prefs.setXpPoints(user.getXpPoints());
                 prefs.setStreakDays(user.getStreakDays());
+                utils.Session.setUser(user);
 
                 Platform.runLater(() -> {
                     try {

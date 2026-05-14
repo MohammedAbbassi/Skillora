@@ -399,15 +399,12 @@ public class MainController implements Initializable {
 
         setGreeting();
 
-        boolean isAdmin = "ADMIN".equalsIgnoreCase(p.getUserRole());
+        String role = normalizeRole(p.getUserRole());
+        boolean isAdmin = "ADMIN".equals(role);
 
         SessionManager.setRole(isAdmin ? SessionManager.Role.ADMIN : SessionManager.Role.USER);
         updateQuizSubmenuForRole();
-
-        if (adminSection != null) {
-            adminSection.setVisible(isAdmin);
-            adminSection.setManaged(isAdmin);
-        }
+        applyRoleNavigation(role);
 
         loadCurrentUserAndAvatar();
         
@@ -455,6 +452,51 @@ public class MainController implements Initializable {
 
         String textStyle = "-fx-text-fill: " + p.getTextColor() + ";";
         greetingLabel.setStyle(textStyle);
+    }
+
+    private void applyRoleNavigation(String role) {
+        boolean admin = "ADMIN".equals(role);
+        boolean instructor = "INSTRUCTEUR".equals(role) || "ENSEIGNANT".equals(role);
+        boolean student = !admin && !instructor;
+
+        setNodeVisible(adminSection, admin);
+
+        setNodeVisible(navEvent, student);
+        setNodeVisible(navReservation, student || instructor);
+        setNodeVisible(navAdmin, admin);
+        setNodeVisible(navAdminCourses, admin);
+        setNodeVisible(navAdminShop, admin);
+        setNodeVisible(navAdminEvents, admin);
+        setNodeVisible(navAdminReservations, admin);
+
+        if (lblEvent != null) {
+            lblEvent.setText("Evenements");
+        }
+        if (lblReservation != null) {
+            lblReservation.setText(instructor ? "Reservations recues" : "Mes reservations");
+        }
+        if (lblAdminEvents != null) {
+            lblAdminEvents.setText("Gerer les evenements");
+        }
+        if (lblAdminReservations != null) {
+            lblAdminReservations.setText("Gerer les reservations");
+        }
+    }
+
+    private String normalizeRole(String role) {
+        if (role == null || role.isBlank()) {
+            return "ETUDIANT";
+        }
+        String normalized = role.trim().toUpperCase();
+        return "ENSEIGNANT".equals(normalized) ? "INSTRUCTEUR" : normalized;
+    }
+
+    private void setNodeVisible(Node node, boolean visible) {
+        if (node == null) {
+            return;
+        }
+        node.setVisible(visible);
+        node.setManaged(visible);
     }
 
     private void setupRoundedShellClip() {
