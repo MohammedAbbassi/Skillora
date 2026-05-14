@@ -100,7 +100,7 @@
                         </graphic>
                     </Button>
                 </HBox>
-<<<<<<< HEAD
+
                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sidebar-scroll" VBox.vgrow="ALWAYS">
                     <VBox spacing="4.0">
                         <VBox.margin>
@@ -108,14 +108,14 @@
                         </VBox.margin>
                         
                         <Label styleClass="sidebar-section-header" text="MAIN MENU" />
-=======
+
                 <VBox spacing="4.0" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets top="32.0" />
                     </VBox.margin>
                     
                     <Label styleClass="sidebar-section-header" text="MAIN MENU" />
->>>>>>> mouayed
+
                     
                     <Button fx:id="navHome" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavHome" styleClass="nav-btn, nav-active">
                         <graphic>
@@ -129,11 +129,11 @@
                     </Button>
                     <Button fx:id="navQuizzes" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavQuizzes" styleClass="nav-btn">
                         <graphic>
-<<<<<<< HEAD
+
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4dd;" /><Label fx:id="lblQuizzes" styleClass="text-sm" text="Quizzes" /></HBox>
                         </graphic>
                     </Button>
-=======
+
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4dd;" /><Label fx:id="lblQuizzes" styleClass="text-sm" text="Gestion de Quiz" /></HBox>
                         </graphic>
                     </Button>
@@ -154,7 +154,7 @@
                             <graphic><HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x25e6;" /><Label fx:id="lblQuizHistory" styleClass="text-sm" text="Historique" /></HBox></graphic>
                         </Button>
                     </VBox>
->>>>>>> mouayed
+
                     <Button fx:id="navLeaderboard" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavLeaderboard" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f3c6;" /><Label fx:id="lblLeaderboard" styleClass="text-sm" text="Leaderboard" /></HBox>
@@ -165,7 +165,7 @@
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4ca;" /><Label fx:id="lblProgress" styleClass="text-sm" text="Achievements" /></HBox>
                         </graphic>
                     </Button>
-<<<<<<< HEAD
+
                     <Button fx:id="navShop" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavShop" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f6cd;" /><Label fx:id="lblShop" styleClass="text-sm" text="Shop" /></HBox>
@@ -186,8 +186,7 @@
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4ac;" /><Label fx:id="lblCommunity" styleClass="text-sm" text="Community" /></HBox>
                         </graphic>
                     </Button>
-=======
->>>>>>> mouayed
+
                     
                     <VBox fx:id="adminSection" spacing="4.0" visible="false" managed="false">
                         <VBox.margin><Insets top="20.0" /></VBox.margin>
@@ -198,7 +197,7 @@
                                     <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f465;" /><Label fx:id="lblAdmin" styleClass="text-sm" text="Users" /></HBox>
                                 </graphic>
                             </Button>
-<<<<<<< HEAD
+
                             <Button fx:id="navAdminCourses" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavAdminCourses" styleClass="nav-btn">
                                 <graphic>
                                     <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4da;" /><Label fx:id="lblAdminCourses" styleClass="text-sm" text="Manage Courses" /></HBox>
@@ -223,10 +222,10 @@
                     </VBox>
                 </VBox>
                 </ScrollPane>
-=======
+
                         </children>
                     </VBox>
->>>>>>> mouayed
+
 
                     <Region VBox.vgrow="ALWAYS" />
                     
@@ -244,10 +243,10 @@
                             </HBox>
                         </graphic>
                     </Button>
-<<<<<<< HEAD
-=======
+
+
                 </VBox>
->>>>>>> mouayed
+
             </children>
         </VBox>
     </left>
@@ -325,11 +324,11 @@
                                         </VBox>
                                         <!-- Collectible 2 -->
                                         <VBox styleClass="collectible-card" HBox.hgrow="ALWAYS">
-<<<<<<< HEAD
+
                                             <StackPane style="-fx-background-color: #eff6ff; -fx-background-radius: 50%;" prefWidth="64" prefHeight="64">
-=======
+
                                             <StackPane style="-fx-background-color: #faf5ff; -fx-background-radius: 50%;" prefWidth="64" prefHeight="64">
->>>>>>> mouayed
+
                                                 <Label text="&#x1f3a8;" styleClass="text-3xl" />
                                             </StackPane>
                                             <Label text="UI Virtuoso" styleClass="font-black text-sm text-slate-800" />
@@ -362,11 +361,11 @@
                                     <Label styleClass="text-lg font-black text-slate-800" text="Daily Loot" />
                                     <VBox styleClass="widget-card" spacing="16.0">
                                         <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-cursor: hand;">
-<<<<<<< HEAD
+
                                             <StackPane style="-fx-background-color: #2563eb; -fx-background-radius: 8px;" prefWidth="40" prefHeight="40">
-=======
+
                                             <StackPane style="-fx-background-color: #4F46E5; -fx-background-radius: 8px;" prefWidth="40" prefHeight="40">
->>>>>>> mouayed
+
                                                 <Label text="&#x2753;" styleClass="text-white"/>
                                             </StackPane>
                                             <VBox>
@@ -375,11 +374,11 @@
                                             </VBox>
                                         </HBox>
                                         <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-cursor: hand;">
-<<<<<<< HEAD
+
                                             <StackPane style="-fx-background-color: #3b82f6; -fx-background-radius: 8px;" prefWidth="40" prefHeight="40">
-=======
+
                                             <StackPane style="-fx-background-color: #7C3AED; -fx-background-radius: 8px;" prefWidth="40" prefHeight="40">
->>>>>>> mouayed
+
                                                 <Label text="&#x2328;" styleClass="text-white"/>
                                             </StackPane>
                                             <VBox>
@@ -415,15 +414,15 @@
                     
                     <!-- OTHER PAGES -->
                     <VBox fx:id="pageCourses" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Courses" /></VBox>
-<<<<<<< HEAD
+
                     <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Quizzes" /></VBox>
                     <VBox fx:id="pageShop" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Shop" /></VBox>
                     <VBox fx:id="pageEvent" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Event" /></VBox>
                     <VBox fx:id="pageReservation" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Reservation" /></VBox>
                     <VBox fx:id="pageCommunity" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Community" /></VBox>
-=======
+
                     <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root"><StackPane fx:id="quizContentPane" VBox.vgrow="ALWAYS" /></VBox>
->>>>>>> mouayed
+
 
                     <VBox fx:id="pageLeaderboard" visible="false" managed="false" styleClass="page-root" spacing="24">
                         <padding><Insets bottom="40" left="36" right="36" top="36" /></padding>
@@ -514,15 +513,15 @@
                                 <VBox spacing="6">
                                     <HBox alignment="CENTER_LEFT">
                                         <Label text="&#x1f40d; Python" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS" />
-<<<<<<< HEAD
+
                                         <Label text="78%" style="-fx-font-weight: 700; -fx-text-fill: #2563eb; -fx-font-size: 13px;" />
                                     </HBox>
                                     <ProgressBar progress="0.78" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #2563eb;" />
-=======
+
                                         <Label text="78%" style="-fx-font-weight: 700; -fx-text-fill: #4F46E5; -fx-font-size: 13px;" />
                                     </HBox>
                                     <ProgressBar progress="0.78" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #4F46E5;" />
->>>>>>> mouayed
+
                                 </VBox>
                                 <!-- Data Science -->
                                 <VBox spacing="6">
@@ -555,11 +554,11 @@
                                 <Label text="Recent Badges" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                 <HBox spacing="16" alignment="CENTER">
                                     <VBox alignment="CENTER" spacing="6">
-<<<<<<< HEAD
+
                                         <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(37, 99, 235, 0.1);">
-=======
+
                                         <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(79,70,229,0.1);">
->>>>>>> mouayed
+
                                             <Label text="&#x1f525;" style="-fx-font-size: 28px;" />
                                         </StackPane>
                                         <Label text="On Fire" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #1e293b;" />
@@ -580,11 +579,11 @@
                                         <Label text="5 courses done" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8;" />
                                     </VBox>
                                     <VBox alignment="CENTER" spacing="6">
-<<<<<<< HEAD
+
                                         <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(37, 99, 235, 0.1); -fx-opacity: 0.4;">
-=======
+
                                         <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(139,92,246,0.1); -fx-opacity: 0.4;">
->>>>>>> mouayed
+
                                             <Label text="&#x1f451;" style="-fx-font-size: 28px;" />
                                         </StackPane>
                                         <Label text="Legend" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #94a3b8;" />
@@ -654,7 +653,7 @@
                             </VBox>
                         </HBox>
 
-<<<<<<< HEAD
+
                         <!-- Edit Profile Card -->
                         <VBox spacing="20.0" styleClass="game-card">
                             <children>
@@ -714,8 +713,6 @@
                             </children>
                         </VBox>
 
-=======
->>>>>>> mouayed
                         <!-- Achievements Section -->
                         <VBox spacing="20" styleClass="game-card">
                             <HBox alignment="CENTER_LEFT">

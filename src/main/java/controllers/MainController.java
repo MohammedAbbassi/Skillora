@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.effect.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -45,6 +46,7 @@ import java.io.ByteArrayOutputStream;
 public class MainController implements Initializable {
 
     @FXML private StackPane rootPane;
+    @FXML private BorderPane mainShell;
     @FXML private HBox   topbar;
     @FXML private Label  topbarLogoText;
     @FXML private Label  topbarUserName;
@@ -423,6 +425,7 @@ public class MainController implements Initializable {
         loadRightFriends();
         applyAccessibilityCss(p);
         setupWindowDragging();
+        setupRoundedShellClip();
 
         if (pollingTimeline == null) {
             pollingTimeline = new Timeline(new KeyFrame(Duration.seconds(3), e -> pollData()));
@@ -458,6 +461,20 @@ public class MainController implements Initializable {
 
         String textStyle = "-fx-text-fill: " + p.getTextColor() + ";";
         greetingLabel.setStyle(textStyle);
+    }
+
+    private void setupRoundedShellClip() {
+        if (mainShell == null) return;
+
+        Rectangle clip = new Rectangle();
+        clip.setArcWidth(48);
+        clip.setArcHeight(48);
+        mainShell.setClip(clip);
+
+        mainShell.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+            clip.setWidth(newBounds.getWidth());
+            clip.setHeight(newBounds.getHeight());
+        });
     }
 
     private void setGreeting() {
@@ -1142,7 +1159,75 @@ public class MainController implements Initializable {
     }
 
     private void onEditUser(User user) {
-        System.out.println("Edit user: " + formatUserName(user));
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Edit User");
+        dialogStage.initOwner(topbar.getScene().getWindow());
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.setResizable(false);
+
+        VBox mainVBox = new VBox(20);
+        mainVBox.setPadding(new javafx.geometry.Insets(30));
+        mainVBox.setStyle("-fx-background-color: #FFFFFF;");
+
+        Label titleLabel = new Label("Edit User: " + user.getEmail());
+        titleLabel.setStyle("-fx-font-family: Georgia; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1A1A2E;");
+
+        TextField firstNameField = new TextField(user.getPrenom() != null ? user.getPrenom() : "");
+        firstNameField.getStyleClass().add("dialog-text-field");
+        firstNameField.setPromptText("First Name");
+        
+        TextField lastNameField = new TextField(user.getNom() != null ? user.getNom() : "");
+        lastNameField.getStyleClass().add("dialog-text-field");
+        lastNameField.setPromptText("Last Name");
+        
+        TextField usernameField = new TextField(user.getNomUtilisateur() != null ? user.getNomUtilisateur() : "");
+        usernameField.getStyleClass().add("dialog-text-field");
+        usernameField.setPromptText("Username");
+
+        ComboBox<String> roleCombo = new ComboBox<>();
+        roleCombo.getStyleClass().add("dialog-combo-box");
+        roleCombo.getItems().addAll("ETUDIANT", "ADMIN");
+        roleCombo.setValue(user.getRole());
+        roleCombo.setMaxWidth(Double.MAX_VALUE);
+
+        CheckBox activeCheck = new CheckBox("Active Account");
+        activeCheck.setSelected(user.isEstActif());
+        activeCheck.setStyle("-fx-font-weight: bold; -fx-text-fill: #475569;");
+
+        HBox buttonBox = new HBox(12);
+        buttonBox.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.getStyleClass().add("dialog-cancel-btn");
+        cancelBtn.setOnAction(e -> dialogStage.close());
+
+        Button saveBtn = new Button("Save Changes");
+        saveBtn.getStyleClass().add("dialog-ok-btn");
+        saveBtn.setOnAction(e -> {
+            user.setPrenom(firstNameField.getText().trim());
+            user.setNom(lastNameField.getText().trim());
+            user.setNomUtilisateur(usernameField.getText().trim());
+            user.setRole(roleCombo.getValue());
+            user.setEstActif(activeCheck.isSelected());
+
+            try {
+                serviceUser.update(user);
+                loadUserTable();
+                dialogStage.close();
+                showStyledAlert(Alert.AlertType.INFORMATION, "Success", "User updated successfully!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showStyledAlert(Alert.AlertType.ERROR, "Error", "Failed to update user: " + ex.getMessage());
+            }
+        });
+
+        buttonBox.getChildren().addAll(cancelBtn, saveBtn);
+        mainVBox.getChildren().addAll(titleLabel, firstNameField, lastNameField, usernameField, roleCombo, activeCheck, buttonBox);
+
+        Scene scene = new Scene(mainVBox);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        dialogStage.setScene(scene);
+        dialogStage.show();
     }
 
     private void onDeleteUser(User user) {
@@ -1360,7 +1445,7 @@ public class MainController implements Initializable {
                 // Since selectedCountry now has a flag (e.g. "Morocco 🇲🇦"), 
                 // we check if the user's country is the prefix
                 users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
-=======
+
             
             // Populate country filter if empty (except "All Countries")
             if (countryFilterCombo.getItems().size() <= 1) {
@@ -1376,7 +1461,7 @@ public class MainController implements Initializable {
             String selectedCountry = countryFilterCombo.getValue();
             if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
                 users.removeIf(u -> !selectedCountry.equals(u.getPays()));
->>>>>>> mouayed
+
             }
             
             // Sort by metric
