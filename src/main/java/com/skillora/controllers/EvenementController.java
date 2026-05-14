@@ -383,11 +383,31 @@ public class EvenementController implements Initializable {
     private void chargerEvenementsDepuisBase() {
         try {
             java.util.List<Evenement> data = evenementCRUD.afficher();
-            allEventList.setAll(data);
+            allEventList.setAll(filtrerEvenementsSelonRole(data));
             appliquerFiltresEvenements();
         } catch (Exception e) {
             afficherAlerte("Erreur de connexion", "Impossible de contacter la base de donnees. Assurez-vous que MySQL est lance sur le port 3306.", Alert.AlertType.ERROR);
         }
+    }
+
+    private List<Evenement> filtrerEvenementsSelonRole(List<Evenement> evenements) {
+        Role role = SessionManager.getCurrentUserRole();
+        long currentUserId = SessionManager.getCurrentUserId();
+
+        if (role == null) {
+            return new ArrayList<>();
+        }
+        if (role == Role.ADMIN || role == Role.ETUDIANT) {
+            return evenements;
+        }
+
+        List<Evenement> filteredEvents = new ArrayList<>();
+        for (Evenement evenement : evenements) {
+            if (role == Role.INSTRUCTEUR && evenement.getId_utilisateur() == currentUserId) {
+                filteredEvents.add(evenement);
+            }
+        }
+        return filteredEvents;
     }
 
     private void appliquerFiltresEvenements() {
