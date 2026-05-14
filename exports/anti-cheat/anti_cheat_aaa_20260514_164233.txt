@@ -1,0 +1,11 @@
+Rapport anti-triche
+Utilisateur: Moham
+Quiz: aaa
+Debut: 14/05/2026 16:42:13
+Fin: 14/05/2026 16:42:33
+Resume: 4 incident(s), dont 3 critique(s).
+
+14/05/2026 16:42:16 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+14/05/2026 16:42:16 | question 1 | WARNING | SOURIS_HORS_FENETRE | La souris est sortie de la fenetre du quiz.
+14/05/2026 16:42:17 | question 1 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
+14/05/2026 16:42:32 | question 2 | CRITICAL | PERTE_FOCUS | La fenetre du quiz a perdu le focus: changement de fenetre, Alt-Tab ou clic externe.
