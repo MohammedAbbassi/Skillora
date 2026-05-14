@@ -123,6 +123,35 @@
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4dd;" /><Label fx:id="lblQuizzes" styleClass="text-sm" text="Quizzes" /></HBox>
                         </graphic>
                     </Button>
+                    <VBox fx:id="quizSubmenu" managed="false" spacing="4.0" visible="false" styleClass="quiz-submenu">
+                        <children>
+                            <Button fx:id="navQuizChoose" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQuizChoose" styleClass="nav-btn, quiz-subnav-btn">
+                                <graphic>
+                                    <HBox spacing="10"><Label styleClass="text-sm emoji-icon" text="&#x25b6;" /><Label fx:id="lblQuizChoose" styleClass="text-sm" text="Passer un quiz" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navQuizManage" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQuizManage" styleClass="nav-btn, quiz-subnav-btn">
+                                <graphic>
+                                    <HBox spacing="10"><Label styleClass="text-sm emoji-icon" text="&#x2699;" /><Label fx:id="lblQuizManage" styleClass="text-sm" text="Quiz" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navQuizQuestions" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQuizQuestions" styleClass="nav-btn, quiz-subnav-btn">
+                                <graphic>
+                                    <HBox spacing="10"><Label styleClass="text-sm emoji-icon" text="?" /><Label fx:id="lblQuizQuestions" styleClass="text-sm" text="Questions" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navQuizAnswers" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQuizAnswers" styleClass="nav-btn, quiz-subnav-btn">
+                                <graphic>
+                                    <HBox spacing="10"><Label styleClass="text-sm emoji-icon" text="&#x2713;" /><Label fx:id="lblQuizAnswers" styleClass="text-sm" text="Reponses" /></HBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="navQuizHistory" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onQuizHistory" styleClass="nav-btn, quiz-subnav-btn">
+                                <graphic>
+                                    <HBox spacing="10"><Label styleClass="text-sm emoji-icon" text="&#x23f1;" /><Label fx:id="lblQuizHistory" styleClass="text-sm" text="Historique" /></HBox>
+                                </graphic>
+                            </Button>
+                        </children>
+                    </VBox>
                     <Button fx:id="navLeaderboard" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavLeaderboard" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f3c6;" /><Label fx:id="lblLeaderboard" styleClass="text-sm" text="Leaderboard" /></HBox>
@@ -359,7 +388,11 @@
                     
                     <!-- OTHER PAGES -->
                     <VBox fx:id="pageCourses" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Courses" /></VBox>
-                    <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Quizzes" /></VBox>
+                    <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS">
+                        <children>
+                            <StackPane fx:id="quizContentPane" VBox.vgrow="ALWAYS" />
+                        </children>
+                    </VBox>
                     <VBox fx:id="pageShop" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Shop" /></VBox>
                     <VBox fx:id="pageEvent" visible="false" managed="false" styleClass="page-root" />
                     <VBox fx:id="pageReservation" visible="false" managed="false" styleClass="page-root" />
