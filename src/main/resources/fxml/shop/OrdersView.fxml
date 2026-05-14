@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.skillora.controllers.OrdersController" spacing="12"
+      stylesheets="@../../css/theme.css">
+    <padding>
+        <Insets bottom="8" left="8" right="8" top="8"/>
+    </padding>
+    <Label text="Commandes" styleClass="title-h2"/>
+    <Label fx:id="subtitleLabel" styleClass="muted"/>
+    <VBox fx:id="adminCommandsBox" spacing="10" managed="false" visible="false">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Statut" styleClass="field-label"/>
+            <ComboBox fx:id="statusCombo" prefWidth="140"/>
+            <Label text="Total (TND)" styleClass="field-label"/>
+            <TextField fx:id="adminTotalField" prefWidth="100" promptText="0.00"/>
+            <Button text="Enregistrer modifications" onAction="#onSaveOrderEdits" styleClass="primary-button"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Supprimer la commande" onAction="#onDeleteOrder" styleClass="danger-button"/>
+            <Button text="Nouvelle commande…" onAction="#onNewOrder" styleClass="secondary-button"/>
+        </HBox>
+    </VBox>
+    <HBox spacing="10" styleClass="stat-strip" alignment="CENTER_LEFT">
+        <VBox styleClass="stat-card" spacing="4">
+            <Label text="Commandes" styleClass="stat-label"/>
+            <Label fx:id="statOrderCount" styleClass="stat-value"/>
+        </VBox>
+        <VBox styleClass="stat-card" spacing="4">
+            <Label text="Montant total (TND)" styleClass="stat-label"/>
+            <Label fx:id="statTotalAmount" styleClass="stat-value"/>
+        </VBox>
+        <VBox styleClass="stat-card" spacing="4">
+            <Label text="En attente / Payées / Annulées" styleClass="stat-label"/>
+            <Label fx:id="statStatusBreakdown" wrapText="true" styleClass="muted"/>
+        </VBox>
+        <VBox spacing="8" alignment="CENTER_LEFT" styleClass="stat-card" minWidth="280" prefWidth="300">
+            <Label text="Répartition par statut" styleClass="stat-label"/>
+            <HBox fx:id="statusBarRow" spacing="0" alignment="CENTER_LEFT" prefHeight="28" minWidth="260" maxWidth="260"
+                  styleClass="order-status-bar-track"/>
+            <HBox spacing="14">
+                <Label fx:id="legendAttente" styleClass="order-legend-attente"/>
+                <Label fx:id="legendPayee" styleClass="order-legend-payee"/>
+                <Label fx:id="legendAnnulee" styleClass="order-legend-annulee"/>
+            </HBox>
+        </VBox>
+    </HBox>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button text="Voir le détail" onAction="#onDetail" styleClass="secondary-button">
+            <graphic><Label text="📄"/></graphic>
+        </Button>
+        <Button fx:id="btnInvoice" text="Télécharger Facture" onAction="#onGenerateInvoice" styleClass="primary-button" disable="true">
+            <graphic><Label text="📥" style="-fx-text-fill: white;"/></graphic>
+        </Button>
+    </HBox>
+    <ListView fx:id="orderList" prefHeight="320" VBox.vgrow="ALWAYS"/>
+    <Label fx:id="orderMessage" wrapText="true" styleClass="muted"/>
+</VBox>

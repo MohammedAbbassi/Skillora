@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.skillora.shop.LoginController"
+            styleClass="login-root" stylesheets="@../../css/theme.css">
+    <HBox alignment="CENTER" spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <VBox styleClass="login-hero" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <Label text="EXTRAIT SKILLORA" styleClass="hero-badge"/>
+            <Region prefHeight="8"/>
+            <Label styleClass="login-hero-title" text="Boutique &amp; commandes uniquement."
+                   wrapText="true"/>
+            <Label styleClass="login-hero-tagline"
+                   text="Catalogue produits, panier, validation de commande et suivi — JavaFX + MySQL."
+                   wrapText="true"/>
+        </VBox>
+        <VBox alignment="CENTER" prefWidth="420" maxWidth="460" styleClass="card card-glow" spacing="16"
+              HBox.hgrow="NEVER">
+            <padding>
+                <Insets bottom="40" left="36" right="36" top="40"/>
+            </padding>
+            <Label text="Connexion" styleClass="title-h2"/>
+            <Label fx:id="errorLabel" styleClass="muted" wrapText="true" managed="false" visible="false"/>
+            <VBox spacing="6">
+                <Label text="E-mail" styleClass="field-label"/>
+                <TextField fx:id="emailField" promptText="vous@exemple.com"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="Mot de passe" styleClass="field-label"/>
+                <PasswordField fx:id="passwordField" promptText="••••••••"/>
+            </VBox>
+            <Button text="Se connecter" defaultButton="true" onAction="#onLogin" styleClass="primary-button"
+                    maxWidth="Infinity"/>
+            <Label styleClass="muted" wrapText="true"
+                   text="Compte démo (après import sql/shop_minimal.sql) : demo@shop.local / demo123"/>
+        </VBox>
+    </HBox>
+</AnchorPane>

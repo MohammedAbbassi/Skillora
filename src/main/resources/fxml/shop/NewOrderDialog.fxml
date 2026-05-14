@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.skillora.shop.dialog.NewOrderDialogController" spacing="12"
+      stylesheets="@../../css/theme.css">
+    <padding>
+        <Insets bottom="16" left="16" right="16" top="16"/>
+    </padding>
+    <Label text="Nouvelle commande (admin)" styleClass="title-h2"/>
+    <Label text="Choisissez le client, ajoutez des lignes puis validez." styleClass="muted"/>
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="Client :" styleClass="field-label"/>
+        <ComboBox fx:id="userCombo" prefWidth="280"/>
+    </HBox>
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="Produit :" styleClass="field-label"/>
+        <ComboBox fx:id="productCombo" prefWidth="240"/>
+        <Label text="Qté" styleClass="field-label"/>
+        <Spinner fx:id="qtySpinner" prefWidth="80"/>
+        <Button text="Ajouter la ligne" onAction="#onAddLine" styleClass="secondary-button"/>
+    </HBox>
+    <Label text="Lignes" styleClass="field-label"/>
+    <ListView fx:id="linesView" prefHeight="160"/>
+    <HBox spacing="10">
+        <Button text="Annuler" onAction="#onCancel" styleClass="secondary-button"/>
+        <Button text="Créer la commande" defaultButton="true" onAction="#onConfirm" styleClass="primary-button"/>
+    </HBox>
+    <Label fx:id="dialogMsg" styleClass="muted" wrapText="true"/>
+</VBox>
