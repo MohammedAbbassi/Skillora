@@ -1161,7 +1161,7 @@ public class ReservationController implements Initializable {
         long currentUserId = SessionManager.getCurrentUserId();
 
         if (role == null) {
-            return reservations;
+            return new ArrayList<>();
         }
 
         if (role == Role.ADMIN || role == Role.INSTRUCTEUR) {

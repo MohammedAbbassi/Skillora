@@ -223,6 +223,8 @@ public class LoginController implements Initializable {
                 }
 
                 User finalUser = user;
+                utils.Session.setUser(finalUser);
+                utils.SessionManager.setCurrentUser(finalUser);
                 UserPreferences prefs = getUserPreferences(finalUser);
                 prefs.setUserName(formatUserName(finalUser));
                 prefs.setUserRole(finalUser.getRole());
@@ -426,6 +428,8 @@ public class LoginController implements Initializable {
                     user = serviceUser.login(email, pass);
                 }
 
+                utils.Session.setUser(user);
+                utils.SessionManager.setCurrentUser(user);
                 UserPreferences prefs = getUserPreferences(user);
                 prefs.setUserName(formatUserName(user));
                 prefs.setUserRole(user.getRole());

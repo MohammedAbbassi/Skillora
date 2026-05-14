@@ -486,6 +486,10 @@ public class MainController implements Initializable {
         }
         try {
             currentUser = serviceUser.findByEmail(prefs.getUserEmail());
+            if (currentUser != null) {
+                utils.Session.setUser(currentUser);
+                utils.SessionManager.setCurrentUser(currentUser);
+            }
             applyCurrentAvatar();
             if (profileAchievementsFlow != null) {
                 BadgeUtils.buildAchievements(currentUser, profileAchievementsFlow);

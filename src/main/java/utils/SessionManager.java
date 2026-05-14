@@ -82,7 +82,11 @@ public final class SessionManager {
         if (role instanceof Role) {
             return (Role) role;
         }
-        return Role.fromString(toText(role));
+        Role parsedRole = Role.fromString(toText(role));
+        if (parsedRole != null) {
+            return parsedRole;
+        }
+        return getDashboardRoleFallback();
     }
 
     public static String getCurrentUserRoleLabel() {
@@ -108,6 +112,24 @@ public final class SessionManager {
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             return null;
         }
+    }
+
+    private static Role getDashboardRoleFallback() {
+        try {
+            Class<?> sessionClass = Class.forName("controllers.SessionManager");
+            Method getRole = sessionClass.getMethod("getRole");
+            Object dashboardRole = getRole.invoke(null);
+            String value = toText(dashboardRole);
+            if ("ADMIN".equalsIgnoreCase(value)) {
+                return Role.ADMIN;
+            }
+            if ("USER".equalsIgnoreCase(value)) {
+                return Role.ETUDIANT;
+            }
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+        return null;
     }
 
     private static Object getValue(Object target, String... methodNames) {
