@@ -18,6 +18,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 public class SocialAuthService {
@@ -59,6 +61,7 @@ public class SocialAuthService {
 
             try {
                 String authorizationUrl = service.getAuthorizationUrl();
+                
                 if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                     Desktop.getDesktop().browse(new URI(authorizationUrl));
                 } else {
@@ -66,12 +69,16 @@ public class SocialAuthService {
                 }
 
                 String code = waitForCallbackCode();
+                if (code == null) {
+                    return null;
+                }
+                
                 OAuth2AccessToken accessToken = service.getAccessToken(code);
 
                 OAuthRequest request = new OAuthRequest(Verb.GET, userInfoUrl);
                 service.signRequest(accessToken, request);
                 Response response = service.execute(request);
-
+                
                 return new JSONObject(response.getBody());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,19 +100,41 @@ public class SocialAuthService {
         }
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
+            // Set a timeout so we don't hang forever if the user closes the browser
+            serverSocket.setSoTimeout(120000); // 2 minutes
             try (Socket socket = serverSocket.accept()) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String line = reader.readLine();
                 if (line == null) return null;
 
                 String code = null;
+                // Improved parsing for the authorization code
                 if (line.contains("code=")) {
-                    code = line.split("code=")[1].split(" ")[0];
+                    int codeIndex = line.indexOf("code=") + 5;
+                    int spaceIndex = line.indexOf(" ", codeIndex);
+                    int ampersandIndex = line.indexOf("&", codeIndex);
+                    
+                    int endIndex = spaceIndex;
+                    if (ampersandIndex != -1 && (spaceIndex == -1 || ampersandIndex < spaceIndex)) {
+                        endIndex = ampersandIndex;
+                    }
+                    
+                    if (endIndex != -1) {
+                        code = line.substring(codeIndex, endIndex);
+                    } else {
+                        code = line.substring(codeIndex);
+                    }
+                    
+                    // URL Decode the code (e.g., %2F -> /)
+                    code = URLDecoder.decode(code, StandardCharsets.UTF_8);
                 }
 
                 OutputStream output = socket.getOutputStream();
                 String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                        "<html><body><h1>Authentication Successful!</h1><p>You can close this window now.</p></body></html>";
+                        "<html><body style='font-family: sans-serif; text-align: center; padding-top: 50px;'>" +
+                        "<h1 style='color: #4CAF50;'>Authentication Successful!</h1>" +
+                        "<p>You can close this window now and return to Skillora.</p>" +
+                        "</body></html>";
                 output.write(response.getBytes());
                 output.flush();
 
