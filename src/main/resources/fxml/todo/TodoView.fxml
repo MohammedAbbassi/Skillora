@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.todo.controllers.TodoController" styleClass="todo-root">
+    <padding><Insets top="34" right="40" bottom="34" left="40"/></padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="6">
+            <Label text="Tasks" styleClass="page-title" />
+            <Label text="Organize your learning goals and track daily progress." wrapText="true" styleClass="page-subtitle" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addTaskBtn" onAction="#onAddTask" styleClass="todo-primary-btn" text="+ New Task" />
+    </HBox>
+
+    <!-- Filter toolbar -->
+    <HBox spacing="12" alignment="CENTER_LEFT" styleClass="todo-toolbar">
+        <TextField fx:id="searchField" promptText="Search tasks..." HBox.hgrow="ALWAYS" styleClass="todo-search-field" />
+        <ComboBox fx:id="filterCategoryCombo" prefWidth="150" promptText="All Categories" styleClass="todo-filter-combo" />
+        <ComboBox fx:id="filterPriorityCombo" prefWidth="140" promptText="All Priorities" styleClass="todo-filter-combo" />
+        <ComboBox fx:id="filterStatusCombo" prefWidth="140" promptText="All Status" styleClass="todo-filter-combo" />
+        <Label fx:id="taskCountLabel" text="0 tasks" styleClass="todo-count-label" />
+    </HBox>
+
+    <!-- Stats row -->
+    <HBox spacing="14" styleClass="todo-stats-row">
+        <VBox alignment="CENTER" spacing="4" styleClass="todo-stat-chip" HBox.hgrow="ALWAYS">
+            <Label text="Pending" styleClass="todo-stat-label" />
+            <Label fx:id="pendingCount" text="0" styleClass="todo-stat-value" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="4" styleClass="todo-stat-chip todo-stat-in-progress" HBox.hgrow="ALWAYS">
+            <Label text="In Progress" styleClass="todo-stat-label" />
+            <Label fx:id="inProgressCount" text="0" styleClass="todo-stat-value" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="4" styleClass="todo-stat-chip todo-stat-completed" HBox.hgrow="ALWAYS">
+            <Label text="Completed" styleClass="todo-stat-label" />
+            <Label fx:id="completedCount" text="0" styleClass="todo-stat-value" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="4" styleClass="todo-stat-chip todo-stat-overdue" HBox.hgrow="ALWAYS">
+            <Label text="Overdue" styleClass="todo-stat-label" />
+            <Label fx:id="overdueCount" text="0" styleClass="todo-stat-value" />
+        </VBox>
+    </HBox>
+
+    <!-- Task list -->
+    <VBox spacing="10" styleClass="todo-list-panel" VBox.vgrow="ALWAYS">
+        <ListView fx:id="taskListView" VBox.vgrow="ALWAYS" styleClass="todo-task-list" />
+    </VBox>
+</VBox>

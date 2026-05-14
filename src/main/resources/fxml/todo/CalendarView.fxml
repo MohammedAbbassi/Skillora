@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.todo.controllers.CalendarController" styleClass="todo-root">
+    <padding><Insets top="34" right="40" bottom="34" left="40"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="6">
+            <Label text="Calendar" styleClass="page-title" />
+            <Label text="View tasks, deadlines, and Google Calendar events." wrapText="true" styleClass="page-subtitle" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="connectCalendarBtn" onAction="#onConnectCalendar" styleClass="cal-connect-btn" text="🔗 Connect Google Calendar" />
+        <Button fx:id="syncTasksBtn" onAction="#onSyncTasks" styleClass="cal-sync-btn" text="Sync Tasks" />
+        <Button fx:id="prevMonthBtn" onAction="#onPrevMonth" styleClass="cal-nav-btn" text="◀" />
+        <Label fx:id="monthLabel" text="January 2026" styleClass="cal-month-label" />
+        <Button fx:id="nextMonthBtn" onAction="#onNextMonth" styleClass="cal-nav-btn" text="▶" />
+        <Button fx:id="todayBtn" onAction="#onToday" styleClass="cal-today-btn" text="Today" />
+    </HBox>
+
+    <!-- Day headers -->
+    <HBox spacing="4" styleClass="cal-day-headers">
+        <Label text="Mon" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Tue" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Wed" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Thu" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Fri" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Sat" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+        <Label text="Sun" styleClass="cal-day-header" HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <!-- Calendar grid -->
+    <GridPane fx:id="calendarGrid" hgap="4" vgap="4" VBox.vgrow="ALWAYS" styleClass="cal-grid" />
+
+    <!-- Selected day task list -->
+    <VBox fx:id="taskDetailPanel" spacing="10" styleClass="cal-task-panel" managed="false" visible="false">
+        <HBox alignment="CENTER_LEFT">
+            <Label fx:id="selectedDateLabel" text="" styleClass="cal-selected-date" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="gcalIndicator" text="" styleClass="cal-gcal-indicator" />
+        </HBox>
+        <VBox fx:id="taskDetailList" spacing="6" />
+    </VBox>
+</VBox>

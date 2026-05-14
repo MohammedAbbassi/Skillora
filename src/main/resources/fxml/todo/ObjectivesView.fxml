@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.todo.controllers.ObjectivesController" styleClass="todo-root">
+    <padding><Insets top="34" right="40" bottom="34" left="40"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="6">
+            <Label text="Objectives" styleClass="page-title" />
+            <Label text="Drag objectives between columns to update progress." wrapText="true" styleClass="page-subtitle" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addObjectiveBtn" onAction="#onAddObjective" styleClass="todo-primary-btn" text="+ New Objective" />
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <!-- À FAIRE -->
+        <VBox spacing="10" styleClass="kanban-column" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="🔵" style="-fx-font-size: 16px;" />
+                <Label text="A faire" styleClass="kanban-column-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="pendingCount" text="0" styleClass="kanban-count" />
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS" styleClass="kanban-scroll">
+                <VBox fx:id="pendingColumn" spacing="8" styleClass="kanban-drop-zone" />
+            </ScrollPane>
+        </VBox>
+
+        <!-- EN COURS -->
+        <VBox spacing="10" styleClass="kanban-column" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="🟡" style="-fx-font-size: 16px;" />
+                <Label text="En cours" styleClass="kanban-column-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="inProgressCount" text="0" styleClass="kanban-count" />
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS" styleClass="kanban-scroll">
+                <VBox fx:id="inProgressColumn" spacing="8" styleClass="kanban-drop-zone" />
+            </ScrollPane>
+        </VBox>
+
+        <!-- FINISHED -->
+        <VBox spacing="10" styleClass="kanban-column" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="🟢" style="-fx-font-size: 16px;" />
+                <Label text="Finished" styleClass="kanban-column-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="completedCount" text="0" styleClass="kanban-count" />
+            </HBox>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS" styleClass="kanban-scroll">
+                <VBox fx:id="completedColumn" spacing="8" styleClass="kanban-drop-zone" />
+            </ScrollPane>
+        </VBox>
+    </HBox>
+</VBox>

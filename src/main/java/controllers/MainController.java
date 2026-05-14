@@ -80,7 +80,10 @@ public class MainController implements Initializable {
     @FXML private Button navQuizzes;
 
     @FXML private Button navLeaderboard;
-    @FXML private Button navProgress;
+    @FXML private Button navTodo;
+    @FXML private Button navCalendar;
+    @FXML private Button navObjectives;
+    @FXML private Button navProductivity;
     @FXML private Button navShop;
     @FXML private Button navEvent;
     @FXML private Button navReservation;
@@ -106,7 +109,10 @@ public class MainController implements Initializable {
     @FXML private Label  lblQuizzes;
 
     @FXML private Label  lblLeaderboard;
-    @FXML private Label  lblProgress;
+    @FXML private Label  lblTodo;
+    @FXML private Label  lblCalendar;
+    @FXML private Label  lblObjectives;
+    @FXML private Label  lblProductivity;
     @FXML private Label  lblShop;
     @FXML private Label  lblEvent;
     @FXML private Label  lblReservation;
@@ -139,12 +145,18 @@ public class MainController implements Initializable {
     @FXML private VBox   leaderboardContainer;
     @FXML private ComboBox<String> sortMetricCombo;
     @FXML private ComboBox<String> countryFilterCombo;
-    @FXML private VBox   pageProgress;
-
+    @FXML private VBox   pageTodo;
+    @FXML private VBox   pageCalendar;
+    @FXML private VBox   pageObjectives;
+    @FXML private VBox   pageProductivity;
     @FXML private VBox   pageShop;
     @FXML private VBox   pageEvent;
     @FXML private VBox   pageReservation;
     @FXML private VBox   pageCommunity;
+    private boolean todoPageLoaded;
+    private boolean calendarPageLoaded;
+    private boolean objectivesPageLoaded;
+    private boolean productivityPageLoaded;
     private boolean shopPageLoaded;
     private boolean eventsPageLoaded;
     private boolean reservationsPageLoaded;
@@ -153,12 +165,6 @@ public class MainController implements Initializable {
     @FXML private VBox   pageAdmin;
     @FXML private VBox   pageSettings;
 
-    // Progress page charts & KPIs
-    @FXML private AreaChart<String, Number> xpAreaChart;
-    @FXML private BarChart<String, Number>  activityBarChart;
-    @FXML private Label kpiStreak;
-    @FXML private Label kpiXP;
-    @FXML private Label kpiCourses;
     @FXML private Label       greetingLabel;
     @FXML private Label       streakCount;
     @FXML private ProgressBar prog1;
@@ -243,7 +249,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navQuizzes, "navQuizzes");
 
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
-        addIfNotNull(allNavBtns, navProgress, "navProgress");
+        addIfNotNull(allNavBtns, navTodo, "navTodo");
+        addIfNotNull(allNavBtns, navCalendar, "navCalendar");
+        addIfNotNull(allNavBtns, navObjectives, "navObjectives");
+        addIfNotNull(allNavBtns, navProductivity, "navProductivity");
         addIfNotNull(allNavBtns, navShop, "navShop");
         addIfNotNull(allNavBtns, navEvent, "navEvent");
         addIfNotNull(allNavBtns, navReservation, "navReservation");
@@ -260,7 +269,6 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navQuizAnswers, "navQuizAnswers");
         addIfNotNull(allNavBtns, navQuizHistory, "navQuizHistory");
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
-        addIfNotNull(allNavBtns, navProgress, "navProgress");
         addIfNotNull(allNavBtns, navAdmin, "navAdmin");
 
         addIfNotNull(allNavBtns, navSettings, "navSettings");
@@ -272,7 +280,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizzes, "lblQuizzes");
 
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
-        addIfNotNull(allNavLabels, lblProgress, "lblProgress");
+        addIfNotNull(allNavLabels, lblTodo, "lblTodo");
+        addIfNotNull(allNavLabels, lblCalendar, "lblCalendar");
+        addIfNotNull(allNavLabels, lblObjectives, "lblObjectives");
+        addIfNotNull(allNavLabels, lblProductivity, "lblProductivity");
         addIfNotNull(allNavLabels, lblShop, "lblShop");
         addIfNotNull(allNavLabels, lblEvent, "lblEvent");
         addIfNotNull(allNavLabels, lblReservation, "lblReservation");
@@ -289,7 +300,6 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizAnswers, "lblQuizAnswers");
         addIfNotNull(allNavLabels, lblQuizHistory, "lblQuizHistory");
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
-        addIfNotNull(allNavLabels, lblProgress, "lblProgress");
         addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
 
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
@@ -299,7 +309,10 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pageCourses, "pageCourses");
         addIfNotNull(allPages, pageQuizzes, "pageQuizzes");
         addIfNotNull(allPages, pageLeaderboard, "pageLeaderboard");
-        addIfNotNull(allPages, pageProgress, "pageProgress");
+        addIfNotNull(allPages, pageTodo, "pageTodo");
+        addIfNotNull(allPages, pageCalendar, "pageCalendar");
+        addIfNotNull(allPages, pageObjectives, "pageObjectives");
+        addIfNotNull(allPages, pageProductivity, "pageProductivity");
 
         addIfNotNull(allPages, pageShop, "pageShop");
         addIfNotNull(allPages, pageEvent, "pageEvent");
@@ -319,13 +332,6 @@ public class MainController implements Initializable {
 
         loadProfileCountries();
 
-
-        try {
-            initProgressCharts();
-        } catch (Exception e) {
-            System.err.println("[Charts] Init error: " + e.getMessage());
-        }
-
         topbar.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.setOnMouseClicked(e -> {
@@ -338,32 +344,6 @@ public class MainController implements Initializable {
                 });
             }
         });
-    }
-
-    private void initProgressCharts() {
-        // XP Area Chart (weekly data)
-        XYChart.Series<String, Number> xpSeries = new XYChart.Series<>();
-        xpSeries.setName("XP");
-        xpSeries.getData().add(new XYChart.Data<>("Week 1", 120));
-        xpSeries.getData().add(new XYChart.Data<>("Week 2", 310));
-        xpSeries.getData().add(new XYChart.Data<>("Week 3", 580));
-        xpSeries.getData().add(new XYChart.Data<>("Week 4", 950));
-        if (xpAreaChart != null) {
-            xpAreaChart.getData().add(xpSeries);
-            xpAreaChart.setCreateSymbols(true);
-        }
-
-        // Activity Bar Chart (daily lessons)
-        XYChart.Series<String, Number> actSeries = new XYChart.Series<>();
-        actSeries.setName("Lessons");
-        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        int[]    vals = {  3,     5,     2,     7,     4,     6,     1   };
-        for (int i = 0; i < days.length; i++) {
-            actSeries.getData().add(new XYChart.Data<>(days[i], vals[i]));
-        }
-        if (activityBarChart != null) {
-            activityBarChart.getData().add(actSeries);
-        }
     }
 
     public void applyPreferences(UserPreferences p) {
@@ -697,7 +677,10 @@ public class MainController implements Initializable {
         navigateTo(pageLeaderboard,  navLeaderboard);
         loadLeaderboard();
     }
-    @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
+    @FXML private void onNavTodo()        { navigateTo(pageTodo, navTodo); ensureTodoPageLoaded(); }
+    @FXML private void onNavCalendar()    { navigateTo(pageCalendar, navCalendar); ensureCalendarPageLoaded(); }
+    @FXML private void onNavObjectives()  { navigateTo(pageObjectives, navObjectives); ensureObjectivesPageLoaded(); }
+    @FXML private void onNavProductivity(){ navigateTo(pageProductivity, navProductivity); ensureProductivityPageLoaded(); }
     @FXML private void onNavShop()      { navigateTo(pageShop,      navShop); ensureShopPageLoaded();      }
     @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent); ensureEventsPageLoaded();     }
     @FXML private void onNavReservation() {
@@ -718,6 +701,30 @@ public class MainController implements Initializable {
     @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents); ensureEventsPageLoaded();  }
     @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); ensureReservationsPageLoaded(); }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
+
+    private void ensureTodoPageLoaded() {
+        if (!todoPageLoaded) {
+            todoPageLoaded = loadEmbeddedPage(pageTodo, "/fxml/todo/TodoView.fxml", "todo");
+        }
+    }
+
+    private void ensureCalendarPageLoaded() {
+        if (!calendarPageLoaded) {
+            calendarPageLoaded = loadEmbeddedPage(pageCalendar, "/fxml/todo/CalendarView.fxml", "calendar");
+        }
+    }
+
+    private void ensureObjectivesPageLoaded() {
+        if (!objectivesPageLoaded) {
+            objectivesPageLoaded = loadEmbeddedPage(pageObjectives, "/fxml/todo/ObjectivesView.fxml", "objectives");
+        }
+    }
+
+    private void ensureProductivityPageLoaded() {
+        if (!productivityPageLoaded) {
+            productivityPageLoaded = loadEmbeddedPage(pageProductivity, "/fxml/todo/ProductivityDashboard.fxml", "productivity");
+        }
+    }
 
     private void ensureShopPageLoaded() {
         syncShopSession();

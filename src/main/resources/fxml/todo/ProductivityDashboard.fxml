@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="22" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.todo.controllers.ProductivityDashboardController" styleClass="todo-root">
+    <padding><Insets top="34" right="40" bottom="34" left="40"/></padding>
+
+    <VBox spacing="6">
+        <Label text="Productivity Dashboard" styleClass="page-title" />
+        <Label text="Track your productivity, streaks, and achievements." wrapText="true" styleClass="page-subtitle" />
+    </VBox>
+
+    <!-- KPI Cards -->
+    <HBox spacing="16">
+        <VBox alignment="CENTER" spacing="8" styleClass="todo-kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="totalCompletedLabel" text="0" styleClass="todo-kpi-value" />
+            <Label text="Tasks Completed" styleClass="todo-kpi-label" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="8" styleClass="todo-kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="streakLabel" text="0" styleClass="todo-kpi-value" style="-fx-text-fill: #f97316;" />
+            <Label text="Day Streak" styleClass="todo-kpi-label" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="8" styleClass="todo-kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="xpEarnedLabel" text="0" styleClass="todo-kpi-value" style="-fx-text-fill: #8b5cf6;" />
+            <Label text="Total XP Earned" styleClass="todo-kpi-label" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="8" styleClass="todo-kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="productivityScoreLabel" text="0%" styleClass="todo-kpi-value" style="-fx-text-fill: #10b981;" />
+            <Label text="Productivity Score" styleClass="todo-kpi-label" />
+        </VBox>
+    </HBox>
+
+    <!-- Weather + Weekly Chart Row -->
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <!-- Weather Card -->
+        <VBox spacing="12" styleClass="todo-chart-card" prefWidth="280" minWidth="240" maxWidth="320">
+            <Label text="Today's Weather &amp; Productivity" styleClass="todo-section-title" />
+            <VBox fx:id="weatherCard" spacing="10" alignment="CENTER">
+                <Label text="Loading weather..." style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;" />
+            </VBox>
+        </VBox>
+
+        <!-- Weekly Chart -->
+        <VBox spacing="12" styleClass="todo-chart-card" HBox.hgrow="ALWAYS">
+            <Label text="Weekly Activity" styleClass="todo-section-title" />
+            <BarChart fx:id="weeklyChart" animated="true" legendVisible="false" styleClass="todo-chart" VBox.vgrow="ALWAYS" prefHeight="220">
+                <xAxis><CategoryAxis tickLabelGap="4" /></xAxis>
+                <yAxis><NumberAxis upperBound="20" tickUnit="2" /></yAxis>
+            </BarChart>
+        </VBox>
+    </HBox>
+
+    <!-- Badges -->
+    <VBox spacing="12" styleClass="todo-chart-card">
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Badges &amp; Achievements" styleClass="todo-section-title" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="badgeCountLabel" text="0 badges" styleClass="todo-count-label" />
+        </HBox>
+        <FlowPane fx:id="badgeFlowPane" hgap="12" vgap="12" />
+    </VBox>
+</VBox>
