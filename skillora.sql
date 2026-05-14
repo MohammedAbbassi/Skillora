@@ -285,7 +285,9 @@ CREATE TABLE `reservation` (
   `nb_places` int(11) NOT NULL DEFAULT 1,
   `date_reservation` date NOT NULL,
   `id_evenement` int(11) NOT NULL,
-  `id_utilisateur` bigint(20) NOT NULL
+  `id_utilisateur` bigint(20) NOT NULL,
+  `statut` varchar(20) NOT NULL DEFAULT 'EN_ATTENTE',
+  `chaises` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

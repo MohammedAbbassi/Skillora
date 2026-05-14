@@ -48,12 +48,7 @@
 .root {
     -fx-font-family: "Segoe UI", "Segoe UI Variable Text", "Arial", sans-serif;
     -fx-font-size: 14px;
-<<<<<<< HEAD
-    -fx-background-color: #F8FAFC;
-
-=======
     -fx-background-color: linear-gradient(to bottom, #eef4ff, #f8fbff 28%, #edf4ff 100%);
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-accent: #2563eb;
     
     /* Global Brand Variables */
@@ -185,12 +180,7 @@
 }
 
 .battle-pass-btn {
-<<<<<<< HEAD
-    -fx-background-color: white;
-
-=======
     -fx-background-color: #f8fbff;
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-text-fill: #2563eb;
 
     -fx-text-fill: #4F46E5;
@@ -281,25 +271,12 @@
     -fx-padding: 40px;
     -fx-border-color: #d9e7fb;
     -fx-border-radius: 24px;
-<<<<<<< HEAD
-
-    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 20, 0, 0, 10);
-=======
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.12), 22, 0, 0, 10);
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
-}
-
-.role-badge-premium {
-    -fx-background-color: rgba(37, 99, 235, 0.1);
-    -fx-text-fill: #2563eb;
-
-    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.08), 20, 0, 0, 10);
 }
 
 .role-badge-premium {
     -fx-background-color: rgba(79, 70, 229, 0.1);
     -fx-text-fill: #4F46E5;
->>>>>>> mouayed
     -fx-padding: 6 16;
     -fx-background-radius: 999;
     -fx-font-weight: 900;
@@ -872,12 +849,7 @@
 }
 
 .action-btn-secondary {
-<<<<<<< HEAD
-    -fx-background-color: #ffffff;
-
-=======
     -fx-background-color: #f8fbff;
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
     -fx-text-fill: #2563eb;
 
     -fx-text-fill: #4F46E5;
@@ -1479,9 +1451,6 @@
     -fx-text-fill: #0f172a;
 }
 
-<<<<<<< HEAD
-=======
-
 .quiz-submenu {
     -fx-padding: 0 0 4 12;
 }
@@ -1494,4 +1463,3 @@
 .quiz-subnav-btn.nav-active {
     -fx-border-width: 0 0 0 3px;
 }
->>>>>>> mouayed

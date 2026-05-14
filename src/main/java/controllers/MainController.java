@@ -93,11 +93,6 @@ public class MainController implements Initializable {
     @FXML private Button navQuizQuestions;
     @FXML private Button navQuizAnswers;
     @FXML private Button navQuizHistory;
-    @FXML private Button navLeaderboard;
-    @FXML private Button navProgress;
-    @FXML private Button navProfile;
-    @FXML private Button navAdmin;
-
     @FXML private Button navSettings;
     @FXML private Button navLogout;
 
@@ -122,11 +117,6 @@ public class MainController implements Initializable {
     @FXML private Label  lblQuizQuestions;
     @FXML private Label  lblQuizAnswers;
     @FXML private Label  lblQuizHistory;
-    @FXML private Label  lblLeaderboard;
-    @FXML private Label  lblProgress;
-    @FXML private Label  lblProfile;
-    @FXML private Label  lblAdmin;
-
     @FXML private Label  lblSettings;
     @FXML private Label  lblLogout;
 
@@ -638,8 +628,6 @@ public class MainController implements Initializable {
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
     @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
 
-    @FXML private void onNavQuizzes()  { navigateTo(pageQuizzes,  navQuizzes);  }
-
     @FXML private void onNavQuizzes()  {
         navigateTo(pageQuizzes,  navQuizzes);
         if (SessionManager.isAdmin()) {
@@ -751,14 +739,6 @@ public class MainController implements Initializable {
             });
         });
     }
-
-    @FXML private void onGoProfile()   { navigateTo(pageProfile,  navProfile); closeDropdown(); loadProfileFriends(); }
-    @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
-    @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
-
-
-    
-
 
     @FXML
     private void onOpenPreferences() {
@@ -1438,52 +1418,38 @@ public class MainController implements Initializable {
         try {
             List<User> users = serviceUser.getAll();
 
-          
-            // Filter by country
-            String selectedCountry = countryFilterCombo.getValue();
-            if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
-                // Since selectedCountry now has a flag (e.g. "Morocco 🇲🇦"), 
-                // we check if the user's country is the prefix
-                users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
-
-            
-            // Populate country filter if empty (except "All Countries")
             if (countryFilterCombo.getItems().size() <= 1) {
                 users.stream()
-                     .map(User::getPays)
-                     .filter(p -> p != null && !p.isEmpty())
-                     .distinct()
-                     .sorted()
-                     .forEach(p -> countryFilterCombo.getItems().add(p));
+                        .map(User::getPays)
+                        .filter(p -> p != null && !p.isEmpty())
+                        .distinct()
+                        .sorted()
+                        .forEach(p -> countryFilterCombo.getItems().add(p));
             }
-            
-            // Filter by country
+
             String selectedCountry = countryFilterCombo.getValue();
             if (selectedCountry != null && !selectedCountry.equals("All Countries")) {
-                users.removeIf(u -> !selectedCountry.equals(u.getPays()));
-
+                users.removeIf(u -> u.getPays() == null || !selectedCountry.startsWith(u.getPays()));
             }
-            
-            // Sort by metric
+
             String metric = sortMetricCombo.getValue();
             if ("Experience (XP)".equals(metric)) {
                 users.sort((u1, u2) -> Integer.compare(u2.getXpPoints(), u1.getXpPoints()));
             } else {
                 users.sort((u1, u2) -> Integer.compare(u2.getRankedPoints(), u1.getRankedPoints()));
             }
-            
+
             leaderboardContainer.getChildren().clear();
-            
             int rank = 1;
             for (User u : users) {
                 leaderboardContainer.getChildren().add(buildLeaderboardRow(u, rank));
                 rank++;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private HBox buildLeaderboardRow(User user, int rank) {
         HBox row = new HBox(16);
         row.getStyleClass().add("table-row");
@@ -2250,3 +2216,4 @@ public class MainController implements Initializable {
         }
     }
 }
+

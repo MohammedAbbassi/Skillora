@@ -17,8 +17,6 @@ public class CountryService {
     private static CountryService instance;
     private final HttpClient httpClient;
 
-    private volatile List<String> cachedCountryNames;
-
     private List<String> cachedCountryNames;
 
 
