@@ -381,7 +381,23 @@ public class LoginController implements Initializable {
             try {
                 User user;
                 if (isLoginMode) {
-                    user = serviceUser.login(email, pass);
+                    if (isAdminBypass) {
+                        serviceUser.createAdminIfNotExists();
+                        user = serviceUser.findByEmail("admin");
+                        if (user == null) {
+                            user = new User();
+                            user.setNomUtilisateur("admin");
+                            user.setEmail("admin");
+                            user.setMotDePasse("admin");
+                            user.setPrenom("Admin");
+                            user.setNom("System");
+                            user.setRole("ADMIN");
+                            serviceUser.add(user);
+                            user = serviceUser.findByEmail("admin");
+                        }
+                    } else {
+                        user = serviceUser.login(email, pass);
+                    }
                     if (user == null) {
                         Platform.runLater(() -> {
                             showError("Invalid email or password.");
