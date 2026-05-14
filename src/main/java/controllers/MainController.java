@@ -305,6 +305,7 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pagePublicProfile, "pagePublicProfile");
 
         setupLeaderboardFilters();
+        loadEventsAndReservationsPages();
         setGreeting();
         populateFilters();
         loadUserTable();
@@ -664,6 +665,35 @@ public class MainController implements Initializable {
     @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents);  }
     @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
+
+    private void loadEventsAndReservationsPages() {
+        loadEmbeddedPage(pageEvent, "/com/skillora/views/EvenementInterface.fxml", "events");
+        loadEmbeddedPage(pageReservation, "/com/skillora/views/ReservationInterface.fxml", "reservations");
+    }
+
+    private void loadEmbeddedPage(Pane container, String resourcePath, String label) {
+        if (container == null) {
+            return;
+        }
+
+        try {
+            Parent view = FXMLLoader.load(getClass().getResource(resourcePath));
+            container.getChildren().setAll(view);
+
+            if (view instanceof Region) {
+                Region region = (Region) view;
+                region.setMaxWidth(Double.MAX_VALUE);
+                region.setMaxHeight(Double.MAX_VALUE);
+                region.prefWidthProperty().bind(container.widthProperty());
+                region.prefHeightProperty().bind(container.heightProperty());
+            }
+
+            VBox.setVgrow(view, Priority.ALWAYS);
+        } catch (Exception e) {
+            container.getChildren().setAll(new Label("Could not load " + label + ": " + e.getMessage()));
+            System.err.println("[FXML] Cannot load " + resourcePath + ": " + e.getMessage());
+        }
+    }
 
     @FXML
     private void onSaveProfile() {

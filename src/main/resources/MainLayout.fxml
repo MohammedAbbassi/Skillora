@@ -361,8 +361,8 @@
                     <VBox fx:id="pageCourses" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Courses" /></VBox>
                     <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Quizzes" /></VBox>
                     <VBox fx:id="pageShop" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Shop" /></VBox>
-                    <VBox fx:id="pageEvent" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Event" /></VBox>
-                    <VBox fx:id="pageReservation" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Reservation" /></VBox>
+                    <VBox fx:id="pageEvent" visible="false" managed="false" styleClass="page-root" />
+                    <VBox fx:id="pageReservation" visible="false" managed="false" styleClass="page-root" />
                     <VBox fx:id="pageCommunity" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Community" /></VBox>
 
                     <VBox fx:id="pageLeaderboard" visible="false" managed="false" styleClass="page-root" spacing="24">
