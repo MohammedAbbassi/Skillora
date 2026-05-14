@@ -31,7 +31,7 @@ public class ScoreResultController {
 
     @FXML
     void retourQuiz() {
-        AppNavigator.load(SessionManager.isAdmin() ? "QuizManagement.fxml" : "UserQuizSelection.fxml");
+        AppNavigator.load(SessionManager.isQuizManager() ? "QuizManagement.fxml" : "UserQuizSelection.fxml");
     }
 
     @FXML

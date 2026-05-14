@@ -3,7 +3,7 @@ package controllers;
 public final class SessionManager {
 
     public enum Role {
-        ADMIN, USER
+        ADMIN, INSTRUCTOR, USER
     }
 
     private static Role role = readRole();
@@ -23,6 +23,10 @@ public final class SessionManager {
         return role == Role.ADMIN;
     }
 
+    public static boolean isQuizManager() {
+        return role == Role.ADMIN || role == Role.INSTRUCTOR;
+    }
+
     private static Role readRole() {
         String configuredRole = System.getProperty("skillora.role");
         if (configuredRole == null || configuredRole.isBlank()) {
@@ -31,6 +35,9 @@ public final class SessionManager {
 
         if ("USER".equalsIgnoreCase(configuredRole)) {
             return Role.USER;
+        }
+        if ("INSTRUCTOR".equalsIgnoreCase(configuredRole) || "INSTRUCTEUR".equalsIgnoreCase(configuredRole)) {
+            return Role.INSTRUCTOR;
         }
         return Role.ADMIN;
     }

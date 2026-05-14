@@ -123,6 +123,9 @@ public final class SessionManager {
             if ("ADMIN".equalsIgnoreCase(value)) {
                 return Role.ADMIN;
             }
+            if ("INSTRUCTOR".equalsIgnoreCase(value) || "INSTRUCTEUR".equalsIgnoreCase(value)) {
+                return Role.INSTRUCTEUR;
+            }
             if ("USER".equalsIgnoreCase(value)) {
                 return Role.ETUDIANT;
             }

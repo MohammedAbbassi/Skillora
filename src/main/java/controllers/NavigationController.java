@@ -27,7 +27,7 @@ public class NavigationController {
     }
 
     private void updateNavigationForRole() {
-        if (SessionManager.isAdmin()) {
+        if (SessionManager.isQuizManager()) {
             configureAdminNavigation();
             showDashboard();
         } else {
@@ -108,7 +108,7 @@ public class NavigationController {
     }
 
     private boolean ensureAdmin() {
-        if (SessionManager.isAdmin()) {
+        if (SessionManager.isQuizManager()) {
             return true;
         }
         showUserQuizSelection();

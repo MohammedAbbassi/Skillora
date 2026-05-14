@@ -90,7 +90,7 @@ public class PasserQuiz {
 
     @FXML
     public void initialize() {
-        adminPreview = SessionManager.isAdmin();
+        adminPreview = SessionManager.isQuizManager();
         setQuizId(AppNavigator.getSelectedQuizId());
     }
 

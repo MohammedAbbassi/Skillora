@@ -400,8 +400,11 @@ public class MainController implements Initializable {
         setGreeting();
 
         boolean isAdmin = "ADMIN".equalsIgnoreCase(p.getUserRole());
+        boolean isInstructor = "INSTRUCTEUR".equalsIgnoreCase(p.getUserRole());
 
-        SessionManager.setRole(isAdmin ? SessionManager.Role.ADMIN : SessionManager.Role.USER);
+        SessionManager.setRole(isAdmin
+                ? SessionManager.Role.ADMIN
+                : isInstructor ? SessionManager.Role.INSTRUCTOR : SessionManager.Role.USER);
         updateQuizSubmenuForRole();
 
         if (adminSection != null) {
@@ -638,7 +641,7 @@ public class MainController implements Initializable {
 
     @FXML private void onNavQuizzes()  {
         navigateTo(pageQuizzes,  navQuizzes);
-        if (SessionManager.isAdmin()) {
+        if (SessionManager.isQuizManager()) {
             quizMenuExpanded = !quizMenuExpanded;
             updateQuizSubmenuVisibility();
             loadDefaultQuizTaskForRole();
@@ -818,7 +821,7 @@ public class MainController implements Initializable {
     private void loadDefaultQuizTaskForRole() {
         if (quizContentPane == null) return;
         if (quizContentPane.getChildren().isEmpty()) {
-            if (SessionManager.isAdmin()) {
+            if (SessionManager.isQuizManager()) {
                 openQuizTask("QuizManagement.fxml", navQuizManage, true);
             } else {
                 openQuizTask("UserQuizSelection.fxml", navQuizChoose, false);
@@ -827,7 +830,7 @@ public class MainController implements Initializable {
     }
 
     private void openQuizTask(String fxml, Button activeQuizButton, boolean requireAdmin) {
-        if (requireAdmin && !SessionManager.isAdmin()) {
+        if (requireAdmin && !SessionManager.isQuizManager()) {
             openQuizTask("UserQuizSelection.fxml", navQuizChoose, false);
             return;
         }
@@ -869,9 +872,9 @@ public class MainController implements Initializable {
     }
 
     private void updateQuizSubmenuForRole() {
-        boolean isAdmin = SessionManager.isAdmin();
+        boolean isQuizManager = SessionManager.isQuizManager();
         if (lblQuizzes != null) {
-            lblQuizzes.setText(isAdmin ? "Gestion de Quiz" : "Passer un quiz");
+            lblQuizzes.setText(isQuizManager ? "Gestion de Quiz" : "Passer un quiz");
         }
         if (navQuizChoose != null) {
             navQuizChoose.setVisible(false);
@@ -879,11 +882,11 @@ public class MainController implements Initializable {
         }
         for (Button btn : java.util.Arrays.asList(navQuizManage, navQuizQuestions, navQuizAnswers, navQuizHistory)) {
             if (btn != null) {
-                btn.setVisible(isAdmin);
-                btn.setManaged(isAdmin);
+                btn.setVisible(isQuizManager);
+                btn.setManaged(isQuizManager);
             }
         }
-        if (!isAdmin) {
+        if (!isQuizManager) {
             quizMenuExpanded = false;
         }
         activateQuizSubButton(null);
@@ -892,7 +895,7 @@ public class MainController implements Initializable {
 
     private void updateQuizSubmenuVisibility() {
         if (quizSubmenu == null) return;
-        boolean show = SessionManager.isAdmin() && quizMenuExpanded && !sidebarCollapsed;
+        boolean show = SessionManager.isQuizManager() && quizMenuExpanded && !sidebarCollapsed;
         quizSubmenu.setVisible(show);
         quizSubmenu.setManaged(show);
     }
