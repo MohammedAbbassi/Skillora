@@ -27,8 +27,8 @@ public class ChapitreService implements IChapitreService {
         checkConnection();
         String req = "INSERT INTO chapitre (titre, contenu, duree, " +
                 "pdf_url, id_cours, type_explication, " +
-                "explication, quiz_json, niveau, youtube_link, est_complete, remarques, fichiers_tp) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "explication, quiz_json, niveau, youtube_link, est_complete, remarques, fichiers_tp, image_url) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1,  ch.getTitre());
@@ -44,6 +44,7 @@ public class ChapitreService implements IChapitreService {
         pst.setBoolean(11, ch.isEstComplete());
         pst.setString(12, ch.getRemarques());
         pst.setString(13, ch.getFichiersTp());
+        pst.setString(14, ch.getImageUrl());
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();
@@ -58,7 +59,7 @@ public class ChapitreService implements IChapitreService {
         String req = "UPDATE chapitre SET titre = ?, contenu = ?, " +
                 "duree = ?, pdf_url = ?, id_cours = ?, " +
                 "type_explication = ?, explication = ?, quiz_json = ?, " +
-                "niveau = ?, youtube_link = ?, est_complete = ?, remarques = ?, fichiers_tp = ? " +
+                "niveau = ?, youtube_link = ?, est_complete = ?, remarques = ?, fichiers_tp = ?, image_url = ? " +
                 "WHERE id_chapitre = ?";
 
         PreparedStatement pst = cnx.prepareStatement(req);
@@ -75,7 +76,8 @@ public class ChapitreService implements IChapitreService {
         pst.setBoolean(11, ch.isEstComplete());
         pst.setString(12, ch.getRemarques());
         pst.setString(13, ch.getFichiersTp());
-        pst.setInt(14, ch.getIdChapitre());
+        pst.setString(14, ch.getImageUrl());
+        pst.setInt(15, ch.getIdChapitre());
         pst.executeUpdate();
     }
 
@@ -176,6 +178,7 @@ public class ChapitreService implements IChapitreService {
         ch.setEstComplete    (rs.getBoolean("est_complete"));
         ch.setRemarques      (rs.getString("remarques"));
         ch.setFichiersTp     (rs.getString("fichiers_tp"));
+        ch.setImageUrl       (rs.getString("image_url"));
         return ch;
     }
 }

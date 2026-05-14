@@ -47,8 +47,10 @@
                 <Button text="Parcourir..." styleClass="btn-secondary" onAction="#onBrowsePdf"/>
             </HBox>
             
-            <Label text="Type" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
             <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+            <Label text="URL de l'image" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="2" />
+            <TextField fx:id="imageUrlField" promptText="Lien image ou chemin..." styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="3" />
             
             <Label text="Contenu" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
             <TextArea fx:id="contenuArea" prefRowCount="8" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />

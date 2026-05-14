@@ -7,78 +7,109 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Service pour interagir avec les APIs de dictionnaires (EN, Wiktionary, WiktAPI).
- */
 public class DictionaryService {
 
-    private static final String EN_API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+    private String lang = "fr";
     private final HttpClient client;
     private final Gson gson;
 
     public DictionaryService() {
-        this.client = HttpClient.newHttpClient();
+        this.client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
+                .build();
         this.gson = new Gson();
     }
 
-    public CompletableFuture<String> getEnglishDefinition(String word) {
-        if (word == null || word.trim().isEmpty()) return CompletableFuture.completedFuture("Entrez un mot.");
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(EN_API_URL + word.trim().toLowerCase())).GET().build();
+    public void setLanguage(String lang) {
+        this.lang = lang;
+    }
+
+    public CompletableFuture<WordDefinition> getDefinition(String word) {
+        String cleanWord = word.replaceAll("[^a-zA-ZàâéèêëîïôûùÀÂÉÈÊËÎÏÔÛÙ-]", "").toLowerCase().trim();
+        if (cleanWord.isEmpty()) return CompletableFuture.completedFuture(null);
+
+        String apiUrl;
+        if (lang.equals("fr")) {
+            // Wikipedia Summary API is much more reliable for French
+            apiUrl = "https://fr.wikipedia.org/api/rest_v1/page/summary/" + cleanWord;
+        } else {
+            apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/" + lang + "/" + cleanWord;
+        }
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl))
+                .GET()
+                .build();
+
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    if (response.statusCode() == 404) return "Non trouvé (EN).";
-                    try {
-                        JsonArray jsonArray = gson.fromJson(response.body(), JsonArray.class);
-                        if (jsonArray.size() > 0) {
-                            JsonArray meanings = jsonArray.get(0).getAsJsonObject().getAsJsonArray("meanings");
-                            if (meanings != null && meanings.size() > 0) {
-                                return meanings.get(0).getAsJsonObject().getAsJsonArray("definitions").get(0).getAsJsonObject().get("definition").getAsString();
+                    if (response.statusCode() == 404) return null;
+                    if (response.statusCode() != 200) {
+                        throw new RuntimeException("Erreur API : " + response.statusCode());
+                    }
+
+                    if (lang.equals("fr")) {
+                        // Parse Wikipedia Response
+                        JsonObject obj = gson.fromJson(response.body(), JsonObject.class);
+                        WordDefinition def = new WordDefinition();
+                        def.setWord(obj.get("title").getAsString());
+                        
+                        List<String> definitions = new ArrayList<>();
+                        if (obj.has("extract")) {
+                            definitions.add(obj.get("extract").getAsString());
+                        }
+                        def.setDefinitions(definitions);
+                        return def;
+                    } else {
+                        // Parse Free Dictionary API Response
+                        JsonArray array = gson.fromJson(response.body(), JsonArray.class);
+                        if (array.size() == 0) return null;
+                        // ... (keep previous parsing for EN)
+                        JsonObject firstEntry = array.get(0).getAsJsonObject();
+                        WordDefinition def = new WordDefinition();
+                        def.setWord(firstEntry.get("word").getAsString());
+                        // ... rest of the EN logic
+                        if (firstEntry.has("phonetics") && firstEntry.getAsJsonArray("phonetics").size() > 0) {
+                            JsonObject p = firstEntry.getAsJsonArray("phonetics").get(0).getAsJsonObject();
+                            if (p.has("text")) def.setPhonetic(p.get("text").getAsString());
+                        }
+
+                        List<String> definitions = new ArrayList<>();
+                        List<String> synonyms = new ArrayList<>();
+                        JsonArray meanings = firstEntry.getAsJsonArray("meanings");
+                        for (int i = 0; i < meanings.size(); i++) {
+                            JsonObject meaning = meanings.get(i).getAsJsonObject();
+                            JsonArray defs = meaning.getAsJsonArray("definitions");
+                            for (int j = 0; j < defs.size(); j++) {
+                                definitions.add(defs.get(j).getAsJsonObject().get("definition").getAsString());
                             }
                         }
-                    } catch (Exception e) { e.printStackTrace(); }
-                    return "Erreur (EN).";
+                        def.setDefinitions(definitions);
+                        return def;
+                    }
                 });
     }
 
-    public CompletableFuture<String> getFrenchDefinition(String word) {
-        if (word == null || word.trim().isEmpty()) return CompletableFuture.completedFuture("Entrez un mot.");
-        String url = "https://fr.wiktionary.org/w/api.php?action=query&titles=" + word.trim().toLowerCase() + "&prop=extracts&format=json&exintro=1&explaintext=1";
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(response -> {
-                    try {
-                        JsonObject root = gson.fromJson(response.body(), JsonObject.class);
-                        JsonObject pages = root.getAsJsonObject("query").getAsJsonObject("pages");
-                        for (String key : pages.keySet()) {
-                            JsonObject page = pages.getAsJsonObject(key);
-                            if (page.has("extract")) {
-                                String extract = page.get("extract").getAsString();
-                                return extract.isEmpty() ? "Aucun extrait (FR)." : extract;
-                            }
-                        }
-                    } catch (Exception e) { e.printStackTrace(); }
-                    return "Non trouvé (FR).";
-                });
-    }
+    public static class WordDefinition {
+        private String word;
+        private String phonetic;
+        private List<String> definitions = new ArrayList<>();
+        private List<String> synonyms = new ArrayList<>();
 
-    public CompletableFuture<String> getWiktApiDefinition(String word) {
-        if (word == null || word.trim().isEmpty()) return CompletableFuture.completedFuture("Entrez un mot.");
-        String url = "https://wiktapi.dev/api/v1/word/fr/" + word.trim().toLowerCase();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(response -> {
-                    try {
-                        JsonObject root = gson.fromJson(response.body(), JsonObject.class);
-                        if (root.has("definitions")) {
-                            JsonArray defs = root.getAsJsonArray("definitions");
-                            if (defs.size() > 0) {
-                                return defs.get(0).getAsJsonObject().get("definition").getAsString();
-                            }
-                        }
-                    } catch (Exception e) { e.printStackTrace(); }
-                    return "Non trouvé (WiktAPI).";
-                });
+        public String getWord() { return word; }
+        public void setWord(String word) { this.word = word; }
+
+        public String getPhonetic() { return phonetic; }
+        public void setPhonetic(String phonetic) { this.phonetic = phonetic; }
+
+        public List<String> getDefinitions() { return definitions; }
+        public void setDefinitions(List<String> definitions) { this.definitions = definitions; }
+
+        public List<String> getSynonyms() { return synonyms; }
+        public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms; }
     }
 }

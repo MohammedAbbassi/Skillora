@@ -102,7 +102,8 @@ CREATE TABLE `cours` (
   `objectif_semaine` text DEFAULT NULL,
   `performance` text DEFAULT NULL,
   `date_creation` date NOT NULL DEFAULT curdate(),
-  `progression` int(11) NOT NULL DEFAULT 0 COMMENT 'pourcentage 0-100'
+  `progression` int(11) NOT NULL DEFAULT 0 COMMENT 'pourcentage 0-100',
+  `image_url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -157,12 +158,17 @@ CREATE TABLE `post` (
 CREATE TABLE `preferences_utilisateur` (
   `id_preference` bigint(20) NOT NULL,
   `id_utilisateur` bigint(20) NOT NULL,
-  `type_police` enum('OPENDYSLEXIC','ARIAL','VERDANA','LEXIE_READABLE') NOT NULL DEFAULT 'OPENDYSLEXIC',
+  `type_police` varchar(50) NOT NULL DEFAULT 'OpenDyslexic',
   `taille_police` int(11) NOT NULL DEFAULT 18,
   `interligne` decimal(3,1) NOT NULL DEFAULT 1.5,
   `espacement_lettres` decimal(3,1) NOT NULL DEFAULT 0.1,
+  `espacement_mots` decimal(3,1) NOT NULL DEFAULT 1.0,
   `couleur_fond` varchar(7) NOT NULL DEFAULT '#FFFDE7',
   `couleur_texte` varchar(7) NOT NULL DEFAULT '#333333',
+  `mode_syllabique` tinyint(1) NOT NULL DEFAULT 0,
+  `coloration_syllabes` tinyint(1) NOT NULL DEFAULT 0,
+  `focus_ligne` tinyint(1) NOT NULL DEFAULT 0,
+  `vitesse_audio` decimal(3,1) NOT NULL DEFAULT 1.0,
   `synthese_vocale` tinyint(1) NOT NULL DEFAULT 1,
   `surlignage_lecture` tinyint(1) NOT NULL DEFAULT 1,
   `reduire_animations` tinyint(1) NOT NULL DEFAULT 0

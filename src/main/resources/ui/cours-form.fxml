@@ -42,6 +42,9 @@
             <Label text="Objectif de la semaine" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
             <TextArea fx:id="objectifArea" prefRowCount="2" promptText="Que devons-nous accomplir cette semaine ?" styleClass="text-area-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
 
+            <Label text="URL de l'image" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextField fx:id="imageUrlField" promptText="Lien vers une image ou chemin local..." styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
             
             <Label text="Description" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
             <TextArea fx:id="descriptionArea" prefRowCount="4" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />

@@ -15,7 +15,10 @@
                 <Label fx:id="progressLabel" text="Question 1 sur 10" style="-fx-font-size: 16px; -fx-text-fill: #64748b; -fx-font-weight: bold;"/>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="Abandonner" styleClass="btn-secondary" onAction="#onQuit"/>
+            <HBox spacing="10">
+                <Button text="🎲 Test Aléatoire (API)" onAction="#onFetchApiQuiz" style="-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                <Button text="Abandonner" styleClass="btn-secondary" onAction="#onQuit"/>
+            </HBox>
         </HBox>
         
         <ProgressBar fx:id="quizProgressBar" progress="0.1" maxWidth="Infinity" prefHeight="10" style="-fx-accent: #3b82f6;"/>

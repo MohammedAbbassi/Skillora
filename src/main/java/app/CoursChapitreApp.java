@@ -25,4 +25,3 @@ public class CoursChapitreApp extends Application {
         launch(args);
     }
 }
-

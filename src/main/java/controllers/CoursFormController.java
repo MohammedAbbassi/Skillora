@@ -18,6 +18,7 @@ public class CoursFormController {
     @FXML private ComboBox<String> dureeCombo;
     @FXML private TextArea descriptionArea;
     @FXML private TextArea objectifArea;
+    @FXML private TextField imageUrlField;
     @FXML private Button saveButton;
 
     private CoursService coursService = new CoursService();
@@ -70,6 +71,7 @@ public class CoursFormController {
         dureeCombo.setValue(cours.getDuree());
         descriptionArea.setText(cours.getDescription());
         objectifArea.setText(cours.getObjectifSemaine());
+        imageUrlField.setText(cours.getImageUrl());
     }
 
     @FXML
@@ -115,6 +117,7 @@ public class CoursFormController {
             c.setNiveau(niveauCombo.getValue());
             c.setDuree(dureeCombo.getValue());
             c.setObjectifSemaine(objectifArea.getText());
+            c.setImageUrl(imageUrlField.getText());
             
             if (coursToEdit == null) {
                 c.setDateCreation(LocalDate.now());

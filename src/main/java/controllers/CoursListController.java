@@ -12,6 +12,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import services.NavigationService;
+import entities.Chapitre;
 import javafx.scene.layout.FlowPane;
 
 import javafx.scene.layout.HBox;
@@ -33,7 +36,14 @@ public class CoursListController {
 
 
     private CoursService coursService = new CoursService();
+    private NavigationService navigationService = new NavigationService();
     private List<Cours> allCourses;
+    private Chapitre recommendedChapter;
+
+    @FXML private VBox navigationAssistantCard;
+    @FXML private Label guidanceMessage;
+    @FXML private HBox recommendationBox;
+    @FXML private Button btnNextChapter;
 
     @FXML
     public void initialize() {
@@ -55,8 +65,52 @@ public class CoursListController {
         try {
             allCourses = coursService.getAll();
             renderCourses(allCourses);
+            updateNavigationAssistant();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateNavigationAssistant() {
+        if (allCourses == null || allCourses.isEmpty() || MainLayoutController.getInstance().isAdminMode()) {
+            navigationAssistantCard.setVisible(false);
+            navigationAssistantCard.setManaged(false);
+            return;
+        }
+
+        // Guide based on the first active course for now
+        Cours targetCourse = allCourses.get(0);
+        String guidance = navigationService.getSmartGuidance(targetCourse);
+        guidanceMessage.setText(guidance);
+        
+        Optional<Chapitre> next = navigationService.getRecommendedNext(targetCourse);
+        if (next.isPresent()) {
+            recommendedChapter = next.get();
+            btnNextChapter.setText(recommendedChapter.getTitre());
+            recommendationBox.setVisible(true);
+            recommendationBox.setManaged(true);
+        } else {
+            recommendationBox.setVisible(false);
+            recommendationBox.setManaged(false);
+        }
+        
+        navigationAssistantCard.setVisible(true);
+        navigationAssistantCard.setManaged(true);
+    }
+
+    @FXML
+    void onDismissAssistant(ActionEvent event) {
+        navigationAssistantCard.setVisible(false);
+        navigationAssistantCard.setManaged(false);
+    }
+
+    @FXML
+    void onGoToRecommended(ActionEvent event) {
+        if (recommendedChapter != null) {
+            ChapitreDetailController ctrl = MainLayoutController.getInstance().loadViewAndGetController("/ui/chapitre-detail.fxml");
+            if (ctrl != null) {
+                ctrl.setChapter(recommendedChapter, null);
+            }
         }
     }
 
@@ -138,7 +192,18 @@ public class CoursListController {
         planBtn.setMaxWidth(Double.MAX_VALUE);
         planBtn.setOnAction(e -> handleViewChapters(cours));
 
-        card.getChildren().addAll(tagsBox, title, level, duration, desc, extraInfo, planBtn);
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(300);
+        imageView.setFitHeight(150);
+        imageView.setPreserveRatio(true);
+        if (cours.getImageUrl() != null && !cours.getImageUrl().isEmpty()) {
+            imageView.setImage(new javafx.scene.image.Image(cours.getImageUrl(), true));
+        } else {
+            // Default placeholder or empty
+            imageView.setStyle("-fx-background-color: #e2e8f0;");
+        }
+        
+        card.getChildren().addAll(imageView, tagsBox, title, level, duration, desc, extraInfo, planBtn);
 
 
         // Navigation on card click

@@ -23,6 +23,7 @@ public class ChapitreAdminController {
     @FXML private ComboBox<String> typeCombo;
     @FXML private TextField youtubeLinkField;
     @FXML private TextField pdfUrlField;
+    @FXML private TextField imageUrlField;
     @FXML private TextArea contenuArea;
     @FXML private Button btnDelete;
     @FXML private Button saveButton;
@@ -67,6 +68,7 @@ public class ChapitreAdminController {
         if (typeCombo != null) typeCombo.setValue(ch.getTypeExplication());
         youtubeLinkField.setText(ch.getYoutubeLink());
         pdfUrlField.setText(ch.getPdfUrl());
+        imageUrlField.setText(ch.getImageUrl());
         contenuArea.setText(ch.getContenu());
     }
 
@@ -137,6 +139,7 @@ public class ChapitreAdminController {
             if (typeCombo != null) ch.setTypeExplication(typeCombo.getValue());
             ch.setYoutubeLink(youtubeLinkField.getText());
             ch.setPdfUrl(pdfUrlField.getText());
+            ch.setImageUrl(imageUrlField.getText());
             ch.setIdCours(currentCourse.getIdCours());
 
             try { ch.setDuree(Integer.parseInt(dureeField.getText())); } catch (Exception e) { ch.setDuree(0); }

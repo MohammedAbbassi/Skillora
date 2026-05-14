@@ -12,6 +12,7 @@ public class Cours {
     private String duree; // ex: "2h"
     private String objectifSemaine;
     private LocalDate dateCreation;
+    private String imageUrl;
 
     // ─── Constructeurs ───────────────────────────────────────────────────────────
 
@@ -53,6 +54,9 @@ public class Cours {
 
     public LocalDate getDateCreation() { return dateCreation; }
     public void setDateCreation(LocalDate dateCreation) { this.dateCreation = dateCreation; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     @Override
     public String toString() {

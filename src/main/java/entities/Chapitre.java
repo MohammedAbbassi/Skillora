@@ -16,6 +16,8 @@ public class Chapitre {
     private boolean estComplete;
     private String remarques;
     private String fichiersTp;
+    private int idChapitreRevision;
+    private String imageUrl;
 
     // Constructeur vide
     public Chapitre() {}
@@ -74,6 +76,12 @@ public class Chapitre {
 
     public String getFichiersTp() { return fichiersTp; }
     public void setFichiersTp(String fichiersTp) { this.fichiersTp = fichiersTp; }
+
+    public int getIdChapitreRevision() { return idChapitreRevision; }
+    public void setIdChapitreRevision(int idChapitreRevision) { this.idChapitreRevision = idChapitreRevision; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     // Compatibilité database aliases
     public int getId_chapitre() { return getIdChapitre(); }

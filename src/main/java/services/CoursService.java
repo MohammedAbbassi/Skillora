@@ -26,8 +26,8 @@ public class CoursService implements ICoursService {
     public void add(Cours cours) throws SQLException {
         checkConnection();
         String req = "INSERT INTO cours (titre, description, categorie, niveau, " +
-                "duree, objectif_semaine, date_creation) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "duree, objectif_semaine, date_creation, image_url) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, cours.getTitre());
@@ -37,6 +37,7 @@ public class CoursService implements ICoursService {
         pst.setString(5, cours.getDuree());
         pst.setString(6, cours.getObjectifSemaine());
         pst.setDate  (7, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
+        pst.setString(8, cours.getImageUrl());
         pst.executeUpdate();
         
         ResultSet rs = pst.getGeneratedKeys();
@@ -50,7 +51,7 @@ public class CoursService implements ICoursService {
         checkConnection();
         String req = "UPDATE cours SET titre = ?, description = ?, categorie = ?, " +
                 "niveau = ?, duree = ?, objectif_semaine = ?, " +
-                "date_creation = ? " +
+                "date_creation = ?, image_url = ? " +
                 "WHERE id_cours = ?";
 
         PreparedStatement pst = cnx.prepareStatement(req);
@@ -61,7 +62,8 @@ public class CoursService implements ICoursService {
         pst.setString(5, cours.getDuree());
         pst.setString(6, cours.getObjectifSemaine());
         pst.setDate  (7, cours.getDateCreation() != null ? Date.valueOf(cours.getDateCreation()) : null);
-        pst.setInt   (8, cours.getIdCours());
+        pst.setString(8, cours.getImageUrl());
+        pst.setInt   (9, cours.getIdCours());
         pst.executeUpdate();
     }
 
@@ -134,6 +136,7 @@ public class CoursService implements ICoursService {
 
         Date dCreation = rs.getDate("date_creation");
         c.setDateCreation(dCreation != null ? dCreation.toLocalDate() : null);
+        c.setImageUrl(rs.getString("image_url"));
         return c;
     }
 }
