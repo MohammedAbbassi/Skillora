@@ -285,7 +285,9 @@ CREATE TABLE `reservation` (
   `nb_places` int(11) NOT NULL DEFAULT 1,
   `date_reservation` date NOT NULL,
   `id_evenement` int(11) NOT NULL,
-  `id_utilisateur` bigint(20) NOT NULL
+  `id_utilisateur` bigint(20) NOT NULL,
+  `statut` varchar(20) NOT NULL DEFAULT 'EN_ATTENTE',
+  `chaises` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -500,6 +502,7 @@ ALTER TABLE `cours`
 --
 ALTER TABLE `evenement`
   ADD PRIMARY KEY (`id_evenement`),
+  ADD UNIQUE KEY `uq_evenement_identite` (`nom`,`date_evenement`,`lieu`),
   ADD KEY `idx_evenement_utilisateur` (`id_utilisateur`),
   ADD KEY `idx_evenement_date` (`date_evenement`);
 
@@ -579,6 +582,14 @@ ALTER TABLE `reponse`
   ADD KEY `fk_reponse_question` (`question_id`);
 
 --
+-- Indexes for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id_reservation`),
+  ADD UNIQUE KEY `uq_reservation` (`id_evenement`,`id_utilisateur`),
+  ADD KEY `idx_reservation_utilisateur` (`id_utilisateur`);
+
+--
 -- Indexes for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
@@ -595,6 +606,12 @@ ALTER TABLE `utilisateurs`
 --
 ALTER TABLE `commande`
   MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `evenement`
+--
+ALTER TABLE `evenement`
+  MODIFY `id_evenement` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -633,6 +650,12 @@ ALTER TABLE `reponse`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `id_reservation` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
@@ -667,6 +690,13 @@ ALTER TABLE `relations`
 --
 ALTER TABLE `reponse`
   ADD CONSTRAINT `fk_reponse_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `fk_reservation_evenement` FOREIGN KEY (`id_evenement`) REFERENCES `evenement` (`id_evenement`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_reservation_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

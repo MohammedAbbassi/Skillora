@@ -15,8 +15,6 @@ public class User {
     private boolean estActif;
     private Timestamp dateCreation;
     private Timestamp dateModification;
-    
-    // Progress fields
     private int xpPoints;
     private int rankedPoints;
     private int streakDays;
@@ -41,8 +39,16 @@ public class User {
         this.pays = "Tunisia";
     }
 
+    public User(long idUtilisateur, String nomUtilisateur, String email, String motDePasse, String prenom, String nom) {
+        this(nomUtilisateur, email, motDePasse, prenom, nom);
+        setIdUtilisateur(idUtilisateur);
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+
+    public long getIdUtilisateur() { return id; }
+    public void setIdUtilisateur(long idUtilisateur) { this.id = (int) idUtilisateur; }
 
     public String getNomUtilisateur() { return nomUtilisateur; }
     public void setNomUtilisateur(String nomUtilisateur) { this.nomUtilisateur = nomUtilisateur; }
@@ -64,6 +70,7 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public void setRole(Role role) { this.role = role == null ? null : role.name(); }
 
     public String getPays() { return pays; }
     public void setPays(String pays) { this.pays = pays; }
@@ -100,6 +107,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{id=" + id + ", email='" + email + "', xp=" + xpPoints + ", streak=" + streakDays + "}";
+        return "User{id=" + id + ", email='" + email + "', role='" + role + "', xp=" + xpPoints + "}";
     }
 }

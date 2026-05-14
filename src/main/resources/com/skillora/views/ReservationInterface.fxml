@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ScrollPane?>
+
+<StackPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.skillora.controllers.ReservationController">
+   <children>
+      <VBox fx:id="reservationListPage" maxWidth="850.0" spacing="12.0" styleClass="card">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+               <children>
+                  <Label fx:id="lblReservationPageTitle" styleClass="section-title" text="Liste des Reservations" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnOpenReservationForm" mnemonicParsing="false" onAction="#ouvrirFormulaireAjout" prefHeight="38.0" prefWidth="150.0" styleClass="btn-primary" text="Nouvelle reservation" />
+                  <Button fx:id="btnToggleMyReservations" mnemonicParsing="false" onAction="#basculerMesReservations" prefHeight="38.0" prefWidth="190.0" styleClass="btn-secondary" text="Consulter mes reservations" />
+                  <Button fx:id="btnOpenSelectedReservationForm" mnemonicParsing="false" onAction="#ouvrirFormulaireModification" prefHeight="38.0" prefWidth="100.0" styleClass="btn-secondary" text="Modifier" />
+                  <Button fx:id="btnListSupprimer" mnemonicParsing="false" onAction="#supprimerElementSelectionne" prefHeight="38.0" prefWidth="100.0" styleClass="btn-danger" text="Supprimer" />
+                  <Button fx:id="btnListAccepter" mnemonicParsing="false" onAction="#accepterReservationSelectionnee" prefHeight="38.0" prefWidth="95.0" styleClass="btn-primary" text="Accepter" />
+                  <Button fx:id="btnListRefuser" mnemonicParsing="false" onAction="#refuserReservationSelectionnee" prefHeight="38.0" prefWidth="95.0" styleClass="btn-danger" text="Refuser" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="filter-bar">
+               <children>
+                  <TextField fx:id="txtRechercheReservation" prefHeight="36.0" prefWidth="420.0" promptText="Rechercher evenement, etudiant, chaise..." />
+                  <ComboBox fx:id="comboFiltreStatut" prefHeight="36.0" prefWidth="170.0" promptText="Statut" />
+               </children>
+            </HBox>
+            <ListView fx:id="listReservations" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-list-view" VBox.vgrow="ALWAYS" />
+            <ScrollPane fx:id="reservationGridScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-grid-scroll" visible="false" managed="false" VBox.vgrow="ALWAYS">
+               <content>
+                  <TilePane fx:id="reservationGridView" hgap="12.0" prefColumns="3" prefTileHeight="230.0" prefTileWidth="245.0" vgap="14.0" />
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="availableEventScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="455.0" prefWidth="810.0" styleClass="reservation-grid-scroll" visible="false" managed="false" VBox.vgrow="ALWAYS">
+               <content>
+                  <TilePane fx:id="availableEventGrid" hgap="12.0" prefColumns="3" prefTileHeight="220.0" prefTileWidth="245.0" vgap="12.0" />
+               </content>
+            </ScrollPane>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+
+      <VBox fx:id="reservationFormPage" maxWidth="930.0" spacing="10.0" styleClass="card" visible="false" managed="false">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#retournerALaListeReservations" prefHeight="34.0" prefWidth="90.0" styleClass="btn-secondary" text="Retour" />
+                  <Label styleClass="section-title" text="Formulaire reservation">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+
+            <HBox alignment="TOP_CENTER" spacing="18.0">
+               <children>
+                  <VBox prefWidth="520.0" spacing="10.0">
+                     <children>
+                        <GridPane vgap="8.0">
+                           <children>
+                              <Label styleClass="field-label" text="Plan de salle" GridPane.rowIndex="0" />
+                              <StackPane prefHeight="240.0" prefWidth="500.0" styleClass="seat-map-panel" GridPane.rowIndex="1">
+                                 <children>
+                                    <ImageView fitHeight="240.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="false" styleClass="seat-map-bg">
+                                       <image>
+                                          <Image url="@../images/seat-map-room.png" />
+                                       </image>
+                                    </ImageView>
+                                    <GridPane fx:id="seatGrid" hgap="8.0" maxHeight="190.0" maxWidth="238.0" styleClass="seat-grid-overlay" vgap="7.0" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+
+                              <HBox alignment="CENTER_LEFT" spacing="8.0" GridPane.rowIndex="2">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="4.0">
+                                       <children>
+                                          <Label prefHeight="14.0" prefWidth="14.0" styleClass="seat-legend-free" />
+                                          <Label styleClass="seat-legend-text" text="Libre" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="4.0">
+                                       <children>
+                                          <Label prefHeight="14.0" prefWidth="14.0" styleClass="seat-legend-selected" />
+                                          <Label styleClass="seat-legend-text" text="Choisie" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="4.0">
+                                       <children>
+                                          <Label prefHeight="14.0" prefWidth="14.0" styleClass="seat-legend-occupied" />
+                                          <Label styleClass="seat-legend-text" text="Reservee" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+
+                              <Label fx:id="lblSelectedSeats" prefWidth="500.0" styleClass="selected-seats-label" text="Aucune chaise choisie" wrapText="true" GridPane.rowIndex="3" />
+
+                              <Label styleClass="field-label" text="Nombre de places" GridPane.rowIndex="4" />
+                              <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.rowIndex="5">
+                                 <children>
+                                    <Label fx:id="lblNbPlaces" alignment="CENTER" prefHeight="38.0" prefWidth="500.0" styleClass="counter-value" text="0" />
+                                 </children>
+                              </HBox>
+
+                              <Label styleClass="field-label" text="Date Reservation" GridPane.rowIndex="6" />
+                              <DatePicker fx:id="datePicker" prefWidth="500.0" GridPane.rowIndex="7" />
+
+                              <Label styleClass="field-label" text="Evenement selectionne" GridPane.rowIndex="8" />
+                              <TextField fx:id="txtEvenementSelectionne" editable="false" prefWidth="500.0" promptText="Selectionner dans la liste" GridPane.rowIndex="9" />
+
+                              <Label styleClass="field-label" text="Utilisateur connecte" GridPane.rowIndex="10" />
+                              <Label fx:id="lblCurrentUser" styleClass="session-label" text="Utilisateur connecte" GridPane.rowIndex="11" />
+                           </children>
+                           <columnConstraints>
+                              <javafx.scene.layout.ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                              <javafx.scene.layout.RowConstraints />
+                           </rowConstraints>
+                        </GridPane>
+
+                        <VBox fx:id="actionBox" spacing="10.0">
+                           <children>
+                              <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterDepuisFormulaire" prefHeight="40.0" prefWidth="500.0" styleClass="btn-primary" text="Reserver" />
+                              <HBox fx:id="rowEditActions" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierDepuisFormulaire" prefHeight="40.0" prefWidth="260.0" styleClass="btn-primary" text="Enregistrer modification" />
+                                    <Button fx:id="btnAnnulerModification" mnemonicParsing="false" onAction="#annulerModificationFormulaire" prefHeight="40.0" prefWidth="130.0" styleClass="btn-secondary" text="Annuler" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+
+                  <VBox prefWidth="0.0" spacing="12.0" styleClass="event-picker-card" visible="false" managed="false">
+                     <children>
+                        <Label styleClass="field-label" text="Evenements disponibles" />
+                        <ListView fx:id="listChoixEvenements" prefHeight="260.0" prefWidth="330.0" styleClass="event-choice-list-view" visible="false" managed="false" />
+                        <ScrollPane fx:id="eventGridScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="505.0" prefWidth="330.0" styleClass="event-grid-scroll">
+                           <content>
+                              <TilePane fx:id="eventGridView" hgap="8.0" prefColumns="1" prefTileHeight="245.0" prefTileWidth="300.0" vgap="8.0" />
+                           </content>
+                        </ScrollPane>
+
+                        <VBox fx:id="eventPreviewCard" alignment="TOP_CENTER" prefWidth="330.0" spacing="10.0" styleClass="event-preview-card" visible="false" managed="false">
+                           <children>
+                              <StackPane prefHeight="155.0" prefWidth="300.0" styleClass="event-preview-image-box">
+                                 <children>
+                                    <ImageView fx:id="eventPreviewImage" fitHeight="145.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" styleClass="event-preview-image" />
+                                 </children>
+                              </StackPane>
+                              <VBox prefWidth="300.0" spacing="6.0">
+                                 <children>
+                                    <Label fx:id="lblPreviewTitle" styleClass="event-preview-title" text="Choisissez un evenement" wrapText="true" />
+                                    <Label fx:id="lblPreviewDate" styleClass="event-preview-meta" text="Date : -" wrapText="true" />
+                                    <Label fx:id="lblPreviewLieu" styleClass="event-preview-meta" text="Lieu : -" wrapText="true" />
+                                    <Label fx:id="lblPreviewAction" styleClass="event-preview-action" text="Selectionnez un evenement dans la liste pour voir son apercu." wrapText="true" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</StackPane>
