@@ -48,12 +48,7 @@
 .root {
     -fx-font-family: "Segoe UI", "Segoe UI Variable Text", "Arial", sans-serif;
     -fx-font-size: 14px;
-<<<<<<< HEAD
-    -fx-background-color: #F8FAFC;
-
-=======
-    -fx-background-color: linear-gradient(to bottom, #eef4ff, #f8fbff 28%, #edf4ff 100%);
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
+    -fx-background-color: linear-gradient(to bottom, #eef4ff, #f8fbff, #edf4ff);
     -fx-accent: #2563eb;
     
     /* Global Brand Variables */
@@ -185,14 +180,7 @@
 }
 
 .battle-pass-btn {
-<<<<<<< HEAD
-    -fx-background-color: white;
-
-=======
     -fx-background-color: #f8fbff;
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
-    -fx-text-fill: #2563eb;
-
     -fx-text-fill: #4F46E5;
 
     -fx-background-radius: 8px;
@@ -281,25 +269,12 @@
     -fx-padding: 40px;
     -fx-border-color: #d9e7fb;
     -fx-border-radius: 24px;
-<<<<<<< HEAD
-
-    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.08), 20, 0, 0, 10);
-=======
     -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.12), 22, 0, 0, 10);
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
-}
-
-.role-badge-premium {
-    -fx-background-color: rgba(37, 99, 235, 0.1);
-    -fx-text-fill: #2563eb;
-
-    -fx-effect: dropshadow(three-pass-box, rgba(79, 70, 229, 0.08), 20, 0, 0, 10);
 }
 
 .role-badge-premium {
     -fx-background-color: rgba(79, 70, 229, 0.1);
     -fx-text-fill: #4F46E5;
->>>>>>> mouayed
     -fx-padding: 6 16;
     -fx-background-radius: 999;
     -fx-font-weight: 900;
@@ -545,9 +520,6 @@
 }
 
 .auth-input-premium:focused { -fx-border-color: #2563eb; -fx-border-width: 2; }
-
-.auth-btn-premium {
-    -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
 
 .auth-input-premium:focused { -fx-border-color: #4F46E5; -fx-border-width: 2; }
 
@@ -872,14 +844,7 @@
 }
 
 .action-btn-secondary {
-<<<<<<< HEAD
-    -fx-background-color: #ffffff;
-
-=======
     -fx-background-color: #f8fbff;
->>>>>>> 228c4cdfc5b742df2834d3c04d8ecae57aa10c09
-    -fx-text-fill: #2563eb;
-
     -fx-text-fill: #4F46E5;
     -fx-font-weight: bold;
     -fx-padding: 10 20;
@@ -1245,25 +1210,25 @@
 
 /* Skillora blue login experience */
 .login-full-root {
-    -fx-background-color: linear-gradient(to bottom right, #eaf6ff, #f8fbff 42%, #dbeafe);
+    -fx-background-color: linear-gradient(to bottom right, #eaf6ff, #f8fbff, #dbeafe);
     -fx-background-radius: 28px;
     -fx-border-radius: 28px;
-    -fx-border-color: rgba(14, 116, 144, 0.18);
+    -fx-border-color: #c7e5f4;
     -fx-border-width: 1;
-    -fx-effect: dropshadow(three-pass-box, rgba(15, 23, 42, 0.22), 34, 0, 0, 16);
+    -fx-effect: dropshadow(three-pass-box, #9aa9bc, 34, 0, 0, 16);
 }
 
 .login-shell {
-    -fx-background-color: rgba(255, 255, 255, 0.72);
+    -fx-background-color: #ffffff;
     -fx-background-radius: 28px;
-    -fx-border-color: rgba(96, 165, 250, 0.42);
+    -fx-border-color: #93c5fd;
     -fx-border-radius: 28px;
     -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.20), 42, 0, 0, 18);
+    -fx-effect: dropshadow(gaussian, #a7b3c4, 42, 0, 0, 18);
 }
 
 .login-brand-panel {
-    -fx-background-color: linear-gradient(to bottom right, #032d6b, #075985 52%, #0ea5e9);
+    -fx-background-color: linear-gradient(to bottom right, #032d6b, #075985, #0ea5e9);
     -fx-background-radius: 28px 0 0 28px;
     -fx-min-height: 640px;
 }
@@ -1273,25 +1238,29 @@
 }
 
 .login-map-line {
-    -fx-stroke: rgba(186, 230, 253, 0.22);
+    -fx-stroke: #7dd3fc;
+    -fx-opacity: 0.35;
     -fx-stroke-width: 1;
 }
 
 .login-blue-tile {
-    -fx-fill: rgba(37, 99, 235, 0.42);
-    -fx-stroke: rgba(191, 219, 254, 0.40);
+    -fx-fill: #2563eb;
+    -fx-opacity: 0.58;
+    -fx-stroke: #bfdbfe;
     -fx-stroke-width: 1;
 }
 
 .login-cyan-tile {
-    -fx-fill: rgba(34, 211, 238, 0.26);
-    -fx-stroke: rgba(165, 243, 252, 0.45);
+    -fx-fill: #22d3ee;
+    -fx-opacity: 0.42;
+    -fx-stroke: #a5f3fc;
     -fx-stroke-width: 1;
 }
 
 .login-navy-tile {
-    -fx-fill: rgba(15, 23, 42, 0.30);
-    -fx-stroke: rgba(147, 197, 253, 0.36);
+    -fx-fill: #0f172a;
+    -fx-opacity: 0.45;
+    -fx-stroke: #93c5fd;
     -fx-stroke-width: 1;
 }
 
@@ -1300,9 +1269,9 @@
 }
 
 .login-logo-holder {
-    -fx-background-color: rgba(255, 255, 255, 0.16);
+    -fx-background-color: #2d6fa8;
     -fx-background-radius: 14px;
-    -fx-border-color: rgba(219, 234, 254, 0.48);
+    -fx-border-color: #dbeafe;
     -fx-border-radius: 14px;
     -fx-border-width: 1;
     -fx-min-width: 52px;
@@ -1343,9 +1312,9 @@
 }
 
 .login-metric {
-    -fx-background-color: rgba(255, 255, 255, 0.13);
+    -fx-background-color: #1d72a8;
     -fx-background-radius: 16px;
-    -fx-border-color: rgba(219, 234, 254, 0.34);
+    -fx-border-color: #93c5fd;
     -fx-border-radius: 16px;
     -fx-padding: 14 16;
     -fx-min-width: 112px;
@@ -1364,7 +1333,7 @@
 }
 
 .login-card-premium {
-    -fx-background-color: rgba(255, 255, 255, 0.94);
+    -fx-background-color: #ffffff;
     -fx-background-radius: 0 28px 28px 0;
     -fx-min-height: 640px;
 }
@@ -1409,7 +1378,7 @@
     -fx-background-color: white;
     -fx-border-color: #0284c7;
     -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(14, 165, 233, 0.22), 16, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, #9ddff8, 16, 0, 0, 4);
 }
 
 .auth-btn-premium {
@@ -1420,7 +1389,7 @@
     -fx-background-radius: 14px;
     -fx-padding: 15 18;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(2, 132, 199, 0.34), 18, 0, 0, 8);
+    -fx-effect: dropshadow(gaussian, #8bd3f2, 18, 0, 0, 8);
 }
 
 .auth-btn-premium:hover {
@@ -1462,9 +1431,9 @@
 }
 
 .close-btn {
-    -fx-background-color: rgba(255, 255, 255, 0.82);
+    -fx-background-color: #ffffff;
     -fx-background-radius: 999px;
-    -fx-border-color: rgba(2, 132, 199, 0.25);
+    -fx-border-color: #bae6fd;
     -fx-border-radius: 999px;
     -fx-border-width: 1;
     -fx-text-fill: #075985;
@@ -1479,9 +1448,6 @@
     -fx-text-fill: #0f172a;
 }
 
-<<<<<<< HEAD
-=======
-
 .quiz-submenu {
     -fx-padding: 0 0 4 12;
 }
@@ -1494,4 +1460,3 @@
 .quiz-subnav-btn.nav-active {
     -fx-border-width: 0 0 0 3px;
 }
->>>>>>> mouayed
