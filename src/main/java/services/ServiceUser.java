@@ -102,11 +102,11 @@ public class ServiceUser implements IService<User> {
         System.out.println("User modifie");
     }
 
-    public void updateProfilePhotoByEmail(String email, String base64Photo) throws SQLException {
+    public void updateProfilePhotoByEmail(String email, String photoData) throws SQLException {
         checkConnection();
         String req = "UPDATE utilisateurs SET photo_profil = ? WHERE email = ?";
         try (PreparedStatement pst = cnx.prepareStatement(req)) {
-            pst.setString(1, base64Photo);
+            pst.setString(1, photoData);
             pst.setString(2, email);
             pst.executeUpdate();
         }

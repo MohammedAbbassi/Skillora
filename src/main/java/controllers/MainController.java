@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ import entities.Message;
 import services.ServiceUser;
 import services.ServiceUserPreferences;
 import services.ServiceMessage;
+import services.CloudinaryService;
 import utils.BadgeUtils;
 import com.skillora.events.controllers.ReservationController;
 
@@ -1145,15 +1147,19 @@ public class MainController implements Initializable {
             ImageIO.write(resizedImage, "png", baos);
             byte[] imageBytes = baos.toByteArray();
             
-            String base64Photo = Base64.getEncoder().encodeToString(imageBytes);
-            serviceUser.updateProfilePhotoByEmail(prefs.getUserEmail(), base64Photo);
+            // Upload to Cloudinary instead of Base64
+            String cloudinaryUrl = CloudinaryService.getInstance().uploadImage(imageBytes, "profile_pictures");
+
+            serviceUser.updateProfilePhotoByEmail(prefs.getUserEmail(), cloudinaryUrl);
 
             if (currentUser == null) {
                 currentUser = new User();
+                currentUser.setEmail(prefs.getUserEmail());
             }
-            currentUser.setPhotoProfil(base64Photo);
+            
+            currentUser.setPhotoProfil(cloudinaryUrl);
             applyCurrentAvatar();
-            showStyledAlert(Alert.AlertType.INFORMATION, "Success", "Profile picture updated.");
+            showStyledAlert(Alert.AlertType.INFORMATION, "Success", "Profile picture updated and uploaded to cloud.");
         } catch (Exception e) {
             e.printStackTrace();
             showStyledAlert(Alert.AlertType.ERROR, "Error", "Could not update picture: " + e.getMessage());
@@ -2368,13 +2374,40 @@ public class MainController implements Initializable {
 
     private void setAvatar(Circle circle, Label initial, User u) {
         if (circle == null) return;
-        if (u.getPhotoProfil() != null && !u.getPhotoProfil().isEmpty()) {
+        String photo = u.getPhotoProfil();
+        
+        if (photo != null && !photo.isEmpty()) {
             try {
-                byte[] b = Base64.getDecoder().decode(u.getPhotoProfil());
-                circle.setFill(new ImagePattern(new Image(new ByteArrayInputStream(b))));
-                if (initial != null) {
-                    initial.setVisible(false);
-                    initial.setManaged(false);
+                if (photo.startsWith("http")) {
+                    // It's a Cloudinary URL
+                    Image img = new Image(photo, true); // background loading
+                    
+                    img.progressProperty().addListener((obs, old, progress) -> {
+                        if (progress.doubleValue() == 1.0 && !img.isError()) {
+                            Platform.runLater(() -> {
+                                circle.setFill(new ImagePattern(img));
+                                if (initial != null) {
+                                    initial.setVisible(false);
+                                    initial.setManaged(false);
+                                }
+                            });
+                        }
+                    });
+                    
+                    img.errorProperty().addListener((obs, old, hasError) -> {
+                        if (hasError) {
+                            Platform.runLater(() -> applyDefaultAvatarStyle(circle, initial, u));
+                        }
+                    });
+                } else {
+                    // It's Base64
+                    byte[] b = Base64.getDecoder().decode(photo);
+                    Image img = new Image(new ByteArrayInputStream(b));
+                    circle.setFill(new ImagePattern(img));
+                    if (initial != null) {
+                        initial.setVisible(false);
+                        initial.setManaged(false);
+                    }
                 }
             } catch (Exception e) {
                 applyDefaultAvatarStyle(circle, initial, u);
