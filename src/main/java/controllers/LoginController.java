@@ -327,7 +327,7 @@ public class LoginController implements Initializable {
         String email = emailField.getText().trim();
         String pass  = passwordField.getText();
 
-        // Special bypass for admin:admin
+        // Allow the seeded admin account to use "admin" as login instead of an email address.
         boolean isAdminBypass = "admin".equalsIgnoreCase(email) && "admin".equals(pass);
 
         // 1. Basic empty check
@@ -381,23 +381,7 @@ public class LoginController implements Initializable {
             try {
                 User user;
                 if (isLoginMode) {
-                    if (isAdminBypass) {
-                        serviceUser.createAdminIfNotExists();
-                        user = serviceUser.findByEmail("admin");
-                        if (user == null) {
-                            user = new User();
-                            user.setNomUtilisateur("admin");
-                            user.setEmail("admin");
-                            user.setMotDePasse("admin");
-                            user.setPrenom("Admin");
-                            user.setNom("System");
-                            user.setRole("ADMIN");
-                            serviceUser.add(user);
-                            user = serviceUser.findByEmail("admin");
-                        }
-                    } else {
-                        user = serviceUser.login(email, pass);
-                    }
+                    user = serviceUser.login(email, pass);
                     if (user == null) {
                         Platform.runLater(() -> {
                             showError("Invalid email or password.");

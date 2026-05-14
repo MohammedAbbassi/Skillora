@@ -364,7 +364,7 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom_utilisateur`, `email`, `mot_d
 (18, 'art_api', 'testuser19@skillora.com', '$2a$10$vI8A7.7.7.7.7.7.7.7.7.OuB8m9m9m9m9m9m9m9m9m9m9m9m9m9m', 'Art', 'Api', NULL, 'ADMIN', 'Egypt', 1, 0, 8900, 8100, 60, 10, 25, '2026-05-13 16:55:00', '2026-05-13 16:55:00'),
 (19, 'rick_root', 'testuser10@skillora.com', '$2a$10$vI8A7.7.7.7.7.7.7.7.7.OuB8m9m9m9m9m9m9m9m9m9m9m9m9m9m', 'Rick', 'Root', NULL, 'ADMIN', 'Tunisia', 1, 0, 9500, 15000, 100, 15, 50, '2026-05-13 16:55:00', '2026-05-13 16:55:00'),
 (20, 'linus_legend', 'testuser20@skillora.com', '$2a$10$vI8A7.7.7.7.7.7.7.7.7.OuB8m9m9m9m9m9m9m9m9m9m9m9m9m9m', 'Linus', 'Legend', NULL, 'ADMIN', 'Finland', 1, 0, 25000, 25000, 365, 50, 100, '2026-05-13 16:55:00', '2026-05-13 16:55:00'),
-(32, 'admin', 'admin@skillora.tn', '$2a$10$gtvEkS37MWRhO7pMOoVsZ.m3orsFO6cZ3q3DMUyWaUazXFHa6m3/G', 'admin', '', NULL, 'ETUDIANT', 'Tunisia', 1, 0, 0, 0, 0, 0, 0, '2026-05-13 17:10:43', '2026-05-13 19:03:16');
+(32, 'admin', 'admin', 'admin', 'Admin', 'System', NULL, 'ADMIN', 'Tunisia', 1, 0, 0, 0, 0, 0, 0, '2026-05-13 17:10:43', '2026-05-13 19:03:16');
 
 -- --------------------------------------------------------
 
