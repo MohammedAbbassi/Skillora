@@ -22,10 +22,10 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
      * Recherche partielle via LIKE (%terme%).
      */
     public List<Question> rechercherParEnonce(String texte) throws SQLException {
-        String req = "SELECT id, quiz_id, enonce, type_question, score, image_path " +
+        String req = "SELECT id_question AS id, quiz_id, enonce, type_question, score, image_path " +
                 "FROM question " +
                 "WHERE LOWER(enonce) LIKE ? " +
-                "ORDER BY id";
+                "ORDER BY id_question";
         List<Question> questions = new ArrayList<>();
         PreparedStatement pst = conn.prepareStatement(req);
         String term = texte == null ? "" : texte.trim().toLowerCase();
@@ -38,16 +38,17 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public void ajouterQuestion(Question question) throws SQLException {
-        String req = "INSERT INTO question (libelle, niveau, score, active, quiz_id, enonce, type_question, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO question (libelle, niveau, score, est_active, quiz_id, enonce, type_question, image_path, id_utilisateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement pst = conn.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, buildUniqueLibelle(question));
-        pst.setString(2, "Debutant");
+        pst.setString(2, "DEBUTANT");
         pst.setInt(3, question.getPoint());
         pst.setBoolean(4, true);
         pst.setInt(5, question.getQuizId());
         pst.setString(6, question.getEnonce());
         pst.setString(7, question.getTypeQuestion().name());
         pst.setString(8, question.getImagePath());
+        pst.setLong(9, resolveQuestionAuthorId());
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();
@@ -57,10 +58,10 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public void modifierQuestion(Question question) throws SQLException {
-        String req = "UPDATE question SET libelle=?, niveau=?, score=?, active=?, quiz_id=?, enonce=?, type_question=?, image_path=? WHERE id=?";
+        String req = "UPDATE question SET libelle=?, niveau=?, score=?, est_active=?, quiz_id=?, enonce=?, type_question=?, image_path=? WHERE id_question=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setString(1, buildStableLibelle(question));
-        pst.setString(2, "Debutant");
+        pst.setString(2, "DEBUTANT");
         pst.setInt(3, question.getPoint());
         pst.setBoolean(4, true);
         pst.setInt(5, question.getQuizId());
@@ -72,7 +73,7 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public void modifierPointQuestion(int questionId, int point) throws SQLException {
-        String req = "UPDATE question SET score=? WHERE id=?";
+        String req = "UPDATE question SET score=? WHERE id_question=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, point);
         pst.setInt(2, questionId);
@@ -80,14 +81,14 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public void supprimerQuestion(int id) throws SQLException {
-        String req = "DELETE FROM question WHERE id=?";
+        String req = "DELETE FROM question WHERE id_question=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         pst.executeUpdate();
     }
 
     public List<Question> afficherQuestions() throws SQLException {
-        String req = "SELECT id, quiz_id, enonce, type_question, score, image_path FROM question ORDER BY id";
+        String req = "SELECT id_question AS id, quiz_id, enonce, type_question, score, image_path FROM question ORDER BY id_question";
         List<Question> questions = new ArrayList<>();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(req);
@@ -98,7 +99,7 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public List<Question> afficherParQuiz(int quizId) throws SQLException {
-        String req = "SELECT id, quiz_id, enonce, type_question, score, image_path FROM question WHERE quiz_id=? ORDER BY id";
+        String req = "SELECT id_question AS id, quiz_id, enonce, type_question, score, image_path FROM question WHERE quiz_id=? ORDER BY id_question";
         List<Question> questions = new ArrayList<>();
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, quizId);
@@ -118,7 +119,7 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
     }
 
     public Question getQuestionById(int id) throws SQLException {
-        String req = "SELECT id, quiz_id, enonce, type_question, score, image_path FROM question WHERE id=?";
+        String req = "SELECT id_question AS id, quiz_id, enonce, type_question, score, image_path FROM question WHERE id_question=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         ResultSet rs = pst.executeQuery();
@@ -130,7 +131,8 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
         question.setId(rs.getInt("id"));
         question.setQuizId(rs.getInt("quiz_id"));
         question.setEnonce(rs.getString("enonce"));
-        question.setTypeQuestion(TypeQuestion.valueOf(rs.getString("type_question")));
+        String typeQuestion = rs.getString("type_question");
+        question.setTypeQuestion(typeQuestion == null ? TypeQuestion.QCU : TypeQuestion.valueOf(typeQuestion));
         question.setPoint(rs.getInt("score"));
         question.setImagePath(rs.getString("image_path"));
         return question;
@@ -150,6 +152,21 @@ public class QuestionCRUD implements InterfaceCRUD<Question> {
             enonce = enonce.substring(0, 220);
         }
         return "Question " + question.getId() + " - " + enonce;
+    }
+
+    private long resolveQuestionAuthorId() throws SQLException {
+        long currentUserId = utils.SessionManager.getCurrentUserId();
+        if (currentUserId > 0) {
+            return currentUserId;
+        }
+
+        try (Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("SELECT id_utilisateur FROM utilisateurs ORDER BY id_utilisateur LIMIT 1")) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+        }
+        throw new SQLException("Aucun utilisateur disponible pour creer une question.");
     }
 
     @Override

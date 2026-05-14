@@ -1,26 +1,18 @@
 package utils;
 
-import java.sql.*;
+import java.sql.Connection;
 
 public class MyBD {
-    String url = "jdbc:mysql://localhost:3307/skillora_combined";
-    String user = "root";
-    String password = "";
     private Connection conn;
 
     private static MyBD instance;
 
     private MyBD() {
-        try {
-            conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection établie !!");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        conn = MyDatabase.getInstance().getCnx();
     }
 
     public static MyBD getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             return instance = new MyBD();
         }
         return instance;

@@ -12,11 +12,9 @@ import java.util.List;
 public class QuizCRUD implements InterfaceCRUD<Quiz> {
 
     private final Connection conn;
-    private static boolean dateColumnChecked;
 
     public QuizCRUD() {
         conn = MyBD.getInstance().getConn();
-        ensureDateAjoutColumn();
     }
 
     /**
@@ -40,9 +38,9 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
      * @param niveauFiltre exact match (Tous => null). Utile pour filtrer/tri par niveau depuis l'UI.
      */
     public List<Quiz> rechercherQuizzes(String titre, String niveau, String matiere, String niveauFiltre,
-                                        boolean dateDesc) throws SQLException {
+        boolean dateDesc) throws SQLException {
         StringBuilder sql = new StringBuilder(
-                "SELECT id, titre, description, niveau, matiere, date_ajout FROM quiz WHERE 1=1"
+                "SELECT id_quiz AS id, titre, description, niveau, matiere, date_creation AS date_ajout FROM quiz WHERE 1=1"
         );
         List<Object> params = new ArrayList<>();
 
@@ -63,9 +61,9 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
             params.add(niveauFiltre.trim().toLowerCase());
         }
 
-        sql.append(" ORDER BY date_ajout ")
+        sql.append(" ORDER BY date_creation ")
                 .append(dateDesc ? "DESC" : "ASC")
-                .append(", id ")
+                .append(", id_quiz ")
                 .append(dateDesc ? "DESC" : "ASC");
 
         List<Quiz> quizzes = new ArrayList<>();
@@ -81,12 +79,18 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
     }
 
     public void ajouterQuiz(Quiz quiz) throws SQLException {
-        String req = "INSERT INTO quiz (titre, description, niveau, matiere, date_ajout) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        String req = "INSERT INTO quiz (titre, description, niveau, matiere, id_createur) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pst = conn.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, quiz.getNomQuiz());
         pst.setString(2, quiz.getDescription());
         pst.setString(3, quiz.getNiveau());
         pst.setString(4, quiz.getMatiere().name());
+        long currentUserId = utils.SessionManager.getCurrentUserId();
+        if (currentUserId > 0) {
+            pst.setLong(5, currentUserId);
+        } else {
+            pst.setNull(5, Types.BIGINT);
+        }
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();
@@ -96,7 +100,7 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
     }
 
     public void modifierQuiz(Quiz quiz) throws SQLException {
-        String req = "UPDATE quiz SET titre=?, description=?, niveau=?, matiere=? WHERE id=?";
+        String req = "UPDATE quiz SET titre=?, description=?, niveau=?, matiere=? WHERE id_quiz=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setString(1, quiz.getNomQuiz());
         pst.setString(2, quiz.getDescription());
@@ -107,14 +111,14 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
     }
 
     public void supprimerQuiz(int id) throws SQLException {
-        String req = "DELETE FROM quiz WHERE id=?";
+        String req = "DELETE FROM quiz WHERE id_quiz=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         pst.executeUpdate();
     }
 
     public List<Quiz> afficherQuiz() throws SQLException {
-        String req = "SELECT id, titre, description, niveau, matiere, date_ajout FROM quiz ORDER BY date_ajout DESC, id DESC";
+        String req = "SELECT id_quiz AS id, titre, description, niveau, matiere, date_creation AS date_ajout FROM quiz ORDER BY date_creation DESC, id_quiz DESC";
         List<Quiz> quizzes = new ArrayList<>();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(req);
@@ -127,36 +131,11 @@ public class QuizCRUD implements InterfaceCRUD<Quiz> {
     }
 
     public Quiz getQuizById(int id) throws SQLException {
-        String req = "SELECT id, titre, description, niveau, matiere, date_ajout FROM quiz WHERE id=?";
+        String req = "SELECT id_quiz AS id, titre, description, niveau, matiere, date_creation AS date_ajout FROM quiz WHERE id_quiz=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         ResultSet rs = pst.executeQuery();
         return rs.next() ? mapQuiz(rs) : null;
-    }
-
-    private void ensureDateAjoutColumn() {
-        if (conn == null || dateColumnChecked) {
-            return;
-        }
-
-        synchronized (QuizCRUD.class) {
-            if (dateColumnChecked) {
-                return;
-            }
-            try {
-                try (Statement check = conn.createStatement();
-                     ResultSet rs = check.executeQuery("SHOW COLUMNS FROM quiz LIKE 'date_ajout'")) {
-                    if (!rs.next()) {
-                        try (Statement st = conn.createStatement()) {
-                            st.executeUpdate("ALTER TABLE quiz ADD COLUMN date_ajout TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
-                        }
-                    }
-                }
-                dateColumnChecked = true;
-            } catch (SQLException e) {
-                System.out.println("Verification date_ajout impossible: " + e.getMessage());
-            }
-        }
     }
 
     private Quiz mapQuiz(ResultSet rs) throws SQLException {

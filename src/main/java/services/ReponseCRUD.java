@@ -19,14 +19,14 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     /**
-     * Recherche simple et insensible a la casse sur le texte d'une reponse (contenu).
+     * Recherche simple et insensible a la casse sur le texte d'une reponse.
      * Recherche partielle via LIKE (%terme%).
      */
     public List<Reponse> rechercherParTexte(String texte) throws SQLException {
-        String req = "SELECT id, question_id AS id_question, contenu, correcte " +
-                "FROM reponse " +
-                "WHERE LOWER(contenu) LIKE ? " +
-                "ORDER BY id";
+        String req = "SELECT id_reponse AS id, id_question, contenu, est_correcte AS correcte "
+                + "FROM reponse "
+                + "WHERE LOWER(contenu) LIKE ? "
+                + "ORDER BY id_reponse";
         List<Reponse> reponses = new ArrayList<>();
         PreparedStatement pst = conn.prepareStatement(req);
         String term = texte == null ? "" : texte.trim().toLowerCase();
@@ -39,17 +39,14 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public void ajouterReponse(Reponse reponse) throws SQLException {
-        String req = "INSERT INTO reponse (contenu, estCorrecte, type_reponse, active, id_question, auteur, question_id, texte, correcte) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO reponse (contenu, est_correcte, type_reponse, est_active, id_question) "
+                + "VALUES (?, ?, ?, ?, ?)";
         PreparedStatement pst = conn.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, reponse.getTexte());
         pst.setBoolean(2, reponse.isCorrecte());
-        pst.setString(3, "Texte");
+        pst.setString(3, "CHOIX_UNIQUE");
         pst.setBoolean(4, true);
         pst.setInt(5, reponse.getQuestionId());
-        pst.setString(6, "Système");
-        pst.setInt(7, reponse.getQuestionId());
-        pst.setString(8, reponse.getTexte());
-        pst.setBoolean(9, reponse.isCorrecte());
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();
@@ -59,18 +56,15 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public void modifierReponse(Reponse reponse) throws SQLException {
-        String req = "UPDATE reponse SET contenu=?, estCorrecte=?, type_reponse=?, active=?, id_question=?, auteur=?, question_id=?, texte=?, correcte=? WHERE id=?";
+        String req = "UPDATE reponse SET contenu=?, est_correcte=?, type_reponse=?, est_active=?, id_question=? "
+                + "WHERE id_reponse=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setString(1, reponse.getTexte());
         pst.setBoolean(2, reponse.isCorrecte());
-        pst.setString(3, "Texte");
+        pst.setString(3, "CHOIX_UNIQUE");
         pst.setBoolean(4, true);
         pst.setInt(5, reponse.getQuestionId());
-        pst.setString(6, "Système");
-        pst.setInt(7, reponse.getQuestionId());
-        pst.setString(8, reponse.getTexte());
-        pst.setBoolean(9, reponse.isCorrecte());
-        pst.setInt(10, reponse.getId());
+        pst.setInt(6, reponse.getId());
         pst.executeUpdate();
     }
 
@@ -81,14 +75,15 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
                     + MIN_REPONSES_PAR_QUESTION + " reponses.");
         }
 
-        String req = "DELETE FROM reponse WHERE id=?";
+        String req = "DELETE FROM reponse WHERE id_reponse=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         pst.executeUpdate();
     }
 
     public Reponse getReponseById(int id) throws SQLException {
-        String req = "SELECT id, question_id AS id_question, contenu, correcte FROM reponse WHERE id=?";
+        String req = "SELECT id_reponse AS id, id_question, contenu, est_correcte AS correcte "
+                + "FROM reponse WHERE id_reponse=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, id);
         ResultSet rs = pst.executeQuery();
@@ -99,7 +94,8 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public List<Reponse> afficherReponsesParQuestion(int questionId) throws SQLException {
-        String req = "SELECT id, question_id  AS id_question, contenu, correcte FROM reponse WHERE question_id=? ORDER BY id";
+        String req = "SELECT id_reponse AS id, id_question, contenu, est_correcte AS correcte "
+                + "FROM reponse WHERE id_question=? ORDER BY id_reponse";
         List<Reponse> reponses = new ArrayList<>();
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, questionId);
@@ -111,7 +107,7 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public int compterReponsesParQuestion(int questionId) throws SQLException {
-        String req = "SELECT COUNT(*) FROM reponse WHERE question_id=?";
+        String req = "SELECT COUNT(*) FROM reponse WHERE id_question=?";
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, questionId);
         ResultSet rs = pst.executeQuery();
@@ -119,7 +115,8 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public List<Reponse> getCorrectAnswersByQuestion(int questionId) throws SQLException {
-        String req = "SELECT id, question_id AS id_question, contenu, correcte FROM reponse WHERE question_id=? AND (correcte=TRUE OR estCorrecte=TRUE) ORDER BY id";
+        String req = "SELECT id_reponse AS id, id_question, contenu, est_correcte AS correcte "
+                + "FROM reponse WHERE id_question=? AND est_correcte=TRUE ORDER BY id_reponse";
         List<Reponse> reponses = new ArrayList<>();
         PreparedStatement pst = conn.prepareStatement(req);
         pst.setInt(1, questionId);
@@ -131,7 +128,8 @@ public class ReponseCRUD implements InterfaceCRUD<Reponse> {
     }
 
     public List<Reponse> afficherReponses() throws SQLException {
-        String req = "SELECT id, question_id AS id_question, contenu, correcte FROM reponse ORDER BY id";
+        String req = "SELECT id_reponse AS id, id_question, contenu, est_correcte AS correcte "
+                + "FROM reponse ORDER BY id_reponse";
         List<Reponse> reponses = new ArrayList<>();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(req);
