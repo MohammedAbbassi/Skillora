@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .root {
     -fx-font-family: "Segoe UI", "Inter", "System";
     -fx-font-size: 14px;
@@ -1050,4 +1051,528 @@
 
 .dark-mode .timer-progress > .track {
     -fx-background-color: #334155;
+=======
+/* ═══════════════════════════════════════════════════════════════
+   SKILLORA  –  Complete UI Stylesheet
+   Facebook-inspired social feed  |  JavaFX CSS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS  (CSS variables via -fx-* named colors)
+   ─────────────────────────────────────────────────────────────── */
+.root {
+    /* Palette */
+    -primary:        #1877f2;
+    -primary-dark:   #166fe5;
+    -primary-light:  #e7f0fd;
+    -danger:         #e74c3c;
+    -danger-dark:    #c0392b;
+    -success:        #27ae60;
+
+    /* Neutrals */
+    -bg:             #f0f2f5;
+    -surface:        #ffffff;
+    -border:         #ced0d4;
+    -divider:        #e4e6eb;
+    -text-primary:   #050505;
+    -text-secondary: #65676b;
+    -text-muted:     #8a8d91;
+    -hover-overlay:  #f2f2f2;
+    -comment-bg:     #f0f2f5;
+    -bubble-bg:      #e4e6eb;
+    -avatar-bg:      #dde1e7;
+
+    /* Typography */
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size:   14px;
+
+    /* Global background */
+    -fx-background-color: -bg;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   2. SCROLLBARS  (minimal, modern)
+   ─────────────────────────────────────────────────────────────── */
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: -border;
+    -fx-background-radius: 4;
+}
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: -text-secondary;
+}
+.scroll-bar .track,
+.scroll-bar .track-background {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   3. HEADER BAR
+   ─────────────────────────────────────────────────────────────── */
+.header-bar {
+    -fx-background-color: -surface;
+    -fx-padding: 0 24;
+    -fx-min-height: 56px;
+    -fx-pref-height: 56px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 8, 0, 0, 2);
+}
+
+.header-logo {
+    -fx-text-fill: -primary;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   4. FEED SCROLL PANE
+   ─────────────────────────────────────────────────────────────── */
+.feed-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+.feed-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   5. CREATE-POST CARD
+   ─────────────────────────────────────────────────────────────── */
+.create-post-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -divider;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+
+.create-post-field {
+    -fx-background-color: -comment-bg;
+    -fx-background-radius: 22;
+    -fx-border-color: transparent;
+    -fx-border-radius: 22;
+    -fx-padding: 10 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-secondary;
+}
+.create-post-field:focused {
+    -fx-background-color: -surface;
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(three-pass-box, rgba(24,119,242,0.18), 6, 0, 0, 0);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   6. POST CARD
+   ─────────────────────────────────────────────────────────────── */
+.post-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -divider;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.07), 6, 0, 0, 2);
+}
+.post-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.13), 10, 0, 0, 3);
+}
+
+/* Post header text */
+.post-username {
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+.post-meta {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+}
+.post-privacy {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+}
+.post-content {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 15px;
+    -fx-line-spacing: 2;
+}
+.post-title {
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: bold;
+    -fx-font-size: 17px;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   7. AVATARS
+   ─────────────────────────────────────────────────────────────── */
+.avatar {
+    -fx-background-color: linear-gradient(to bottom right, #4facfe, #00f2fe);
+    -fx-background-radius: 50;
+}
+.avatar-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+.avatar-small {
+    -fx-background-color: linear-gradient(to bottom right, #a18cd1, #fbc2eb);
+    -fx-background-radius: 50;
+}
+.avatar-small .avatar-label {
+    -fx-font-size: 12px;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   8. ACTION BUTTONS  (Like / Comment / Share row)
+   ─────────────────────────────────────────────────────────────── */
+.btn-action {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 8 12;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+}
+.btn-action:hover {
+    -fx-background-color: -hover-overlay;
+    -fx-text-fill: -text-primary;
+}
+.btn-action:pressed {
+    -fx-background-color: -divider;
+}
+
+/* Liked state (applied inline via controller) */
+.btn-liked {
+    -fx-text-fill: -primary;
+    -fx-font-weight: bold;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   9. PUBLISH / PRIMARY BUTTON
+   ─────────────────────────────────────────────────────────────── */
+.btn-publish {
+    -fx-background-color: -primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-padding: 9 22;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+.btn-publish:hover {
+    -fx-background-color: -primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(24,119,242,0.35), 8, 0, 0, 2);
+}
+.btn-publish:pressed {
+    -fx-background-color: #1464d8;
+}
+.btn-publish:disabled {
+    -fx-opacity: 0.55;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   10. MEDIA BUTTON
+   ─────────────────────────────────────────────────────────────── */
+.btn-media {
+    -fx-background-color: transparent;
+    -fx-text-fill: -success;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+.btn-media:hover {
+    -fx-background-color: #eafaf1;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   11. DANGER / DELETE BUTTON
+   ─────────────────────────────────────────────────────────────── */
+.btn-danger {
+    -fx-background-color: -danger;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+.btn-danger:hover {
+    -fx-background-color: -danger-dark;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   12. COMMENT SECTION
+   ─────────────────────────────────────────────────────────────── */
+.comment-section {
+    -fx-background-color: -comment-bg;
+    -fx-padding: 12 16 12 16;
+}
+
+.comment-bubble {
+    -fx-background-color: -bubble-bg;
+    -fx-background-radius: 18;
+    -fx-padding: 8 14;
+}
+
+.comment-author {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+.comment-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+.comment-time {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-muted;
+}
+
+/* Comment input field */
+.comment-field {
+    -fx-background-color: -surface;
+    -fx-background-radius: 22;
+    -fx-border-color: -border;
+    -fx-border-radius: 22;
+    -fx-border-width: 1;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-secondary;
+}
+.comment-field:focused {
+    -fx-border-color: -primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(24,119,242,0.15), 4, 0, 0, 0);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   13. SEPARATORS
+   ─────────────────────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: -divider;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   14. TOAST NOTIFICATION
+   ─────────────────────────────────────────────────────────────── */
+.toast-label {
+    -fx-background-color: rgba(0, 0, 0, 0.78);
+    -fx-text-fill: white;
+    -fx-padding: 9 20;
+    -fx-background-radius: 24;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 2);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   15. MENU BUTTON  (3-dot post options)
+   ─────────────────────────────────────────────────────────────── */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-padding: 4 10;
+    -fx-background-radius: 50;
+    -fx-border-color: transparent;
+}
+.menu-button:hover {
+    -fx-background-color: -hover-overlay;
+}
+.menu-button .arrow-button {
+    -fx-padding: 0;
+}
+.menu-button .arrow-button .arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+.context-menu {
+    -fx-background-color: -surface;
+    -fx-background-radius: 8;
+    -fx-border-color: -divider;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 12, 0, 0, 4);
+    -fx-padding: 4 0;
+}
+.menu-item {
+    -fx-padding: 8 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+}
+.menu-item:focused,
+.menu-item:hover {
+    -fx-background-color: -hover-overlay;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   16. HYPERLINKS  (Reply, etc.)
+   ─────────────────────────────────────────────────────────────── */
+.hyperlink {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-underline: false;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.hyperlink:hover {
+    -fx-text-fill: -text-primary;
+    -fx-underline: false;
+}
+.hyperlink:visited {
+    -fx-text-fill: -text-secondary;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   17. AJOUTER POSTE  (legacy form view)
+   ─────────────────────────────────────────────────────────────── */
+.form-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 12;
+    -fx-border-color: -divider;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 32;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 3);
+}
+
+.form-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.form-field {
+    -fx-background-color: -surface;
+    -fx-background-radius: 8;
+    -fx-border-color: -border;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 10 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-secondary;
+    -fx-pref-width: 320;
+}
+.form-field:focused {
+    -fx-border-color: -primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(24,119,242,0.2), 6, 0, 0, 0);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   18. AFFICHER POSTE  (TableView)
+   ─────────────────────────────────────────────────────────────── */
+.table-view {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -divider;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+.table-view .column-header-background {
+    -fx-background-color: -comment-bg;
+    -fx-background-radius: 10 10 0 0;
+}
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: -divider;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 14;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+.table-row-cell {
+    -fx-background-color: -surface;
+    -fx-border-color: -divider;
+    -fx-border-width: 0 0 0.5 0;
+    -fx-padding: 4 0;
+}
+.table-row-cell:odd {
+    -fx-background-color: #fafbfc;
+}
+.table-row-cell:hover {
+    -fx-background-color: -primary-light;
+}
+.table-row-cell:selected {
+    -fx-background-color: -primary-light;
+    -fx-text-fill: -text-primary;
+}
+.table-cell {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 14px;
+    -fx-padding: 8 14;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   19. IMAGE PLACEHOLDER  (post image area)
+   ─────────────────────────────────────────────────────────────── */
+.post-image-placeholder {
+    -fx-background-color: -divider;
+    -fx-background-radius: 6;
+    -fx-min-height: 200;
+    -fx-pref-height: 220;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   20. STATS ROW  (likes / comments count)
+   ─────────────────────────────────────────────────────────────── */
+.stats-row {
+    -fx-padding: 6 16 6 16;
+}
+.stats-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+.stats-label:hover {
+    -fx-underline: true;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   21. EMPTY STATE  (no posts yet)
+   ─────────────────────────────────────────────────────────────── */
+.empty-state {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 15px;
+    -fx-padding: 40;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   22. TOOLTIP
+   ─────────────────────────────────────────────────────────────── */
+.tooltip {
+    -fx-background-color: rgba(0,0,0,0.82);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 6;
+    -fx-padding: 5 10;
+>>>>>>> amine
 }

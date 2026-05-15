@@ -31,6 +31,7 @@ public class ServiceUser implements IService<User> {
     private void autoMigrate() {
         try {
             if (cnx != null) {
+<<<<<<< HEAD
                 // Check and add missing columns in order
                 addColumnIfMissing("pays", "ALTER TABLE utilisateurs ADD COLUMN pays varchar(100) DEFAULT 'Tunisia' AFTER role;");
                 addColumnIfMissing("est_en_ligne", "ALTER TABLE utilisateurs ADD COLUMN est_en_ligne tinyint(1) NOT NULL DEFAULT 0 AFTER est_actif;");
@@ -41,6 +42,20 @@ public class ServiceUser implements IService<User> {
                 addColumnIfMissing("quizzes_done", "ALTER TABLE utilisateurs ADD COLUMN quizzes_done int(11) NOT NULL DEFAULT 0 AFTER certificates_count;");
                 addColumnIfMissing("reset_token", "ALTER TABLE utilisateurs ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL AFTER quizzes_done;");
                 addColumnIfMissing("reset_token_expiry", "ALTER TABLE utilisateurs ADD COLUMN reset_token_expiry TIMESTAMP NULL DEFAULT NULL AFTER reset_token;");
+=======
+                addColumnIfMissing("pays", "ALTER TABLE utilisateurs ADD COLUMN pays VARCHAR(255) DEFAULT 'Tunisia';");
+                addColumnIfMissing("est_actif", "ALTER TABLE utilisateurs ADD COLUMN est_actif tinyint(1) NOT NULL DEFAULT 1;");
+                addColumnIfMissing("photo_profil", "ALTER TABLE utilisateurs ADD COLUMN photo_profil VARCHAR(500) DEFAULT NULL;");
+                addColumnIfMissing("xp_points", "ALTER TABLE utilisateurs ADD COLUMN xp_points int(11) NOT NULL DEFAULT 0;");
+                addColumnIfMissing("streak_days", "ALTER TABLE utilisateurs ADD COLUMN streak_days int(11) NOT NULL DEFAULT 0 AFTER xp_points;");
+                addColumnIfMissing("est_en_ligne", "ALTER TABLE utilisateurs ADD COLUMN est_en_ligne tinyint(1) NOT NULL DEFAULT 0;");
+                addColumnIfMissing("ranked_points", "ALTER TABLE utilisateurs ADD COLUMN ranked_points int(11) NOT NULL DEFAULT 0 AFTER xp_points;");
+                addColumnIfMissing("certificates_count", "ALTER TABLE utilisateurs ADD COLUMN certificates_count int(11) NOT NULL DEFAULT 0 AFTER streak_days;");
+                addColumnIfMissing("reset_token", "ALTER TABLE utilisateurs ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL AFTER certificates_count;");
+                addColumnIfMissing("reset_token_expiry", "ALTER TABLE utilisateurs ADD COLUMN reset_token_expiry TIMESTAMP NULL DEFAULT NULL AFTER reset_token;");
+                addColumnIfMissing("date_creation", "ALTER TABLE utilisateurs ADD COLUMN date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;");
+                addColumnIfMissing("date_modification", "ALTER TABLE utilisateurs ADD COLUMN date_modification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;");
+>>>>>>> amine
             }
         } catch (SQLException e) {
             System.err.println("Auto-migration failed: " + e.getMessage());
@@ -49,6 +64,7 @@ public class ServiceUser implements IService<User> {
 
     private void addColumnIfMissing(String columnName, String sql) throws SQLException {
         DatabaseMetaData meta = cnx.getMetaData();
+<<<<<<< HEAD
         // Use cnx.getCatalog() to get current database name for more reliable column checking
         try (ResultSet rs = meta.getColumns(cnx.getCatalog(), null, "utilisateurs", columnName)) {
             if (!rs.next()) {
@@ -61,6 +77,14 @@ public class ServiceUser implements IService<User> {
                         throw e;
                     }
                 }
+=======
+        try (ResultSet rs = meta.getColumns(null, null, "utilisateurs", columnName)) {
+            if (!rs.next()) {
+                try (Statement st = cnx.createStatement()) {
+                    st.executeUpdate(sql);
+                }
+                System.out.println("Auto-migrated database: added " + columnName + " to utilisateurs table.");
+>>>>>>> amine
             }
         }
     }
@@ -77,7 +101,11 @@ public class ServiceUser implements IService<User> {
             pst.setString(3, hashedPassword);
             pst.setString(4, user.getPrenom() != null ? user.getPrenom() : "");
             pst.setString(5, user.getNom() != null ? user.getNom() : "");
+<<<<<<< HEAD
             pst.setString(6, user.getRole() != null ? user.getRole() : "ETUDIANT");
+=======
+            pst.setString(6, user.getRole() != null ? user.getRole().name() : "ETUDIANT");
+>>>>>>> amine
             pst.setString(7, user.getPays() != null ? user.getPays() : "Tunisia");
             pst.setBoolean(8, true);
             pst.setInt(9, user.getXpPoints());
@@ -99,7 +127,11 @@ public class ServiceUser implements IService<User> {
             pst.setString(2, user.getEmail());
             pst.setString(3, user.getPrenom());
             pst.setString(4, user.getNom());
+<<<<<<< HEAD
             pst.setString(5, user.getRole());
+=======
+            pst.setString(5, user.getRole().name());
+>>>>>>> amine
             pst.setString(6, user.getPays());
             pst.setBoolean(7, user.isEstActif());
             pst.setInt(8, user.getXpPoints());
@@ -360,6 +392,7 @@ public class ServiceUser implements IService<User> {
         u.setMotDePasse(rs.getString("mot_de_passe"));
         u.setPrenom(rs.getString("prenom"));
         u.setNom(rs.getString("nom"));
+<<<<<<< HEAD
         u.setPhotoProfil(rs.getString("photo_profil"));
         u.setRole(rs.getString("role"));
         u.setPays(rs.getString("pays"));
@@ -373,6 +406,23 @@ public class ServiceUser implements IService<User> {
         u.setResetTokenExpiry(rs.getTimestamp("reset_token_expiry"));
         u.setDateCreation(rs.getTimestamp("date_creation"));
         u.setDateModification(rs.getTimestamp("date_modification"));
+=======
+        
+        try { u.setPhotoProfil(rs.getString("photo_profil")); } catch (SQLException e) {}
+        try { u.setRole(rs.getString("role")); } catch (SQLException e) { u.setRole("ETUDIANT"); }
+        try { u.setPays(rs.getString("pays")); } catch (SQLException e) { u.setPays("Tunisia"); }
+        try { u.setEstActif(rs.getBoolean("est_actif")); } catch (SQLException e) { u.setEstActif(true); }
+        try { u.setXpPoints(rs.getInt("xp_points")); } catch (SQLException e) { u.setXpPoints(0); }
+        try { u.setRankedPoints(rs.getInt("ranked_points")); } catch (SQLException e) { u.setRankedPoints(0); }
+        try { u.setStreakDays(rs.getInt("streak_days")); } catch (SQLException e) { u.setStreakDays(0); }
+        try { u.setCertificatesCount(rs.getInt("certificates_count")); } catch (SQLException e) { u.setCertificatesCount(0); }
+        try { u.setEstEnLigne(rs.getBoolean("est_en_ligne")); } catch (SQLException e) { u.setEstEnLigne(false); }
+        try { u.setResetToken(rs.getString("reset_token")); } catch (SQLException e) {}
+        try { u.setResetTokenExpiry(rs.getTimestamp("reset_token_expiry")); } catch (SQLException e) {}
+        try { u.setDateCreation(rs.getTimestamp("date_creation")); } catch (SQLException e) {}
+        try { u.setDateModification(rs.getTimestamp("date_modification")); } catch (SQLException e) {}
+        
+>>>>>>> amine
         return u;
     }
 }

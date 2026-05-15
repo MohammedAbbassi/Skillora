@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="700.0" prefWidth="1024.0"
+            stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.FeedController">
+
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header-bar" spacing="12.0">
+            <Label styleClass="header-logo" text="Skillora"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+
+
+            <!-- Role badge (ADMIN / ENSEIGNANT / ETUDIANT) -->
+            <Label fx:id="lblRole" text=""
+                   style="-fx-font-size:12px;-fx-font-weight:bold;-fx-padding:4 10;-fx-background-radius:20;"/>
+
+            <!-- Activity badge (Debutant / Actif / Pro) -->
+            <Label fx:id="lblBadge" text=""
+                   style="-fx-font-size:12px;-fx-font-weight:bold;-fx-padding:4 10;-fx-background-radius:20;"/>
+
+            <Label fx:id="lblToast" styleClass="toast-label" text="" visible="false"/>
+        </HBox>
+    </top>
+
+    <!-- FEED -->
+    <center>
+        <ScrollPane fx:id="feedScroll" fitToWidth="true"
+                    styleClass="feed-scroll" hbarPolicy="NEVER">
+            <content>
+                <VBox alignment="TOP_CENTER" spacing="14.0">
+                    <padding><Insets top="20" bottom="30"/></padding>
+
+                    <!-- CREATE POST CARD -->
+                    <VBox maxWidth="620.0" styleClass="create-post-card" spacing="10.0">
+                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                            <StackPane fx:id="spCreateAvatar" styleClass="avatar"
+                                       minWidth="40" minHeight="40"
+                                       prefWidth="40" prefHeight="40"
+                                       maxWidth="40" maxHeight="40">
+                                <Label fx:id="lblCreateAvatar" styleClass="avatar-label" text="?"/>
+                            </StackPane>
+                            <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                <TextField fx:id="tfTitre"
+                                           styleClass="create-post-field"
+                                           promptText="Titre de la publication..."/>
+                                <TextField fx:id="tfContenu"
+                                           styleClass="create-post-field"
+                                           promptText="Quoi de neuf ?"/>
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="8.0">
+                            <Label fx:id="lblImageSelected"
+                                   style="-fx-text-fill:#1877f2;-fx-font-size:12px;" text=""/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button styleClass="btn-media" text="Photo/Video"
+                                    mnemonicParsing="false" onAction="#handleChooseImage"/>
+                            <Button styleClass="btn-publish" text="Publier"
+                                    mnemonicParsing="false" onAction="#handlePublish"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- SEARCH BAR -->
+                    <HBox maxWidth="620.0" spacing="8.0" alignment="CENTER_LEFT"
+                          style="-fx-background-color:white;-fx-background-radius:10;-fx-border-color:#e4e6eb;-fx-border-radius:10;-fx-border-width:1;-fx-padding:10 14;-fx-effect:dropshadow(three-pass-box,rgba(0,0,0,0.06),6,0,0,2);">
+                        <TextField fx:id="tfSearch"
+                                   styleClass="create-post-field"
+                                   promptText="Rechercher un post..."
+                                   HBox.hgrow="ALWAYS"
+                                   onAction="#handleSearch"/>
+                        <Button fx:id="btnSearch" text="Rechercher"
+                                styleClass="btn-publish"
+                                mnemonicParsing="false" onAction="#handleSearch"/>
+                        <Button fx:id="btnClearSearch" text="X"
+                                mnemonicParsing="false" onAction="#handleClearSearch"
+                                style="-fx-background-color:transparent;-fx-text-fill:#65676b;-fx-font-weight:bold;-fx-font-size:13px;-fx-cursor:hand;-fx-border-color:transparent;-fx-padding:8 10;"/>
+                    </HBox>
+
+                    <!-- Search result count label -->
+                    <Label fx:id="lblSearchResult" text="" maxWidth="620.0"
+                           style="-fx-font-size:12px;-fx-text-fill:#65676b;-fx-padding:0 4;"/>
+
+                    <!-- POSTS INJECTED BY CONTROLLER -->
+                    <VBox fx:id="vbFeed" maxWidth="620.0" spacing="14.0"/>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

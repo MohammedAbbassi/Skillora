@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<<<<<<< HEAD
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
@@ -22,25 +23,59 @@
     </properties>
 
     <dependencies>
+=======
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>structura</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- JavaFX version -->
+    <javafx.version>21.0.2</javafx.version>
+  </properties>
+
+    <dependencies>
+
+        <!-- MySQL Connector -->
+>>>>>>> amine
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+=======
+
+        <!-- JavaFX Controls -->
+>>>>>>> amine
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
+<<<<<<< HEAD
         </dependency>
+=======
+            <classifier>win</classifier>
+        </dependency>
+
+        <!-- JavaFX FXML -->
+>>>>>>> amine
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
+<<<<<<< HEAD
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -152,4 +187,52 @@
             </plugin>
         </plugins>
     </build>
+=======
+            <classifier>win</classifier>
+        </dependency>
+
+        <!-- OkHttp — HTTP client for Perspective API calls -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
+        <!-- Gson — JSON serialization / deserialization -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+<<<<<<< Updated upstream
+
+=======
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+>>>>>>> Stashed changes
+    </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- JavaFX Maven Plugin -->
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+
+        <configuration>
+          <!-- IMPORTANT: your real main class -->
+          <mainClass>tests.MainFX</mainClass>
+        </configuration>
+
+      </plugin>
+
+    </plugins>
+  </build>
+
+>>>>>>> amine
 </project>

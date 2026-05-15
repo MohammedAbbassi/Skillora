@@ -15,6 +15,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import javafx.geometry.Insets;
+<<<<<<< HEAD
+=======
+import entities.Role;
+>>>>>>> amine
 import entities.User;
 import entities.UserPreferences;
 import services.ServiceUser;
@@ -227,7 +231,11 @@ public class LoginController implements Initializable {
                 utils.SessionManager.setCurrentUser(finalUser);
                 UserPreferences prefs = getUserPreferences(finalUser);
                 prefs.setUserName(formatUserName(finalUser));
+<<<<<<< HEAD
                 prefs.setUserRole(finalUser.getRole());
+=======
+                prefs.setUserRole(finalUser.getRole().name());
+>>>>>>> amine
                 prefs.setUserEmail(finalUser.getEmail());
                 prefs.setXpPoints(finalUser.getXpPoints());
                 prefs.setStreakDays(finalUser.getStreakDays());
@@ -420,10 +428,14 @@ public class LoginController implements Initializable {
                         user.setPays(fullCountry);
                     }
 
+<<<<<<< HEAD
 
                     user.setPays(countryComboBox.getValue());
 
                     user.setRole("ETUDIANT");
+=======
+                    user.setRole(Role.ETUDIANT);
+>>>>>>> amine
                     serviceUser.add(user);
                     user = serviceUser.login(email, pass);
                 }
@@ -432,7 +444,11 @@ public class LoginController implements Initializable {
                 utils.SessionManager.setCurrentUser(user);
                 UserPreferences prefs = getUserPreferences(user);
                 prefs.setUserName(formatUserName(user));
+<<<<<<< HEAD
                 prefs.setUserRole(user.getRole());
+=======
+                prefs.setUserRole(user.getRole().name());
+>>>>>>> amine
                 prefs.setUserEmail(user.getEmail());
                 prefs.setXpPoints(user.getXpPoints());
                 prefs.setStreakDays(user.getStreakDays());
@@ -463,7 +479,11 @@ public class LoginController implements Initializable {
             UserPreferences prefs = servicePrefs.getByUserId(user.getId());
             if (prefs != null) {
                 prefs.setUserName(formatUserName(user));
+<<<<<<< HEAD
                 prefs.setUserRole(user.getRole());
+=======
+                prefs.setUserRole(user.getRole().name());
+>>>>>>> amine
                 prefs.setUserEmail(user.getEmail());
                 return prefs;
             }
