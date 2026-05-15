@@ -39,4 +39,8 @@ public class MyDatabase {
     public Connection getCnx() {
         return connection;
     }
+
+    public Connection getConnection() {
+        return cnx;
+    }
 }
