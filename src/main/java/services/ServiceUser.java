@@ -31,10 +31,15 @@ public class ServiceUser implements IService<User> {
     private void autoMigrate() {
         try {
             if (cnx != null) {
-                addColumnIfMissing("est_en_ligne", "ALTER TABLE utilisateurs ADD COLUMN est_en_ligne tinyint(1) NOT NULL DEFAULT 0;");
+                // Check and add missing columns in order
+                addColumnIfMissing("pays", "ALTER TABLE utilisateurs ADD COLUMN pays varchar(100) DEFAULT 'Tunisia' AFTER role;");
+                addColumnIfMissing("est_en_ligne", "ALTER TABLE utilisateurs ADD COLUMN est_en_ligne tinyint(1) NOT NULL DEFAULT 0 AFTER est_actif;");
+                addColumnIfMissing("xp_points", "ALTER TABLE utilisateurs ADD COLUMN xp_points int(11) NOT NULL DEFAULT 0 AFTER est_en_ligne;");
                 addColumnIfMissing("ranked_points", "ALTER TABLE utilisateurs ADD COLUMN ranked_points int(11) NOT NULL DEFAULT 0 AFTER xp_points;");
+                addColumnIfMissing("streak_days", "ALTER TABLE utilisateurs ADD COLUMN streak_days int(11) NOT NULL DEFAULT 0 AFTER ranked_points;");
                 addColumnIfMissing("certificates_count", "ALTER TABLE utilisateurs ADD COLUMN certificates_count int(11) NOT NULL DEFAULT 0 AFTER streak_days;");
-                addColumnIfMissing("reset_token", "ALTER TABLE utilisateurs ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL AFTER certificates_count;");
+                addColumnIfMissing("quizzes_done", "ALTER TABLE utilisateurs ADD COLUMN quizzes_done int(11) NOT NULL DEFAULT 0 AFTER certificates_count;");
+                addColumnIfMissing("reset_token", "ALTER TABLE utilisateurs ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL AFTER quizzes_done;");
                 addColumnIfMissing("reset_token_expiry", "ALTER TABLE utilisateurs ADD COLUMN reset_token_expiry TIMESTAMP NULL DEFAULT NULL AFTER reset_token;");
             }
         } catch (SQLException e) {
@@ -44,12 +49,18 @@ public class ServiceUser implements IService<User> {
 
     private void addColumnIfMissing(String columnName, String sql) throws SQLException {
         DatabaseMetaData meta = cnx.getMetaData();
-        try (ResultSet rs = meta.getColumns(null, null, "utilisateurs", columnName)) {
+        // Use cnx.getCatalog() to get current database name for more reliable column checking
+        try (ResultSet rs = meta.getColumns(cnx.getCatalog(), null, "utilisateurs", columnName)) {
             if (!rs.next()) {
                 try (Statement st = cnx.createStatement()) {
                     st.executeUpdate(sql);
+                    System.out.println("Auto-migrated database: added " + columnName + " to utilisateurs table.");
+                } catch (SQLException e) {
+                    // If it still fails with "duplicate column", it means it actually exists
+                    if (!e.getMessage().toLowerCase().contains("duplicate column")) {
+                        throw e;
+                    }
                 }
-                System.out.println("Auto-migrated database: added " + columnName + " to utilisateurs table.");
             }
         }
     }

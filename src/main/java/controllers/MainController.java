@@ -49,6 +49,12 @@ import java.io.ByteArrayOutputStream;
 
 public class MainController implements Initializable {
 
+    private static MainController instance;
+
+    public static MainController getInstance() {
+        return instance;
+    }
+
     @FXML private StackPane rootPane;
     @FXML private BorderPane mainShell;
     @FXML private HBox   topbar;
@@ -243,6 +249,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        instance = this;
         allNavBtns = new java.util.ArrayList<>();
         addIfNotNull(allNavBtns, navHome, "navHome");
         addIfNotNull(allNavBtns, navCourses, "navCourses");
@@ -658,7 +665,25 @@ public class MainController implements Initializable {
 
 
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
-    @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
+    @FXML private void onNavCourses()  { 
+        loadViewIntoPage("/ui/cours-list.fxml", pageCourses);
+        navigateTo(pageCourses,  navCourses);  
+    }
+
+    public <T> T loadViewIntoPage(String fxmlPath, VBox page) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            page.getChildren().clear();
+            page.getChildren().add(view);
+            VBox.setVgrow(view, Priority.ALWAYS);
+            return loader.getController();
+        } catch (Exception e) {
+            System.err.println("Error loading view " + fxmlPath + ": " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @FXML private void onNavQuizzes()  {
         navigateTo(pageQuizzes,  navQuizzes);
@@ -696,7 +721,10 @@ public class MainController implements Initializable {
         populateProfileFields();
     }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
-    @FXML private void onNavAdminCourses() { navigateTo(pageCourses, navAdminCourses); }
+    @FXML private void onNavAdminCourses() { 
+        loadViewIntoPage("/ui/cours-list.fxml", pageCourses);
+        navigateTo(pageCourses, navAdminCourses); 
+    }
     @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop); ensureShopPageLoaded();    }
     @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents); ensureEventsPageLoaded();  }
     @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); ensureReservationsPageLoaded(); }

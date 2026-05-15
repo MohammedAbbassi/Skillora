@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CoursFormController">
+
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+    
+    <VBox maxWidth="800" styleClass="card" spacing="20">
+        <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+        
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label fx:id="formTitle" text="Ajouter un nouveau cours" styleClass="card-title"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Retour à la liste" styleClass="btn-secondary" onAction="#onCancel" />
+        </HBox>
+        
+        <Separator />
+
+        <GridPane hgap="25" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints minWidth="120" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            
+            <Label text="Titre du Cours" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="titreField" promptText="Ex: Java Avancé" styleClass="text-field-modern" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+            
+            <Label text="Catégories" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <MenuButton fx:id="categorieMenu" text="Sélectionner..." maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+            
+            <Label text="Niveau" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+            <ComboBox fx:id="niveauCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+            
+            <Label text="Durée estimée" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ComboBox fx:id="dureeCombo" maxWidth="Infinity" styleClass="combo-box-modern" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            
+            <Label text="Objectif de la semaine" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextArea fx:id="objectifArea" prefRowCount="2" promptText="Que devons-nous accomplir cette semaine ?" styleClass="text-area-modern" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
+            <Label text="URL de l'image" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextField fx:id="imageUrlField" promptText="Lien vers une image ou chemin local..." styleClass="text-field-modern" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+
+            
+            <Label text="Description" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <TextArea fx:id="descriptionArea" prefRowCount="4" styleClass="text-area-modern" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3" />
+        </GridPane>
+        
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <Button text="Annuler" styleClass="btn-secondary" onAction="#onCancel" />
+            <Button fx:id="saveButton" text="Enregistrer le cours" styleClass="btn-primary" onAction="#onSave" />
+        </HBox>
+    </VBox>
+</VBox>

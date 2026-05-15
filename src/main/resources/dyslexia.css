@@ -1,0 +1,82 @@
+.panel-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #475569;
+}
+
+.sub-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+.value-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0ea5e9;
+    -fx-background-color: #f0f9ff;
+    -fx-padding: 2 8;
+    -fx-background-radius: 8;
+}
+
+/* Modern Slider Styling */
+.modern-slider .thumb {
+    -fx-background-color: #0ea5e9;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+
+.modern-slider .track {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 5;
+    -fx-pref-height: 6;
+}
+
+/* Toggle Button Modern */
+.toggle-button-modern {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #64748b;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.toggle-button-modern:selected {
+    -fx-background-color: #0ea5e9;
+    -fx-text-fill: white;
+}
+
+/* Reader View (TextFlow container) */
+.reader-container {
+    -fx-padding: 30;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+}
+
+.reader-text {
+    -fx-smoothing-type: lcd;
+}
+
+/* Syllable Colors */
+.syllable-0 { -fx-fill: #3b82f6; }
+.syllable-1 { -fx-fill: #ef4444; }
+.syllable-2 { -fx-fill: #10b981; }
+.syllable-3 { -fx-fill: #f59e0b; }
+
+/* Focus Line Effect */
+.focus-line-active {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+}
+
+.focus-line-dimmed {
+    -fx-opacity: 0.3;
+}
