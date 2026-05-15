@@ -88,7 +88,11 @@ public class UserManagementController implements Initializable {
         HBox.setHgrow(userInfo, Priority.ALWAYS);
 
         VBox roleInfo = new VBox(5);
+<<<<<<< HEAD
         Label roleLabel = new Label(user.getRole());
+=======
+        Label roleLabel = new Label(user.getRole().name());
+>>>>>>> amine
         roleLabel.setStyle("-fx-padding: 2 8; -fx-background-radius: 4; -fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: bold;");
         Label statusLabel = new Label(user.isEstActif() ? "Active" : "Inactive");
         statusLabel.setStyle("-fx-text-fill: " + (user.isEstActif() ? "#16a34a" : "#dc2626") + "; -fx-font-size: 11px; -fx-font-weight: bold;");
@@ -117,7 +121,11 @@ public class UserManagementController implements Initializable {
     }
 
     private void handleEditRole(User user) {
+<<<<<<< HEAD
         ChoiceDialog<String> dialog = new ChoiceDialog<>(user.getRole(), "ETUDIANT", "INSTRUCTEUR", "ADMIN");
+=======
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(user.getRole().name(), "ETUDIANT", "INSTRUCTEUR", "ADMIN");
+>>>>>>> amine
         dialog.setTitle("Change Role");
         dialog.setHeaderText("Update role for " + user.getNomUtilisateur());
         dialog.setContentText("Select new role:");

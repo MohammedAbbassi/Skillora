@@ -49,12 +49,15 @@ import java.io.ByteArrayOutputStream;
 
 public class MainController implements Initializable {
 
+<<<<<<< HEAD
     private static MainController instance;
 
     public static MainController getInstance() {
         return instance;
     }
 
+=======
+>>>>>>> amine
     @FXML private StackPane rootPane;
     @FXML private BorderPane mainShell;
     @FXML private HBox   topbar;
@@ -86,10 +89,14 @@ public class MainController implements Initializable {
     @FXML private Button navQuizzes;
 
     @FXML private Button navLeaderboard;
+<<<<<<< HEAD
     @FXML private Button navTodo;
     @FXML private Button navCalendar;
     @FXML private Button navObjectives;
     @FXML private Button navProductivity;
+=======
+    @FXML private Button navProgress;
+>>>>>>> amine
     @FXML private Button navShop;
     @FXML private Button navEvent;
     @FXML private Button navReservation;
@@ -115,10 +122,14 @@ public class MainController implements Initializable {
     @FXML private Label  lblQuizzes;
 
     @FXML private Label  lblLeaderboard;
+<<<<<<< HEAD
     @FXML private Label  lblTodo;
     @FXML private Label  lblCalendar;
     @FXML private Label  lblObjectives;
     @FXML private Label  lblProductivity;
+=======
+    @FXML private Label  lblProgress;
+>>>>>>> amine
     @FXML private Label  lblShop;
     @FXML private Label  lblEvent;
     @FXML private Label  lblReservation;
@@ -151,14 +162,20 @@ public class MainController implements Initializable {
     @FXML private VBox   leaderboardContainer;
     @FXML private ComboBox<String> sortMetricCombo;
     @FXML private ComboBox<String> countryFilterCombo;
+<<<<<<< HEAD
     @FXML private VBox   pageTodo;
     @FXML private VBox   pageCalendar;
     @FXML private VBox   pageObjectives;
     @FXML private VBox   pageProductivity;
+=======
+    @FXML private VBox   pageProgress;
+
+>>>>>>> amine
     @FXML private VBox   pageShop;
     @FXML private VBox   pageEvent;
     @FXML private VBox   pageReservation;
     @FXML private VBox   pageCommunity;
+<<<<<<< HEAD
     private boolean todoPageLoaded;
     private boolean calendarPageLoaded;
     private boolean objectivesPageLoaded;
@@ -166,11 +183,26 @@ public class MainController implements Initializable {
     private boolean shopPageLoaded;
     private boolean eventsPageLoaded;
     private boolean reservationsPageLoaded;
+=======
+    private boolean shopPageLoaded;
+    private boolean eventsPageLoaded;
+    private boolean reservationsPageLoaded;
+    private boolean communityPageLoaded;
+>>>>>>> amine
 
     @FXML private VBox   pageProfile;
     @FXML private VBox   pageAdmin;
     @FXML private VBox   pageSettings;
 
+<<<<<<< HEAD
+=======
+    // Progress page charts & KPIs
+    @FXML private AreaChart<String, Number> xpAreaChart;
+    @FXML private BarChart<String, Number>  activityBarChart;
+    @FXML private Label kpiStreak;
+    @FXML private Label kpiXP;
+    @FXML private Label kpiCourses;
+>>>>>>> amine
     @FXML private Label       greetingLabel;
     @FXML private Label       streakCount;
     @FXML private ProgressBar prog1;
@@ -249,17 +281,24 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+<<<<<<< HEAD
         instance = this;
+=======
+>>>>>>> amine
         allNavBtns = new java.util.ArrayList<>();
         addIfNotNull(allNavBtns, navHome, "navHome");
         addIfNotNull(allNavBtns, navCourses, "navCourses");
         addIfNotNull(allNavBtns, navQuizzes, "navQuizzes");
 
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
+<<<<<<< HEAD
         addIfNotNull(allNavBtns, navTodo, "navTodo");
         addIfNotNull(allNavBtns, navCalendar, "navCalendar");
         addIfNotNull(allNavBtns, navObjectives, "navObjectives");
         addIfNotNull(allNavBtns, navProductivity, "navProductivity");
+=======
+        addIfNotNull(allNavBtns, navProgress, "navProgress");
+>>>>>>> amine
         addIfNotNull(allNavBtns, navShop, "navShop");
         addIfNotNull(allNavBtns, navEvent, "navEvent");
         addIfNotNull(allNavBtns, navReservation, "navReservation");
@@ -276,6 +315,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavBtns, navQuizAnswers, "navQuizAnswers");
         addIfNotNull(allNavBtns, navQuizHistory, "navQuizHistory");
         addIfNotNull(allNavBtns, navLeaderboard, "navLeaderboard");
+<<<<<<< HEAD
+=======
+        addIfNotNull(allNavBtns, navProgress, "navProgress");
+>>>>>>> amine
         addIfNotNull(allNavBtns, navAdmin, "navAdmin");
 
         addIfNotNull(allNavBtns, navSettings, "navSettings");
@@ -287,10 +330,14 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizzes, "lblQuizzes");
 
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
+<<<<<<< HEAD
         addIfNotNull(allNavLabels, lblTodo, "lblTodo");
         addIfNotNull(allNavLabels, lblCalendar, "lblCalendar");
         addIfNotNull(allNavLabels, lblObjectives, "lblObjectives");
         addIfNotNull(allNavLabels, lblProductivity, "lblProductivity");
+=======
+        addIfNotNull(allNavLabels, lblProgress, "lblProgress");
+>>>>>>> amine
         addIfNotNull(allNavLabels, lblShop, "lblShop");
         addIfNotNull(allNavLabels, lblEvent, "lblEvent");
         addIfNotNull(allNavLabels, lblReservation, "lblReservation");
@@ -307,6 +354,10 @@ public class MainController implements Initializable {
         addIfNotNull(allNavLabels, lblQuizAnswers, "lblQuizAnswers");
         addIfNotNull(allNavLabels, lblQuizHistory, "lblQuizHistory");
         addIfNotNull(allNavLabels, lblLeaderboard, "lblLeaderboard");
+<<<<<<< HEAD
+=======
+        addIfNotNull(allNavLabels, lblProgress, "lblProgress");
+>>>>>>> amine
         addIfNotNull(allNavLabels, lblAdmin, "lblAdmin");
 
         addIfNotNull(allNavLabels, lblSettings, "lblSettings");
@@ -316,10 +367,14 @@ public class MainController implements Initializable {
         addIfNotNull(allPages, pageCourses, "pageCourses");
         addIfNotNull(allPages, pageQuizzes, "pageQuizzes");
         addIfNotNull(allPages, pageLeaderboard, "pageLeaderboard");
+<<<<<<< HEAD
         addIfNotNull(allPages, pageTodo, "pageTodo");
         addIfNotNull(allPages, pageCalendar, "pageCalendar");
         addIfNotNull(allPages, pageObjectives, "pageObjectives");
         addIfNotNull(allPages, pageProductivity, "pageProductivity");
+=======
+        addIfNotNull(allPages, pageProgress, "pageProgress");
+>>>>>>> amine
 
         addIfNotNull(allPages, pageShop, "pageShop");
         addIfNotNull(allPages, pageEvent, "pageEvent");
@@ -339,6 +394,16 @@ public class MainController implements Initializable {
 
         loadProfileCountries();
 
+<<<<<<< HEAD
+=======
+
+        try {
+            initProgressCharts();
+        } catch (Exception e) {
+            System.err.println("[Charts] Init error: " + e.getMessage());
+        }
+
+>>>>>>> amine
         topbar.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.setOnMouseClicked(e -> {
@@ -353,6 +418,35 @@ public class MainController implements Initializable {
         });
     }
 
+<<<<<<< HEAD
+=======
+    private void initProgressCharts() {
+        // XP Area Chart (weekly data)
+        XYChart.Series<String, Number> xpSeries = new XYChart.Series<>();
+        xpSeries.setName("XP");
+        xpSeries.getData().add(new XYChart.Data<>("Week 1", 120));
+        xpSeries.getData().add(new XYChart.Data<>("Week 2", 310));
+        xpSeries.getData().add(new XYChart.Data<>("Week 3", 580));
+        xpSeries.getData().add(new XYChart.Data<>("Week 4", 950));
+        if (xpAreaChart != null) {
+            xpAreaChart.getData().add(xpSeries);
+            xpAreaChart.setCreateSymbols(true);
+        }
+
+        // Activity Bar Chart (daily lessons)
+        XYChart.Series<String, Number> actSeries = new XYChart.Series<>();
+        actSeries.setName("Lessons");
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        int[]    vals = {  3,     5,     2,     7,     4,     6,     1   };
+        for (int i = 0; i < days.length; i++) {
+            actSeries.getData().add(new XYChart.Data<>(days[i], vals[i]));
+        }
+        if (activityBarChart != null) {
+            activityBarChart.getData().add(actSeries);
+        }
+    }
+
+>>>>>>> amine
     public void applyPreferences(UserPreferences p) {
         if (p == null) return;
         this.prefs = p;
@@ -665,6 +759,7 @@ public class MainController implements Initializable {
 
 
     @FXML private void onNavHome()     { navigateTo(pageHome,     navHome);     }
+<<<<<<< HEAD
     @FXML private void onNavCourses()  { 
         loadViewIntoPage("/ui/cours-list.fxml", pageCourses);
         navigateTo(pageCourses,  navCourses);  
@@ -684,6 +779,9 @@ public class MainController implements Initializable {
             return null;
         }
     }
+=======
+    @FXML private void onNavCourses()  { navigateTo(pageCourses,  navCourses);  }
+>>>>>>> amine
 
     @FXML private void onNavQuizzes()  {
         navigateTo(pageQuizzes,  navQuizzes);
@@ -702,10 +800,14 @@ public class MainController implements Initializable {
         navigateTo(pageLeaderboard,  navLeaderboard);
         loadLeaderboard();
     }
+<<<<<<< HEAD
     @FXML private void onNavTodo()        { navigateTo(pageTodo, navTodo); ensureTodoPageLoaded(); }
     @FXML private void onNavCalendar()    { navigateTo(pageCalendar, navCalendar); ensureCalendarPageLoaded(); }
     @FXML private void onNavObjectives()  { navigateTo(pageObjectives, navObjectives); ensureObjectivesPageLoaded(); }
     @FXML private void onNavProductivity(){ navigateTo(pageProductivity, navProductivity); ensureProductivityPageLoaded(); }
+=======
+    @FXML private void onNavProgress() { navigateTo(pageProgress, navProgress); }
+>>>>>>> amine
     @FXML private void onNavShop()      { navigateTo(pageShop,      navShop); ensureShopPageLoaded();      }
     @FXML private void onNavEvent()     { navigateTo(pageEvent,     navEvent); ensureEventsPageLoaded();     }
     @FXML private void onNavReservation() {
@@ -713,7 +815,20 @@ public class MainController implements Initializable {
         navigateTo(pageReservation, navReservation);
         ensureReservationsPageLoaded();
     }
+<<<<<<< HEAD
     @FXML private void onNavCommunity() { navigateTo(pageCommunity, navCommunity); }
+=======
+    @FXML private void onNavCommunity() { 
+        navigateTo(pageCommunity, navCommunity); 
+        ensureCommunityPageLoaded(); 
+    }
+    
+    private void ensureCommunityPageLoaded() {
+        if (!communityPageLoaded) {
+            communityPageLoaded = loadEmbeddedPage(pageCommunity, "/MainFeed.fxml", "community");
+        }
+    }
+>>>>>>> amine
     @FXML private void onGoProfile()   { 
         navigateTo(pageProfile,  navProfile); 
         closeDropdown(); 
@@ -721,15 +836,20 @@ public class MainController implements Initializable {
         populateProfileFields();
     }
     @FXML private void onNavAdmin()    { navigateTo(pageAdmin,    navAdmin);    }
+<<<<<<< HEAD
     @FXML private void onNavAdminCourses() { 
         loadViewIntoPage("/ui/cours-list.fxml", pageCourses);
         navigateTo(pageCourses, navAdminCourses); 
     }
+=======
+    @FXML private void onNavAdminCourses() { navigateTo(pageCourses, navAdminCourses); }
+>>>>>>> amine
     @FXML private void onNavAdminShop()    { navigateTo(pageShop,    navAdminShop); ensureShopPageLoaded();    }
     @FXML private void onNavAdminEvents()  { navigateTo(pageEvent,   navAdminEvents); ensureEventsPageLoaded();  }
     @FXML private void onNavAdminReservations() { navigateTo(pageReservation, navAdminReservations); ensureReservationsPageLoaded(); }
     @FXML private void onNavSettings() { navigateTo(pageSettings, navSettings); closeDropdown(); }
 
+<<<<<<< HEAD
     private void ensureTodoPageLoaded() {
         if (!todoPageLoaded) {
             todoPageLoaded = loadEmbeddedPage(pageTodo, "/fxml/todo/TodoView.fxml", "todo");
@@ -754,6 +874,8 @@ public class MainController implements Initializable {
         }
     }
 
+=======
+>>>>>>> amine
     private void ensureShopPageLoaded() {
         syncShopSession();
         if (!shopPageLoaded) {
@@ -767,7 +889,11 @@ public class MainController implements Initializable {
         String lastName = currentUser != null ? currentUser.getNom() : null;
         String username = currentUser != null ? currentUser.getNomUtilisateur() : null;
         String email = currentUser != null ? currentUser.getEmail() : null;
+<<<<<<< HEAD
         String role = currentUser != null ? currentUser.getRole() : null;
+=======
+        String role = currentUser != null ? currentUser.getRole().name() : null;
+>>>>>>> amine
 
         if ((firstName == null || firstName.isBlank()) && prefs != null && prefs.getUserName() != null) {
             firstName = prefs.getUserName();
@@ -830,7 +956,11 @@ public class MainController implements Initializable {
     }
 
     private boolean usesStudentEventFlow() {
+<<<<<<< HEAD
         String role = currentUser != null ? currentUser.getRole() : null;
+=======
+        String role = currentUser != null ? currentUser.getRole().name() : null;
+>>>>>>> amine
         if ((role == null || role.isBlank()) && prefs != null) {
             role = prefs.getUserRole();
         }
@@ -1276,9 +1406,15 @@ public class MainController implements Initializable {
         emailLbl.getStyleClass().add("row-email");
         emailLbl.setPrefWidth(220);
 
+<<<<<<< HEAD
         Label roleLbl = new Label(user.getRole());
         roleLbl.getStyleClass().addAll("row-badge",
             "ADMIN".equalsIgnoreCase(user.getRole()) ? "badge-admin" : "badge-learner");
+=======
+        Label roleLbl = new Label(user.getRole().name());
+        roleLbl.getStyleClass().addAll("row-badge",
+            "ADMIN".equalsIgnoreCase(user.getRole().name()) ? "badge-admin" : "badge-learner");
+>>>>>>> amine
         roleLbl.setPrefWidth(110);
 
         Label rankLbl = new Label("Bronze");
@@ -1343,7 +1479,11 @@ public class MainController implements Initializable {
                 user.getEmail().toLowerCase().contains(searchLower);
 
             boolean matchesRole = roleFilterVal.equals("All Roles") ||
+<<<<<<< HEAD
                 user.getRole().equalsIgnoreCase(roleFilterVal);
+=======
+                user.getRole().name().equalsIgnoreCase(roleFilterVal);
+>>>>>>> amine
 
             boolean matchesStatus = statusFilterVal.equals("All Status") ||
                 (statusFilterVal.equals("Active") && user.isEstActif()) ||
@@ -1384,7 +1524,11 @@ public class MainController implements Initializable {
         ComboBox<String> roleCombo = new ComboBox<>();
         roleCombo.getStyleClass().add("dialog-combo-box");
         roleCombo.getItems().addAll("ETUDIANT", "ADMIN");
+<<<<<<< HEAD
         roleCombo.setValue(user.getRole());
+=======
+        roleCombo.setValue(user.getRole().name());
+>>>>>>> amine
         roleCombo.setMaxWidth(Double.MAX_VALUE);
 
         CheckBox activeCheck = new CheckBox("Active Account");

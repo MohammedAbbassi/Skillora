@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Generation Time: May 13, 2026 at 09:11 PM
+=======
+-- Generation Time: Apr 24, 2026 at 10:49 AM
+>>>>>>> amine
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,7 +115,11 @@ CREATE TABLE `evenement` (
   `nom` varchar(50) NOT NULL,
   `date_evenement` date NOT NULL,
   `lieu` varchar(50) NOT NULL,
+<<<<<<< HEAD
   `image` longtext DEFAULT NULL,
+=======
+  `image` varchar(255) DEFAULT NULL,
+>>>>>>> amine
   `duree_minutes` int(11) NOT NULL,
   `id_utilisateur` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -131,6 +139,7 @@ CREATE TABLE `jaime` (
 -- --------------------------------------------------------
 
 --
+<<<<<<< HEAD
 -- Table structure for table `messages`
 --
 
@@ -146,6 +155,8 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
+=======
+>>>>>>> amine
 -- Table structure for table `post`
 --
 
@@ -153,7 +164,11 @@ CREATE TABLE `post` (
   `id_post` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `contenu` text DEFAULT NULL,
+<<<<<<< HEAD
   `image` longtext DEFAULT NULL,
+=======
+  `image` varchar(255) DEFAULT NULL,
+>>>>>>> amine
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `id_utilisateur` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -189,8 +204,13 @@ CREATE TABLE `produit` (
   `nom` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `prix` decimal(10,2) NOT NULL,
+<<<<<<< HEAD
   `categorie` enum('LIVRE','SERIE','FORMATION','KIT') NOT NULL,
   `langue` varchar(40) DEFAULT NULL,
+=======
+  `type` enum('FORMATION','COURS','SERIE') NOT NULL,
+  `duree` int(11) DEFAULT NULL COMMENT 'en heures',
+>>>>>>> amine
   `niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE') DEFAULT NULL,
   `id_cours` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -219,6 +239,7 @@ CREATE TABLE `progression_cours` (
 --
 
 CREATE TABLE `question` (
+<<<<<<< HEAD
   `id` int(11) NOT NULL,
   `libelle` varchar(255) NOT NULL,
   `niveau` varchar(100) DEFAULT 'Debutant',
@@ -256,6 +277,16 @@ CREATE TABLE `relations` (
   `utilisateur_cible_id` bigint(20) NOT NULL,
   `type` enum('FRIEND','BLOCKED') NOT NULL DEFAULT 'FRIEND',
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp()
+=======
+  `id_question` int(11) NOT NULL,
+  `libelle` varchar(255) NOT NULL,
+  `niveau` enum('DEBUTANT','INTERMEDIAIRE','AVANCE') NOT NULL DEFAULT 'DEBUTANT',
+  `score` int(11) NOT NULL DEFAULT 0,
+  `categorie` varchar(100) DEFAULT NULL,
+  `est_active` tinyint(1) NOT NULL DEFAULT 1,
+  `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_utilisateur` bigint(20) NOT NULL
+>>>>>>> amine
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -265,6 +296,7 @@ CREATE TABLE `relations` (
 --
 
 CREATE TABLE `reponse` (
+<<<<<<< HEAD
   `id` int(11) NOT NULL,
   `texte` text NOT NULL,
   `correcte` tinyint(1) DEFAULT 0,
@@ -272,6 +304,18 @@ CREATE TABLE `reponse` (
   `active` tinyint(1) DEFAULT 1,
   `question_id` int(11) NOT NULL,
   `auteur` varchar(255) DEFAULT 'Systeme'
+=======
+  `id_reponse` int(11) NOT NULL,
+  `contenu` text NOT NULL,
+  `est_correcte` tinyint(1) NOT NULL DEFAULT 0,
+  `commentaire` text DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
+  `type_reponse` enum('CHOIX_UNIQUE','CHOIX_MULTIPLE','VRAI_FAUX') NOT NULL DEFAULT 'CHOIX_UNIQUE',
+  `est_active` tinyint(1) NOT NULL DEFAULT 1,
+  `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `id_question` int(11) NOT NULL
+>>>>>>> amine
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -285,9 +329,13 @@ CREATE TABLE `reservation` (
   `nb_places` int(11) NOT NULL DEFAULT 1,
   `date_reservation` date NOT NULL,
   `id_evenement` int(11) NOT NULL,
+<<<<<<< HEAD
   `id_utilisateur` bigint(20) NOT NULL,
   `statut` varchar(20) NOT NULL DEFAULT 'EN_ATTENTE',
   `chaises` varchar(255) DEFAULT NULL
+=======
+  `id_utilisateur` bigint(20) NOT NULL
+>>>>>>> amine
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -323,6 +371,7 @@ CREATE TABLE `utilisateurs` (
   `mot_de_passe` varchar(255) NOT NULL,
   `prenom` varchar(50) DEFAULT NULL,
   `nom` varchar(50) DEFAULT NULL,
+<<<<<<< HEAD
   `photo_profil` longtext DEFAULT NULL,
   `role` enum('ETUDIANT','INSTRUCTEUR','ENSEIGNANT','ADMIN') NOT NULL DEFAULT 'ETUDIANT',
   `pays` varchar(100) DEFAULT 'Tunisia',
@@ -335,10 +384,16 @@ CREATE TABLE `utilisateurs` (
   `quizzes_done` int(11) NOT NULL DEFAULT 0,
   `reset_token` varchar(255) DEFAULT NULL,
   `reset_token_expiry` timestamp NULL DEFAULT NULL,
+=======
+  `photo_profil` varchar(255) DEFAULT NULL,
+  `role` enum('ETUDIANT','INSTRUCTEUR','ADMIN') NOT NULL DEFAULT 'ETUDIANT',
+  `est_actif` tinyint(1) NOT NULL DEFAULT 1,
+>>>>>>> amine
   `date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
   `date_modification` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 --
 -- Dumping data for table `utilisateurs`
 --
@@ -366,6 +421,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom_utilisateur`, `email`, `mot_d
 (20, 'linus_legend', 'testuser20@skillora.com', '$2a$10$vI8A7.7.7.7.7.7.7.7.7.OuB8m9m9m9m9m9m9m9m9m9m9m9m9m9m', 'Linus', 'Legend', NULL, 'ADMIN', 'Finland', 1, 0, 25000, 25000, 365, 50, 100, '2026-05-13 16:55:00', '2026-05-13 16:55:00'),
 (32, 'admin', 'admin@skillora.tn', '$2a$10$gtvEkS37MWRhO7pMOoVsZ.m3orsFO6cZ3q3DMUyWaUazXFHa6m3/G', 'admin', '', NULL, 'ETUDIANT', 'Tunisia', 1, 0, 0, 0, 0, 0, 0, '2026-05-13 17:10:43', '2026-05-13 19:03:16');
 
+=======
+>>>>>>> amine
 -- --------------------------------------------------------
 
 --
@@ -412,8 +469,13 @@ CREATE TABLE `vue_profil_utilisateur` (
 ,`email` varchar(100)
 ,`prenom` varchar(50)
 ,`nom` varchar(50)
+<<<<<<< HEAD
 ,`photo_profil` longtext
 ,`role` enum('ETUDIANT','INSTRUCTEUR','ENSEIGNANT','ADMIN')
+=======
+,`photo_profil` varchar(255)
+,`role` enum('ETUDIANT','INSTRUCTEUR','ADMIN')
+>>>>>>> amine
 ,`est_actif` tinyint(1)
 ,`date_creation` timestamp
 ,`type_police` enum('OPENDYSLEXIC','ARIAL','VERDANA','LEXIE_READABLE')
@@ -473,13 +535,24 @@ ALTER TABLE `chapitre`
 -- Indexes for table `commande`
 --
 ALTER TABLE `commande`
+<<<<<<< HEAD
   ADD PRIMARY KEY (`id_commande`);
+=======
+  ADD PRIMARY KEY (`id_commande`),
+  ADD KEY `idx_commande_utilisateur` (`id_utilisateur`),
+  ADD KEY `idx_commande_statut` (`statut`);
+>>>>>>> amine
 
 --
 -- Indexes for table `commande_produit`
 --
 ALTER TABLE `commande_produit`
+<<<<<<< HEAD
   ADD PRIMARY KEY (`id_commande`,`id_produit`);
+=======
+  ADD PRIMARY KEY (`id_commande`,`id_produit`),
+  ADD KEY `idx_commande_produit_produit` (`id_produit`);
+>>>>>>> amine
 
 --
 -- Indexes for table `commentaire`
@@ -502,7 +575,10 @@ ALTER TABLE `cours`
 --
 ALTER TABLE `evenement`
   ADD PRIMARY KEY (`id_evenement`),
+<<<<<<< HEAD
   ADD UNIQUE KEY `uq_evenement_identite` (`nom`,`date_evenement`,`lieu`),
+=======
+>>>>>>> amine
   ADD KEY `idx_evenement_utilisateur` (`id_utilisateur`),
   ADD KEY `idx_evenement_date` (`date_evenement`);
 
@@ -514,6 +590,7 @@ ALTER TABLE `jaime`
   ADD KEY `idx_jaime_utilisateur` (`id_utilisateur`);
 
 --
+<<<<<<< HEAD
 -- Indexes for table `messages`
 --
 ALTER TABLE `messages`
@@ -522,6 +599,8 @@ ALTER TABLE `messages`
   ADD KEY `destinataire_id` (`destinataire_id`);
 
 --
+=======
+>>>>>>> amine
 -- Indexes for table `post`
 --
 ALTER TABLE `post`
@@ -540,7 +619,13 @@ ALTER TABLE `preferences_utilisateur`
 -- Indexes for table `produit`
 --
 ALTER TABLE `produit`
+<<<<<<< HEAD
   ADD PRIMARY KEY (`id_produit`);
+=======
+  ADD PRIMARY KEY (`id_produit`),
+  ADD KEY `idx_produit_cours` (`id_cours`),
+  ADD KEY `idx_produit_type` (`type`);
+>>>>>>> amine
 
 --
 -- Indexes for table `progression_cours`
@@ -555,6 +640,7 @@ ALTER TABLE `progression_cours`
 -- Indexes for table `question`
 --
 ALTER TABLE `question`
+<<<<<<< HEAD
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_question_quiz` (`quiz_id`),
   ADD KEY `idx_question_quiz` (`quiz_id`);
@@ -573,13 +659,23 @@ ALTER TABLE `relations`
   ADD UNIQUE KEY `uq_relation` (`utilisateur_id`,`utilisateur_cible_id`),
   ADD KEY `idx_relation_utilisateur` (`utilisateur_id`),
   ADD KEY `idx_relation_cible` (`utilisateur_cible_id`);
+=======
+  ADD PRIMARY KEY (`id_question`),
+  ADD KEY `idx_question_utilisateur` (`id_utilisateur`),
+  ADD KEY `idx_question_categorie` (`categorie`);
+>>>>>>> amine
 
 --
 -- Indexes for table `reponse`
 --
 ALTER TABLE `reponse`
+<<<<<<< HEAD
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_reponse_question` (`question_id`);
+=======
+  ADD PRIMARY KEY (`id_reponse`),
+  ADD KEY `idx_reponse_question` (`id_question`);
+>>>>>>> amine
 
 --
 -- Indexes for table `reservation`
@@ -590,6 +686,16 @@ ALTER TABLE `reservation`
   ADD KEY `idx_reservation_utilisateur` (`id_utilisateur`);
 
 --
+<<<<<<< HEAD
+=======
+-- Indexes for table `statistiques_utilisateur`
+--
+ALTER TABLE `statistiques_utilisateur`
+  ADD PRIMARY KEY (`id_statistique`),
+  ADD UNIQUE KEY `uq_stat_utilisateur` (`id_utilisateur`);
+
+--
+>>>>>>> amine
 -- Indexes for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
@@ -602,22 +708,59 @@ ALTER TABLE `utilisateurs`
 --
 
 --
+<<<<<<< HEAD
+=======
+-- AUTO_INCREMENT for table `chapitre`
+--
+ALTER TABLE `chapitre`
+  MODIFY `id_chapitre` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+>>>>>>> amine
 -- AUTO_INCREMENT for table `commande`
 --
 ALTER TABLE `commande`
   MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
+=======
+-- AUTO_INCREMENT for table `commentaire`
+--
+ALTER TABLE `commentaire`
+  MODIFY `id_commentaire` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `cours`
+--
+ALTER TABLE `cours`
+  MODIFY `id_cours` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+>>>>>>> amine
 -- AUTO_INCREMENT for table `evenement`
 --
 ALTER TABLE `evenement`
   MODIFY `id_evenement` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+=======
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `preferences_utilisateur`
+--
+ALTER TABLE `preferences_utilisateur`
+  MODIFY `id_preference` bigint(20) NOT NULL AUTO_INCREMENT;
+>>>>>>> amine
 
 --
 -- AUTO_INCREMENT for table `produit`
@@ -626,6 +769,7 @@ ALTER TABLE `produit`
   MODIFY `id_produit` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
@@ -642,12 +786,28 @@ ALTER TABLE `quiz`
 --
 ALTER TABLE `relations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+=======
+-- AUTO_INCREMENT for table `progression_cours`
+--
+ALTER TABLE `progression_cours`
+  MODIFY `id_progression` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `question`
+--
+ALTER TABLE `question`
+  MODIFY `id_question` int(11) NOT NULL AUTO_INCREMENT;
+>>>>>>> amine
 
 --
 -- AUTO_INCREMENT for table `reponse`
 --
 ALTER TABLE `reponse`
+<<<<<<< HEAD
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+=======
+  MODIFY `id_reponse` int(11) NOT NULL AUTO_INCREMENT;
+>>>>>>> amine
 
 --
 -- AUTO_INCREMENT for table `reservation`
@@ -656,26 +816,112 @@ ALTER TABLE `reservation`
   MODIFY `id_reservation` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+<<<<<<< HEAD
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
   MODIFY `id_utilisateur` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+=======
+-- AUTO_INCREMENT for table `statistiques_utilisateur`
+--
+ALTER TABLE `statistiques_utilisateur`
+  MODIFY `id_statistique` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  MODIFY `id_utilisateur` bigint(20) NOT NULL AUTO_INCREMENT;
+>>>>>>> amine
 
 --
 -- Constraints for dumped tables
 --
 
 --
+<<<<<<< HEAD
 -- Constraints for table `messages`
 --
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`expediteur_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE,
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`destinataire_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE;
+=======
+-- Constraints for table `chapitre`
+--
+ALTER TABLE `chapitre`
+  ADD CONSTRAINT `fk_chapitre_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `commande`
+--
+ALTER TABLE `commande`
+  ADD CONSTRAINT `fk_commande_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `commande_produit`
+--
+ALTER TABLE `commande_produit`
+  ADD CONSTRAINT `fk_cp_commande` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_cp_produit` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `commentaire`
+--
+ALTER TABLE `commentaire`
+  ADD CONSTRAINT `fk_commentaire_post` FOREIGN KEY (`id_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_commentaire_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `cours`
+--
+ALTER TABLE `cours`
+  ADD CONSTRAINT `fk_cours_instructeur` FOREIGN KEY (`id_instructeur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `evenement`
+--
+ALTER TABLE `evenement`
+  ADD CONSTRAINT `fk_evenement_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `jaime`
+--
+ALTER TABLE `jaime`
+  ADD CONSTRAINT `fk_jaime_post` FOREIGN KEY (`id_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_jaime_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `post`
+--
+ALTER TABLE `post`
+  ADD CONSTRAINT `fk_post_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `preferences_utilisateur`
+--
+ALTER TABLE `preferences_utilisateur`
+  ADD CONSTRAINT `fk_pref_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `produit`
+--
+ALTER TABLE `produit`
+  ADD CONSTRAINT `fk_produit_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `progression_cours`
+--
+ALTER TABLE `progression_cours`
+  ADD CONSTRAINT `fk_progression_chapitre` FOREIGN KEY (`id_chapitre`) REFERENCES `chapitre` (`id_chapitre`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_progression_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_progression_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> amine
 
 --
 -- Constraints for table `question`
 --
 ALTER TABLE `question`
+<<<<<<< HEAD
   ADD CONSTRAINT `fk_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -684,12 +930,19 @@ ALTER TABLE `question`
 ALTER TABLE `relations`
   ADD CONSTRAINT `fk_relation_cible` FOREIGN KEY (`utilisateur_cible_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_relation_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE;
+=======
+  ADD CONSTRAINT `fk_question_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> amine
 
 --
 -- Constraints for table `reponse`
 --
 ALTER TABLE `reponse`
+<<<<<<< HEAD
   ADD CONSTRAINT `fk_reponse_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+=======
+  ADD CONSTRAINT `fk_reponse_question` FOREIGN KEY (`id_question`) REFERENCES `question` (`id_question`) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> amine
 
 --
 -- Constraints for table `reservation`
@@ -697,6 +950,15 @@ ALTER TABLE `reponse`
 ALTER TABLE `reservation`
   ADD CONSTRAINT `fk_reservation_evenement` FOREIGN KEY (`id_evenement`) REFERENCES `evenement` (`id_evenement`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_reservation_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+<<<<<<< HEAD
+=======
+
+--
+-- Constraints for table `statistiques_utilisateur`
+--
+ALTER TABLE `statistiques_utilisateur`
+  ADD CONSTRAINT `fk_stat_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> amine
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -26,6 +26,10 @@ public final class Session {
     }
 
     public static boolean isAdmin() {
+<<<<<<< HEAD
         return currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole());
+=======
+        return currentUser != null && currentUser.getRole() == entities.Role.ADMIN;
+>>>>>>> amine
     }
 }
