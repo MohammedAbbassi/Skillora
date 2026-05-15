@@ -49,17 +49,12 @@ public class ProfileController {
             Platform.runLater(() -> {
                 countryComboBox.getItems().setAll(countries);
                 if (user != null && user.getPays() != null) {
-
-                    // Try to find the matching entry with flag
                     String userCountry = user.getPays();
                     String match = countries.stream()
                             .filter(c -> c.startsWith(userCountry))
                             .findFirst()
                             .orElse(userCountry);
                     countryComboBox.setValue(match);
-
-                    countryComboBox.setValue(user.getPays());
-
                 }
             });
         });
@@ -72,27 +67,24 @@ public class ProfileController {
             return;
         }
 
-        user.setPrenom(firstNameField.getText().trim());
-        user.setNom(lastNameField.getText().trim());
-        user.setNomUtilisateur(usernameField.getText().trim());
-
-        
-        // Save country without the flag emoji
-        String fullCountry = countryComboBox.getValue();
-        if (fullCountry != null && fullCountry.contains(" ")) {
-            user.setPays(fullCountry.substring(0, fullCountry.lastIndexOf(" ")).trim());
-        } else {
-            user.setPays(fullCountry);
-        }
-
-
-
         try {
+            user.setPrenom(firstNameField.getText().trim());
+            user.setNom(lastNameField.getText().trim());
+            user.setNomUtilisateur(usernameField.getText().trim());
+
+            String fullCountry = countryComboBox.getValue();
+            if (fullCountry != null && fullCountry.contains(" ")) {
+                user.setPays(fullCountry.substring(0, fullCountry.lastIndexOf(" ")).trim());
+            } else {
+                user.setPays(fullCountry);
+            }
+
             serviceUser.update(user);
             Session.setUser(user);
             populateForm();
             showAlert(Alert.AlertType.INFORMATION, "Profile", "Profile updated successfully.");
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Profile", "Could not update profile: " + e.getMessage());
         }
     }
@@ -118,7 +110,7 @@ public class ProfileController {
             countryComboBox.setValue(user.getPays());
         }
         fullNameLabel.setText(formatName(user));
-        roleBadge.setText(nullToEmpty(user.getRole().name()));
+        roleBadge.setText(user.getRole() != null ? user.getRole().name() : "ETUDIANT");
         emailDisplayLabel.setText(nullToEmpty(user.getEmail()));
         if (achievementsFlow != null) {
             BadgeUtils.buildAchievements(user, achievementsFlow);
