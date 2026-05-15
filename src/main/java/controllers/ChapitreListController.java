@@ -53,7 +53,7 @@ public class ChapitreListController {
     private boolean isAdmin() {
         User user = SessionManager.getCurrentUser();
         if (user == null || user.getRole() == null) return false;
-        Role userRole = Role.fromString(user.getRole());
+        Role userRole = user.getRole();
         return userRole == Role.ADMIN || userRole == Role.INSTRUCTEUR;
     }
 

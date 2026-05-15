@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<<<<<<< HEAD
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
@@ -23,91 +22,80 @@
     </properties>
 
     <dependencies>
-=======
-
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>org.example</groupId>
-  <artifactId>structura</artifactId>
-  <version>1.0-SNAPSHOT</version>
-
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <!-- JavaFX version -->
-    <javafx.version>21.0.2</javafx.version>
-  </properties>
-
-    <dependencies>
-
         <!-- MySQL Connector -->
->>>>>>> amine
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
-<<<<<<< HEAD
+
+        <!-- jBCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
-=======
 
         <!-- JavaFX Controls -->
->>>>>>> amine
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
-<<<<<<< HEAD
-        </dependency>
-=======
             <classifier>win</classifier>
         </dependency>
 
         <!-- JavaFX FXML -->
->>>>>>> amine
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
-<<<<<<< HEAD
+            <classifier>win</classifier>
         </dependency>
+
+        <!-- JavaFX Media -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
+        <!-- JavaFX Web -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
+        <!-- Apache Commons Text -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.10.0</version>
         </dependency>
+
+        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Resend (Email) -->
         <dependency>
             <groupId>com.resend</groupId>
             <artifactId>resend-java</artifactId>
             <version>4.6.0</version>
         </dependency>
+
+        <!-- Dotenv -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
+
+        <!-- ScribeJava OAuth -->
         <dependency>
             <groupId>com.github.scribejava</groupId>
             <artifactId>scribejava-apis</artifactId>
@@ -118,21 +106,29 @@
             <artifactId>scribejava-core</artifactId>
             <version>8.3.3</version>
         </dependency>
+
+        <!-- JSON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
         </dependency>
+
+        <!-- Gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
         </dependency>
+
+        <!-- OpenPDF -->
         <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
             <version>1.3.43</version>
         </dependency>
+
+        <!-- iText7 -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
@@ -154,15 +150,26 @@
             <artifactId>io</artifactId>
             <version>7.2.5</version>
         </dependency>
+
+        <!-- Stripe -->
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
             <version>24.21.0</version>
         </dependency>
+
+        <!-- Cloudinary -->
         <dependency>
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http5</artifactId>
             <version>2.0.0</version>
+        </dependency>
+
+        <!-- OkHttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
         </dependency>
     </dependencies>
 
@@ -187,52 +194,4 @@
             </plugin>
         </plugins>
     </build>
-=======
-            <classifier>win</classifier>
-        </dependency>
-
-        <!-- OkHttp — HTTP client for Perspective API calls -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.12.0</version>
-        </dependency>
-
-        <!-- Gson — JSON serialization / deserialization -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-<<<<<<< Updated upstream
-
-=======
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.12.0</version>
-        </dependency>
->>>>>>> Stashed changes
-    </dependencies>
-
-  <build>
-    <plugins>
-
-      <!-- JavaFX Maven Plugin -->
-      <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
-
-        <configuration>
-          <!-- IMPORTANT: your real main class -->
-          <mainClass>tests.MainFX</mainClass>
-        </configuration>
-
-      </plugin>
-
-    </plugins>
-  </build>
-
->>>>>>> amine
 </project>

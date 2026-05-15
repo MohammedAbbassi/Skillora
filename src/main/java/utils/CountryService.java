@@ -80,11 +80,6 @@ public class CountryService {
                 countries.add(countryName);
             }
 
-<<<<<<< HEAD
-            countries.add(nameObj.getString("common"));
-
-=======
->>>>>>> amine
         }
         Collections.sort(countries);
         return countries;

@@ -78,10 +78,6 @@
                                 <Button mnemonicParsing="false" onAction="#onCloseWindow" styleClass="window-btn, window-btn-close" />
                             </children>
                         </HBox>
-<<<<<<< HEAD
-=======
-
->>>>>>> amine
                     </children>
                 </StackPane>
             </top>
@@ -161,7 +157,6 @@
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f3c6;" /><Label fx:id="lblLeaderboard" styleClass="text-sm" text="Leaderboard" /></HBox>
                         </graphic>
                     </Button>
-<<<<<<< HEAD
                     <Button fx:id="navTodo" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavTodo" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x2705;" /><Label fx:id="lblTodo" styleClass="text-sm" text="Tasks" /></HBox>
@@ -180,11 +175,11 @@
                     <Button fx:id="navProductivity" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavProductivity" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4c8;" /><Label fx:id="lblProductivity" styleClass="text-sm" text="Productivity" /></HBox>
-=======
+                        </graphic>
+                    </Button>
                     <Button fx:id="navProgress" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavProgress" styleClass="nav-btn">
                         <graphic>
                             <HBox spacing="12"><Label styleClass="text-sm emoji-icon" text="&#x1f4ca;" /><Label fx:id="lblProgress" styleClass="text-sm" text="Achievements" /></HBox>
->>>>>>> amine
                         </graphic>
                     </Button>
                     <Button fx:id="navShop" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNavShop" styleClass="nav-btn">
@@ -412,11 +407,7 @@
                     </VBox>
                     
                     <!-- OTHER PAGES -->
-<<<<<<< HEAD
-                    <VBox fx:id="pageCourses" visible="false" managed="false" styleClass="page-root" />
-=======
                     <VBox fx:id="pageCourses" visible="false" managed="false" styleClass="page-root placeholder-page"><padding><Insets bottom="36" left="36" right="36" top="36" /></padding><Label styleClass="page-greeting" text="Courses" /></VBox>
->>>>>>> amine
                     <VBox fx:id="pageQuizzes" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS">
                         <children>
                             <StackPane fx:id="quizContentPane" VBox.vgrow="ALWAYS" />
@@ -455,22 +446,16 @@
                         <VBox fx:id="publicProfileContainer" spacing="25" alignment="TOP_CENTER" />
                     </VBox>
                     
-<<<<<<< HEAD
                     <VBox fx:id="pageTodo" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS" />
                     <VBox fx:id="pageCalendar" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS" />
                     <VBox fx:id="pageObjectives" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS" />
                     <VBox fx:id="pageProductivity" visible="false" managed="false" styleClass="page-root" VBox.vgrow="ALWAYS" />
-=======
                     <VBox fx:id="pageProgress" visible="false" managed="false" styleClass="page-root" spacing="28">
                         <padding><Insets bottom="40" left="36" right="36" top="36" /></padding>
-
-                        <!-- Header -->
                         <VBox spacing="4">
                             <Label styleClass="page-greeting" text="Achievements" />
                             <Label styleClass="page-greeting-sub" text="Your learning journey at a glance" />
                         </VBox>
-
-                        <!-- KPI Stat Cards Row -->
                         <HBox spacing="20">
                             <VBox alignment="CENTER" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
                                 <Label text="&#x1f525;" style="-fx-font-size: 26px;" />
@@ -488,11 +473,7 @@
                                 <Label text="Courses Done" style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: 600;" />
                             </VBox>
                         </HBox>
-
-                        <!-- Charts Row -->
                         <HBox spacing="20" VBox.vgrow="ALWAYS">
-
-                            <!-- XP Over Time - Area Chart -->
                             <VBox styleClass="game-card" spacing="12" HBox.hgrow="ALWAYS">
                                 <Label text="XP Progress This Month" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                 <Label text="Your experience points over the last 4 weeks" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8;" />
@@ -501,8 +482,6 @@
                                     <yAxis><NumberAxis label="" tickMarkVisible="false" minorTickVisible="false" /></yAxis>
                                 </AreaChart>
                             </VBox>
-
-                            <!-- Daily Activity - Bar Chart -->
                             <VBox styleClass="game-card" spacing="12" prefWidth="320">
                                 <Label text="Daily Activity" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                 <Label text="Lessons completed per day" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8;" />
@@ -511,85 +490,8 @@
                                     <yAxis><NumberAxis tickMarkVisible="false" minorTickVisible="false" upperBound="10" tickUnit="2" /></yAxis>
                                 </BarChart>
                             </VBox>
-
                         </HBox>
-
-                        <!-- Skill Breakdown Row -->
-                        <HBox spacing="20">
-                            <VBox styleClass="game-card" spacing="16" HBox.hgrow="ALWAYS">
-                                <Label text="Skill Progress" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
-                                <!-- Python -->
-                                <VBox spacing="6">
-                                    <HBox alignment="CENTER_LEFT">
-                                        <Label text="&#x1f40d; Python" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS" />
-                                        <Label text="78%" style="-fx-font-weight: 700; -fx-text-fill: #2563eb; -fx-font-size: 13px;" />
-                                    </HBox>
-                                    <ProgressBar progress="0.78" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #2563eb;" />
-                                </VBox>
-                                <!-- Data Science -->
-                                <VBox spacing="6">
-                                    <HBox alignment="CENTER_LEFT">
-                                        <Label text="&#x1f4ca; Data Science" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS" />
-                                        <Label text="55%" style="-fx-font-weight: 700; -fx-text-fill: #0ea5e9; -fx-font-size: 13px;" />
-                                    </HBox>
-                                    <ProgressBar progress="0.55" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #0ea5e9;" />
-                                </VBox>
-                                <!-- Web Dev -->
-                                <VBox spacing="6">
-                                    <HBox alignment="CENTER_LEFT">
-                                        <Label text="&#x1f310; Web Development" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS" />
-                                        <Label text="92%" style="-fx-font-weight: 700; -fx-text-fill: #10b981; -fx-font-size: 13px;" />
-                                    </HBox>
-                                    <ProgressBar progress="0.92" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #10b981;" />
-                                </VBox>
-                                <!-- AI / ML -->
-                                <VBox spacing="6">
-                                    <HBox alignment="CENTER_LEFT">
-                                        <Label text="&#x1f916; AI &amp; Machine Learning" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS" />
-                                        <Label text="34%" style="-fx-font-weight: 700; -fx-text-fill: #f97316; -fx-font-size: 13px;" />
-                                    </HBox>
-                                    <ProgressBar progress="0.34" maxWidth="1.7976931348623157E308" styleClass="skill-bar" style="-fx-accent: #f97316;" />
-                                </VBox>
-                            </VBox>
-
-                            <!-- Recent Badges -->
-                            <VBox styleClass="game-card" spacing="16" prefWidth="300">
-                                <Label text="Recent Badges" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
-                                <HBox spacing="16" alignment="CENTER">
-                                    <VBox alignment="CENTER" spacing="6">
-                                        <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(37, 99, 235, 0.1);">
-                                            <Label text="&#x1f525;" style="-fx-font-size: 28px;" />
-                                        </StackPane>
-                                        <Label text="On Fire" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #1e293b;" />
-                                        <Label text="7 day streak" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8;" />
-                                    </VBox>
-                                    <VBox alignment="CENTER" spacing="6">
-                                        <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(16,185,129,0.1);">
-                                            <Label text="&#x1f3af;" style="-fx-font-size: 28px;" />
-                                        </StackPane>
-                                        <Label text="Sharpshooter" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #1e293b;" />
-                                        <Label text="Perfect accuracy" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8;" />
-                                    </VBox>
-                                    <VBox alignment="CENTER" spacing="6">
-                                        <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(245,158,11,0.1);">
-                                            <Label text="&#x1f4d6;" style="-fx-font-size: 28px;" />
-                                        </StackPane>
-                                        <Label text="Bookworm" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #1e293b;" />
-                                        <Label text="5 courses done" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8;" />
-                                    </VBox>
-                                    <VBox alignment="CENTER" spacing="6">
-                                        <StackPane styleClass="badge-circle" style="-fx-background-color: rgba(37, 99, 235, 0.1); -fx-opacity: 0.4;">
-                                            <Label text="&#x1f451;" style="-fx-font-size: 28px;" />
-                                        </StackPane>
-                                        <Label text="Legend" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #94a3b8;" />
-                                        <Label text="Locked" style="-fx-font-size: 10px; -fx-text-fill: #cbd5e1;" />
-                                    </VBox>
-                                </HBox>
-                            </VBox>
-                        </HBox>
-
                     </VBox>
->>>>>>> amine
                     <VBox fx:id="pageProfile" managed="false" spacing="28" styleClass="page-root" visible="false">
                         <padding><Insets bottom="40" left="36" right="36" top="36" /></padding>
                         

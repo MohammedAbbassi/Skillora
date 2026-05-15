@@ -85,11 +85,7 @@ public class ProfileController {
             user.setPays(fullCountry);
         }
 
-<<<<<<< HEAD
-        user.setPays(countryComboBox.getValue());
 
-=======
->>>>>>> amine
 
         try {
             serviceUser.update(user);
@@ -122,11 +118,7 @@ public class ProfileController {
             countryComboBox.setValue(user.getPays());
         }
         fullNameLabel.setText(formatName(user));
-<<<<<<< HEAD
-        roleBadge.setText(nullToEmpty(user.getRole()));
-=======
         roleBadge.setText(nullToEmpty(user.getRole().name()));
->>>>>>> amine
         emailDisplayLabel.setText(nullToEmpty(user.getEmail()));
         if (achievementsFlow != null) {
             BadgeUtils.buildAchievements(user, achievementsFlow);

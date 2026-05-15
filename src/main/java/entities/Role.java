@@ -2,7 +2,7 @@ package entities;
 
 public enum Role {
     ETUDIANT,
-<<<<<<< HEAD
+    ENSEIGNANT,
     INSTRUCTEUR,
     ADMIN;
 
@@ -16,12 +16,3 @@ public enum Role {
         }
     }
 }
-=======
-    ENSEIGNANT,
-<<<<<<< Updated upstream
-=======
-    INSTRUCTEUR,
->>>>>>> Stashed changes
-    ADMIN
-}
->>>>>>> amine
